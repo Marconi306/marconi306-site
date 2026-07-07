@@ -20,3 +20,22 @@
 .distance-strip b{color:var(--ink);margin-right:4px}.structure{background:var(--paper)}.structure .photo{height:560px}.structure .photo img{width:100%;height:100%;object-fit:cover}
 .why{background:var(--sage-light)}.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.why-grid article{background:var(--paper);border:1px solid var(--line);padding:28px;min-height:210px}.why-grid span{font-size:2rem;display:block;margin-bottom:12px}.why-grid h3{font-size:1.8rem;margin:0 0 8px}.why-grid p{color:var(--muted);margin:0}.premium-places .place-card{min-height:430px;border-radius:3px;box-shadow:0 18px 50px rgba(50,40,28,.12)}.premium-places .place-copy span{border-radius:999px;background:rgba(255,255,255,.22);backdrop-filter:blur(8px)}
 @media(max-width:1000px){.distance-strip{gap:8px}.distance-strip span{font-size:.78rem}.why-grid{grid-template-columns:1fr}.structure .photo{height:420px}.premium-places .place-card{min-height:360px}}
+
+
+/* Correzione header: un solo pulsante Prenota ora su desktop */
+.header > .menu{display:none!important}
+@media(max-width:1000px){.header > .menu{display:inline-flex!important}.nav{display:none!important}}
+
+/* Sezione spiagge */
+.beaches{background:linear-gradient(180deg,var(--paper),var(--cream));}
+.beach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.beach-card{position:relative;min-height:330px;overflow:hidden;border-radius:3px;box-shadow:0 18px 50px rgba(50,40,28,.13);background:#ddd;color:white;}
+.beach-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .45s ease;}
+.beach-card:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.72),rgba(0,0,0,.08) 58%,rgba(0,0,0,.02));}
+.beach-card:hover img{transform:scale(1.05);}
+.beach-copy{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:24px;}
+.beach-copy span{display:inline-flex;margin-bottom:12px;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(8px);font-size:.78rem;font-weight:900;}
+.beach-copy h3{font-size:2rem;line-height:1;margin:0 0 8px;color:white;}
+.beach-copy p{margin:0;color:rgba(255,255,255,.92);font-size:.94rem;}
+@media(max-width:1100px){.beach-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.beach-grid{grid-template-columns:1fr}.beach-card{min-height:310px}.beach-copy{padding:20px}.beach-copy h3{font-size:1.85rem}}
