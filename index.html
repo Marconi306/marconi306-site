@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=2.2">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LodgingBusiness", "name": "Marconi306", "description": "Elegante camera con bagno privato e cortile esclusivo a Quartu Sant'Elena.", "address": {"@type": "PostalAddress", "streetAddress": "Via Guglielmo Marconi 306", "addressLocality": "Quartu Sant'Elena", "addressRegion": "CA", "addressCountry": "IT"}, "email": "viamarconi306@gmail.com", "url": "https://marconi306.it"}</script>
 </head>
 <body>
@@ -21,7 +21,6 @@
 <header class="header">
   <a class="logo" href="#"><img src="assets/logo/marconi306-logo.png" alt="Marconi306"></a>
   <nav class="nav"><a href="#camera">La Camera</a><a href="#servizi">Servizi</a><a href="#dintorni">Dintorni</a><a href="#spiagge">Spiagge</a><a href="#galleria">Gallery</a><a href="#contatti">Contatti</a><a class="btn sage" href="#prenota">Prenota ora</a></nav>
-  <a class="btn sage menu" href="#prenota">Prenota ora</a>
 </header>
 <main>
 <section class="hero">
@@ -34,7 +33,7 @@
   </div>
   <div class="hero-img"><img src="assets/img/camera-01.jpg" alt="Camera Marconi306"></div>
 </section>
-<section id="servizi" class="comfort-strip"><div class="comfort"><span>🛏️</span><strong>Camera matrimoniale</strong><small>Comfort e relax</small></div><div class="comfort"><span>🚿</span><strong>Bagno privato</strong><small>Uso esclusivo</small></div><div class="comfort"><span>📶</span><strong>Wi‑Fi veloce</strong><small>Connessione gratuita</small></div><div class="comfort"><span>❄️</span><strong>Aria condizionata</strong><small>Caldo / freddo</small></div><div class="comfort"><span>☕</span><strong>Macchina del caffè</strong><small>Cialde incluse</small></div><div class="comfort"><span>🌿</span><strong>Cortile privato</strong><small>Spazio all'aperto</small></div></section>
+<section class="comfort-strip"><div class="comfort"><span>🛏️</span><strong>Camera matrimoniale</strong><small>Comfort e relax</small></div><div class="comfort"><span>🚿</span><strong>Bagno privato</strong><small>Uso esclusivo</small></div><div class="comfort"><span>📶</span><strong>Wi‑Fi veloce</strong><small>Connessione gratuita</small></div><div class="comfort"><span>❄️</span><strong>Aria condizionata</strong><small>Caldo / freddo</small></div><div class="comfort"><span>☕</span><strong>Macchina del caffè</strong><small>Cialde incluse</small></div><div class="comfort"><span>🌿</span><strong>Cortile privato</strong><small>Spazio all'aperto</small></div></section>
 <section id="camera" class="section">
   <div class="container grid-2">
     <div><p class="eyebrow">La camera</p><h2>Comfort e privacy, proprio come a casa</h2><p class="lead">Uno spazio luminoso e curato, con ingresso riservato, bagno privato e cortile esclusivo. Ideale per chi cerca una base tranquilla e comoda per visitare Cagliari e il Sud Sardegna.</p></div>
@@ -52,7 +51,7 @@
     <div><p class="eyebrow">La struttura</p><h2>Una casa campidanese ristrutturata, con ingresso indipendente</h2><p class="lead">Marconi306 nasce dal recupero di una tradizionale abitazione nel centro storico di Quartu Sant'Elena. La camera è pensata per offrire privacy, semplicità e comfort moderno, con accesso riservato e spazi curati.</p></div>
   </div>
 </section>
-<section class="section why">
+<section id="servizi" class="section why">
   <div class="container gallery-head"><div><p class="eyebrow">Perché scegliere Marconi306</p><h2>Comfort, privacy e posizione</h2></div><p class="lead">Tutto ciò che serve per un soggiorno pratico e rilassante nel Sud Sardegna.</p></div>
   <div class="container why-grid">
     <article><span>🏠</span><h3>Ingresso indipendente</h3><p>Massima autonomia durante il soggiorno.</p></article>
@@ -104,10 +103,10 @@
         <img src="assets/img/cagliari-bastione.webp" alt="Bastione di Saint Remy a Cagliari" loading="lazy">
         <div class="place-copy"><span>🚗 15 min in auto</span><h3>Cagliari – Bastione di Saint Remy</h3><p>Il cuore storico del capoluogo sardo, tra panorami, ristoranti, shopping e vita serale.</p></div>
       </a>
-      <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Via+Guglielmo+Marconi+306+Quartu+Sant%27Elena" target="_blank" rel="noopener">
+      <article class="place-card no-link">
         <img src="assets/img/facciata-02.jpeg" alt="Ingresso Marconi306" loading="lazy">
         <div class="place-copy"><span>📍 Qui ti trovi</span><h3>Marconi306</h3><p>La tua base riservata nel centro storico di Quartu Sant'Elena.</p></div>
-      </a>
+      </article>
     </div>
   </div>
 </section>
@@ -178,7 +177,7 @@
 </section>
 <section class="section">
   <div class="container grid-2">
-    <div><p class="eyebrow">Posizione</p><h2>Nel cuore di Quartu Sant'Elena</h2><p class="lead">A pochi passi dalla Basilica di Sant'Elena e vicino al Parco Matteotti. Una posizione pratica per Cagliari, Poetto, Villasimius e Costa Rei.</p><a class="btn dark" href="https://www.google.com/maps/search/?api=1&query=Via+Guglielmo+Marconi+306+Quartu+Sant%27Elena" target="_blank">Apri Google Maps</a></div>
+    <div><p class="eyebrow">Posizione</p><h2>Nel cuore di Quartu Sant'Elena</h2><p class="lead">A pochi passi dalla Basilica di Sant'Elena e vicino al Parco Matteotti. Una posizione pratica per Cagliari, Poetto, Villasimius e Costa Rei.</p><a class="btn dark" href="https://www.google.com/maps/dir/?api=1&destination=Via+Guglielmo+Marconi+306,+Quartu+Sant%27Elena,+CA" target="_blank">Indicazioni stradali</a></div>
     <div class="map"><iframe title="Mappa Marconi306" src="https://www.google.com/maps?q=Via%20Guglielmo%20Marconi%20306%2C%20Quartu%20Sant%27Elena%2C%20CA&output=embed" loading="lazy"></iframe></div>
   </div>
 </section>
