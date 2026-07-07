@@ -59,3 +59,24 @@
 @media(max-width:1200px){.beach-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:850px){.beach-grid{grid-template-columns:repeat(2,1fr)}.beach-card{min-height:250px}}
 @media(max-width:600px){.beach-grid{grid-template-columns:1fr}.beach-card{min-height:280px}.beach-copy h3{font-size:1.8rem}}
+
+/* Mobile navigation */
+.mobile-menu-toggle{display:none;border:1px solid var(--line);background:var(--paper);border-radius:3px;width:48px;height:44px;align-items:center;justify-content:center;flex-direction:column;gap:5px;cursor:pointer;z-index:70}
+.mobile-menu-toggle span{display:block;width:22px;height:2px;background:var(--ink);transition:transform .25s ease,opacity .25s ease}
+.mobile-menu-toggle.is-open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.mobile-menu-toggle.is-open span:nth-child(2){opacity:0}
+.mobile-menu-toggle.is-open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;position:sticky;top:0;z-index:49;background:rgba(255,253,249,.98);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 22px 20px;box-shadow:0 18px 40px rgba(50,40,28,.08)}
+.mobile-menu a{display:flex;align-items:center;justify-content:space-between;text-decoration:none;font-weight:900;padding:14px 0;border-bottom:1px solid var(--line)}
+.mobile-menu a:not(.btn)::after{content:'›';color:var(--sage);font-size:1.3rem;line-height:1}
+.mobile-menu .btn{margin-top:16px;border-bottom:0;width:100%;justify-content:center;padding:15px 22px}
+.mobile-menu.is-open{display:block}
+body.menu-open{overflow:hidden}
+@media(max-width:1000px){
+  .mobile-menu-toggle{display:inline-flex}
+  .header{top:0}
+  .topbar{display:none}
+  .logo img{width:160px;max-height:76px}
+  html{scroll-padding-top:92px}
+}
+@media(min-width:1001px){.mobile-menu{display:none!important}.mobile-menu-toggle{display:none!important}}

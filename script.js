@@ -8,3 +8,24 @@ function stepLightbox(d){lb=(lb+d+gallery.length)%gallery.length;$('#lb-img').sr
 window.openLightbox=openLightbox; window.closeLightbox=closeLightbox; window.stepLightbox=stepLightbox;
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e.key==='ArrowRight')stepLightbox(1);if(e.key==='ArrowLeft')stepLightbox(-1);});
 $('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#arrival').value||'...';const d=$('#departure').value||'...';const g=$('#guests').value||'2';const msg=`Ciao, vorrei ricevere la migliore tariffa diretta per Marconi306 dal ${a} al ${d} per ${g} ospiti.`;window.open('https://wa.me/393278562974?text='+encodeURIComponent(msg),'_blank')});
+
+// Menu mobile
+const mobileToggle = document.querySelector('.mobile-menu-toggle');
+const mobileMenu = document.querySelector('#mobile-menu');
+function closeMobileMenu(){
+  if(!mobileToggle || !mobileMenu) return;
+  mobileToggle.classList.remove('is-open');
+  mobileMenu.classList.remove('is-open');
+  mobileToggle.setAttribute('aria-expanded','false');
+  mobileToggle.setAttribute('aria-label','Apri il menu');
+  document.body.classList.remove('menu-open');
+}
+mobileToggle?.addEventListener('click',()=>{
+  const isOpen = mobileMenu.classList.toggle('is-open');
+  mobileToggle.classList.toggle('is-open', isOpen);
+  mobileToggle.setAttribute('aria-expanded', String(isOpen));
+  mobileToggle.setAttribute('aria-label', isOpen ? 'Chiudi il menu' : 'Apri il menu');
+  document.body.classList.toggle('menu-open', isOpen);
+});
+mobileMenu?.querySelectorAll('a').forEach(link=>link.addEventListener('click', closeMobileMenu));
+window.addEventListener('resize',()=>{ if(window.innerWidth > 1000) closeMobileMenu(); });
