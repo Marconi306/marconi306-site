@@ -7,7 +7,9 @@
 <meta name="description" content="Marconi306: elegante camera con bagno privato e cortile esclusivo a Quartu Sant'Elena. Prenota direttamente al miglior prezzo.">
 <meta property="og:title" content="Marconi306">
 <meta property="og:description" content="Elegante camera con bagno privato a Quartu Sant'Elena.">
-<meta property="og:image" content="https://marconi306.it/assets/img/camera-01.jpg">
+<meta property="og:image" content="https://marconi306.it/og-image.jpg">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#778768">
 <link rel="icon" href="favicon.png">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +23,6 @@
 <header class="header">
   <a class="logo" href="#"><img src="assets/logo/marconi306-logo.png" alt="Marconi306"></a>
   <nav class="nav"><a href="#camera">La Camera</a><a href="#servizi">Servizi</a><a href="#dintorni">Dintorni</a><a href="#galleria">Gallery</a><a href="#contatti">Contatti</a><a class="btn sage" href="#prenota">Prenota ora</a></nav>
-  <a class="btn sage menu" href="#prenota">Prenota</a>
 </header>
 <main>
 <section class="hero">
@@ -45,6 +46,24 @@
     <article class="card"><h3>Prenotazione diretta</h3><p>Contatto diretto, più semplicità e migliore tariffa disponibile.</p></article>
   </div>
 </section>
+<section id="struttura" class="section structure-section">
+  <div class="container grid-2 structure-grid">
+    <div>
+      <p class="eyebrow">La struttura</p>
+      <h2>Ingresso indipendente nel centro storico</h2>
+      <p class="lead">Marconi306 si trova in Via Guglielmo Marconi 306, in una casa ristrutturata e curata nei dettagli. L'accesso alla camera è riservato, con cortile privato e una posizione comoda per muoversi tra Quartu, Cagliari e il Poetto.</p>
+      <div class="mini-features">
+        <span>📍 Centro di Quartu</span>
+        <span>🌿 Cortile privato</span>
+        <span>🚪 Ingresso riservato</span>
+      </div>
+    </div>
+    <div class="structure-photos">
+      <img class="main" src="assets/img/facciata-02.jpg" alt="Facciata di Marconi306 in Via Guglielmo Marconi 306" loading="lazy">
+      <img src="assets/img/facciata-ingresso-cortile.jpg" alt="Ingresso del cortile privato di Marconi306" loading="lazy">
+    </div>
+  </div>
+</section>
 <section id="galleria" class="section">
   <div class="container gallery-head"><div><p class="eyebrow">Gallery</p><h2>Gli ambienti</h2></div><p class="lead">Camera, bagno privato, cortile e dettagli della struttura.</p></div>
   <div class="container gallery"><button onclick="openLightbox(0)"><img src="assets/img/camera-01.jpg" alt="Marconi306 foto" loading="lazy"></button>
@@ -64,39 +83,24 @@
 <button onclick="openLightbox(14)"><img src="assets/img/camera-15.jpg" alt="Marconi306 foto" loading="lazy"></button>
 <button onclick="openLightbox(15)"><img src="assets/img/camera-16.jpg" alt="Marconi306 foto" loading="lazy"></button>
 <button onclick="openLightbox(16)"><img src="assets/img/camera-17.jpg" alt="Marconi306 foto" loading="lazy"></button>
-<button onclick="openLightbox(17)"><img src="assets/img/facciata-01.jpg" alt="Facciata Marconi306" loading="lazy"></button>
-<button onclick="openLightbox(18)"><img src="assets/img/facciata-02.jpg" alt="Facciata Marconi306" loading="lazy"></button>
-<button onclick="openLightbox(19)"><img src="assets/img/facciata-ingresso-cortile.jpg" alt="Ingresso cortile Marconi306" loading="lazy"></button>
-<button onclick="openLightbox(20)"><img src="assets/img/parco-matteotti-01.jpg" alt="Parco Matteotti a Quartu Sant'Elena" loading="lazy"></button>
-<button onclick="openLightbox(21)"><img src="assets/img/parco-matteotti-02.jpg" alt="Parco Matteotti a Quartu Sant'Elena" loading="lazy"></button>
-<button onclick="openLightbox(22)"><img src="assets/img/parco-matteotti-03.jpg" alt="Parco Matteotti a Quartu Sant'Elena" loading="lazy"></button>
-<button onclick="openLightbox(23)"><img src="assets/img/basilica-santelena-01.jpg" alt="Basilica di Sant'Elena Imperatrice" loading="lazy"></button>
-<button onclick="openLightbox(24)"><img src="assets/img/basilica-santelena-02.jpg" alt="Basilica di Sant'Elena Imperatrice" loading="lazy"></button></div>
+</div>
 </section>
 <section id="dintorni" class="section places">
   <div class="container"><p class="eyebrow">Dintorni</p><h2>Scopri il Sud Sardegna</h2><p class="lead">Una selezione di luoghi, servizi e spiagge raggiungibili da Marconi306.</p><div class="place-grid">
-<a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Basilica+di+Sant%27Elena+Imperatrice+Quartu+Sant%27Elena" target="_blank" rel="noopener">
-  <img src="assets/img/basilica-santelena-02.jpg" alt="Basilica di Sant'Elena Imperatrice" loading="lazy">
+<a class="place-card featured" href="https://www.google.com/maps/search/?api=1&query=Basilica+di+Sant%27Elena+Imperatrice+Quartu+Sant%27Elena" target="_blank" rel="noopener">
+  <img src="assets/img/basilica-santelena-02.jpg" alt="Basilica di Sant'Elena Imperatrice a Quartu Sant'Elena" loading="lazy">
   <div class="place-copy">
     <span>🚶 A pochi passi da Marconi306</span>
     <h3>Basilica di Sant'Elena</h3>
     <p>Uno dei simboli del centro storico di Quartu Sant'Elena.</p>
   </div>
 </a>
-<a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Parco+Matteotti+Quartu+Sant%27Elena" target="_blank" rel="noopener">
-  <img src="assets/img/parco-matteotti-01.jpg" alt="Parco Matteotti" loading="lazy">
+<a class="place-card featured" href="https://www.google.com/maps/search/?api=1&query=Parco+Matteotti+Quartu+Sant%27Elena" target="_blank" rel="noopener">
+  <img src="assets/img/parco-matteotti-02.jpg" alt="Parco Matteotti a Quartu Sant'Elena" loading="lazy">
   <div class="place-copy">
     <span>🚶 Vicino a Marconi306</span>
     <h3>Parco Matteotti</h3>
     <p>Area verde cittadina ideale per una passeggiata tranquilla.</p>
-  </div>
-</a>
-<a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Via+Guglielmo+Marconi+306+Quartu+Sant%27Elena" target="_blank" rel="noopener">
-  <img src="assets/img/facciata-02.jpg" alt="Facciata Marconi306" loading="lazy">
-  <div class="place-copy">
-    <span>📍 Marconi306</span>
-    <h3>La struttura</h3>
-    <p>Ingresso riservato e posizione comoda nel centro di Quartu.</p>
   </div>
 </a>
 <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Mari+Pintau" target="_blank" rel="noopener">
