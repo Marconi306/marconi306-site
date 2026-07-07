@@ -7,19 +7,4 @@ function closeLightbox(){$('.lightbox').style.display='none';}
 function stepLightbox(d){lb=(lb+d+gallery.length)%gallery.length;$('#lb-img').src=gallery[lb];}
 window.openLightbox=openLightbox; window.closeLightbox=closeLightbox; window.stepLightbox=stepLightbox;
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e.key==='ArrowRight')stepLightbox(1);if(e.key==='ArrowLeft')stepLightbox(-1);});
-$('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#arrival').value||'...';const d=$('#departure').value||'...';const g=$('#guests').value||'2';const msg=`Ciao, vorrei prenotare Marconi306 dal ${a} al ${d} per ${g} ospiti.`;window.open('https://wa.me/393278562974?text='+encodeURIComponent(msg),'_blank')});
-
-
-const revealItems = document.querySelectorAll('.section, .card, .place-card, .comfort, .photo');
-if ('IntersectionObserver' in window) {
-  revealItems.forEach(el => el.classList.add('reveal'));
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        io.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  revealItems.forEach(el => io.observe(el));
-}
+$('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#arrival').value||'...';const d=$('#departure').value||'...';const g=$('#guests').value||'2';const msg=`Ciao, vorrei ricevere la migliore tariffa diretta per Marconi306 dal ${a} al ${d} per ${g} ospiti.`;window.open('https://wa.me/393278562974?text='+encodeURIComponent(msg),'_blank')});
