@@ -80,3 +80,15 @@ body.menu-open{overflow:hidden}
   html{scroll-padding-top:92px}
 }
 @media(min-width:1001px){.mobile-menu{display:none!important}.mobile-menu-toggle{display:none!important}}
+
+
+/* Fix definitivo menu mobile v2.7 */
+@media (max-width:1000px){
+  .mobile-menu-toggle{display:inline-flex!important;position:relative;z-index:120!important;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+  #mobile-menu.mobile-menu{display:none!important;position:fixed;left:16px;right:16px;top:132px;z-index:115!important;background:rgba(255,253,249,.99);border:1px solid var(--line);border-radius:18px;padding:12px 18px 18px;box-shadow:0 22px 70px rgba(20,20,20,.18);max-height:calc(100vh - 150px);overflow:auto}
+  #mobile-menu.mobile-menu.is-open{display:block!important}
+  body.menu-open{overflow:hidden}
+}
+@media (max-width:640px){
+  #mobile-menu.mobile-menu{top:118px;left:12px;right:12px}
+}

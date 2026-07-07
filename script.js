@@ -9,60 +9,34 @@ window.openLightbox=openLightbox; window.closeLightbox=closeLightbox; window.ste
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e.key==='ArrowRight')stepLightbox(1);if(e.key==='ArrowLeft')stepLightbox(-1);});
 $('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#arrival').value||'...';const d=$('#departure').value||'...';const g=$('#guests').value||'2';const msg=`Ciao, vorrei ricevere la migliore tariffa diretta per Marconi306 dal ${a} al ${d} per ${g} ospiti.`;window.open('https://wa.me/393278562974?text='+encodeURIComponent(msg),'_blank')});
 
-// Menu mobile
-const mobileToggle = document.querySelector('.mobile-menu-toggle');
-const mobileMenu = document.querySelector('#mobile-menu');
-function closeMobileMenu(){
-  if(!mobileToggle || !mobileMenu) return;
-  mobileToggle.classList.remove('is-open');
-  mobileMenu.classList.remove('is-open');
-  mobileToggle.setAttribute('aria-expanded','false');
-  mobileToggle.setAttribute('aria-label','Apri il menu');
-  document.body.classList.remove('menu-open');
-}
-mobileToggle?.addEventListener('click',()=>{
-  const isOpen = mobileMenu.classList.toggle('is-open');
-  mobileToggle.classList.toggle('is-open', isOpen);
-  mobileToggle.setAttribute('aria-expanded', String(isOpen));
-  mobileToggle.setAttribute('aria-label', isOpen ? 'Chiudi il menu' : 'Apri il menu');
-  document.body.classList.toggle('menu-open', isOpen);
-});
-mobileMenu?.querySelectorAll('a').forEach(link=>link.addEventListener('click', closeMobileMenu));
-window.addEventListener('resize',()=>{ if(window.innerWidth > 1000) closeMobileMenu(); });
-
-
-// Mobile menu robust v2.6
+// Menu mobile: funzione di supporto. La gestione principale è anche inline in index.html per evitare problemi di cache.
 (function(){
-  function initMobileMenu(){
-    const toggle = document.querySelector('.mobile-menu-toggle');
+  function ready(fn){ if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
+  ready(function(){
+    const toggle = document.getElementById('mobile-menu-button') || document.querySelector('.mobile-menu-toggle');
     const menu = document.getElementById('mobile-menu');
-    if(!toggle || !menu || toggle.dataset.menuReady === '1') return;
-    toggle.dataset.menuReady = '1';
+    if(!toggle || !menu || toggle.dataset.bound === '1') return;
+    toggle.dataset.bound = '1';
     function close(){
-      toggle.classList.remove('is-open');
       menu.classList.remove('is-open');
+      menu.setAttribute('aria-hidden','true');
+      toggle.classList.remove('is-open');
       toggle.setAttribute('aria-expanded','false');
-      toggle.setAttribute('aria-label','Apri il menu');
       document.body.classList.remove('menu-open');
-    }
-    function open(){
-      toggle.classList.add('is-open');
-      menu.classList.add('is-open');
-      toggle.setAttribute('aria-expanded','true');
-      toggle.setAttribute('aria-label','Chiudi il menu');
-      document.body.classList.add('menu-open');
     }
     toggle.addEventListener('click', function(e){
       e.preventDefault();
       e.stopPropagation();
-      menu.classList.contains('is-open') ? close() : open();
+      if(window.toggleMobileMenu) window.toggleMobileMenu(e);
+      else {
+        const open = !menu.classList.contains('is-open');
+        menu.classList.toggle('is-open', open);
+        menu.setAttribute('aria-hidden', String(!open));
+        toggle.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', String(open));
+        document.body.classList.toggle('menu-open', open);
+      }
     });
-    menu.querySelectorAll('a').forEach(function(link){ link.addEventListener('click', close); });
-    document.addEventListener('click', function(e){
-      if(menu.classList.contains('is-open') && !menu.contains(e.target) && !toggle.contains(e.target)) close();
-    });
-    window.addEventListener('resize', function(){ if(window.innerWidth > 1000) close(); });
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMobileMenu);
-  else initMobileMenu();
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+  });
 })();

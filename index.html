@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=2.5">
+<link rel="stylesheet" href="style.css?v=2.7">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LodgingBusiness", "name": "Marconi306", "description": "Elegante camera con bagno privato e cortile esclusivo a Quartu Sant'Elena.", "address": {"@type": "PostalAddress", "streetAddress": "Via Guglielmo Marconi 306", "addressLocality": "Quartu Sant'Elena", "addressRegion": "CA", "addressCountry": "IT"}, "email": "viamarconi306@gmail.com", "url": "https://marconi306.it"}</script>
 </head>
 <body>
@@ -21,9 +21,9 @@
 <header class="header">
   <a class="logo" href="#"><img src="assets/logo/marconi306-logo.png" alt="Marconi306"></a>
   <nav class="nav"><a href="#camera">La Camera</a><a href="#servizi">Servizi</a><a href="#dintorni">Dintorni</a><a href="#spiagge">Spiagge</a><a href="#galleria">Gallery</a><a href="#contatti">Contatti</a><a class="btn sage" href="#prenota">Prenota ora</a></nav>
-  <button class="mobile-menu-toggle" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+  <button id="mobile-menu-button" class="mobile-menu-toggle" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="mobile-menu" onclick="return toggleMobileMenu(event)"><span></span><span></span><span></span></button>
 </header>
-<nav id="mobile-menu" class="mobile-menu" aria-label="Menu principale mobile">
+<nav id="mobile-menu" class="mobile-menu" aria-label="Menu principale mobile" aria-hidden="true">
   <a href="#camera">La Camera</a>
   <a href="#servizi">Servizi</a>
   <a href="#dintorni">Dintorni</a>
@@ -201,6 +201,51 @@
 <footer id="contatti" class="footer"><div class="footer-grid"><div><img src="assets/logo/marconi306-mark.png" alt="Marconi306" style="width:160px;margin-bottom:16px"><p>Via Guglielmo Marconi 306<br>Quartu Sant'Elena • Sardegna</p><p class="small">Locazione turistica gestita da privati. CIN IT092051C2000U3955.</p></div><div><p><a href="mailto:viamarconi306@gmail.com">viamarconi306@gmail.com</a></p><p><a href="https://wa.me/393278562974" target="_blank">WhatsApp</a></p><p><a href="privacy.html">Privacy</a></p></div></div></footer>
 <a class="whatsapp" href="https://wa.me/393278562974" target="_blank">WhatsApp</a>
 <div class="lightbox" onclick="closeLightbox()"><button class="lb-close" onclick="event.stopPropagation();closeLightbox()">×</button><button class="lb-prev" onclick="event.stopPropagation();stepLightbox(-1)">‹</button><img id="lb-img" src="" alt=""><button class="lb-next" onclick="event.stopPropagation();stepLightbox(1)">›</button></div>
-<script src="script.js?v=2.6"></script>
+<script src="script.js?v=2.7"></script>
+<script>
+(function(){
+  function getParts(){
+    return {
+      button: document.getElementById('mobile-menu-button') || document.querySelector('.mobile-menu-toggle'),
+      menu: document.getElementById('mobile-menu')
+    };
+  }
+  window.toggleMobileMenu = function(event){
+    if(event){ event.preventDefault(); event.stopPropagation(); }
+    var parts = getParts();
+    if(!parts.button || !parts.menu) return false;
+    var open = !parts.menu.classList.contains('is-open');
+    parts.menu.classList.toggle('is-open', open);
+    parts.menu.setAttribute('aria-hidden', String(!open));
+    parts.button.classList.toggle('is-open', open);
+    parts.button.setAttribute('aria-expanded', String(open));
+    parts.button.setAttribute('aria-label', open ? 'Chiudi il menu' : 'Apri il menu');
+    document.body.classList.toggle('menu-open', open);
+    return false;
+  };
+  function closeMobileMenu(){
+    var parts = getParts();
+    if(!parts.button || !parts.menu) return;
+    parts.menu.classList.remove('is-open');
+    parts.menu.setAttribute('aria-hidden','true');
+    parts.button.classList.remove('is-open');
+    parts.button.setAttribute('aria-expanded','false');
+    parts.button.setAttribute('aria-label','Apri il menu');
+    document.body.classList.remove('menu-open');
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    var parts = getParts();
+    if(!parts.button || !parts.menu) return;
+    parts.button.addEventListener('click', window.toggleMobileMenu, true);
+    parts.menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMobileMenu); });
+    document.addEventListener('click', function(e){
+      var p = getParts();
+      if(!p.menu || !p.button) return;
+      if(p.menu.classList.contains('is-open') && !p.menu.contains(e.target) && !p.button.contains(e.target)) closeMobileMenu();
+    });
+    window.addEventListener('resize', function(){ if(window.innerWidth > 1000) closeMobileMenu(); });
+  });
+})();
+</script>
 </body>
 </html>
