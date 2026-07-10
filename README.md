@@ -7,3 +7,7 @@ Aggiornamenti:
 - nuova sezione “Muoversi senza auto” con terminal CTM e fermate ARST;
 - metadati e dati strutturati migliorati;
 - calendario e prezzi non ancora pubblicati: saranno definiti in una fase successiva.
+
+
+## Changelog
+- 2026-07-10: Trigger nuovo deploy Cloudflare e preparazione sincronizzazione calendario Booking/Airbnb.
