@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;family=Inter:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=7.2" rel="stylesheet"/>
+<link href="style.css?v=7.3" rel="stylesheet"/>
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "LodgingBusiness",
@@ -46,7 +46,15 @@
 <header class="header">
 <a class="logo" href="#"><img alt="Marconi306" src="assets/logo/marconi306-logo.png"/></a>
 <nav class="nav"><a href="#camera">La Camera</a><a href="#servizi">Servizi</a><a href="#dintorni">Dintorni</a><a href="#locali">A due passi</a><a href="#trasporti">Come muoversi</a><a href="#spiagge">Spiagge</a><a href="#galleria">Gallery</a><a href="#contatti">Contatti</a><a class="btn sage" href="#prenota">Prenota ora</a></nav>
-<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Apri il menu" class="mobile-menu-toggle" id="mobile-menu-button" onclick="return toggleMobileMenu(event)" type="button"><span></span><span></span><span></span></button>
+<div aria-label="Seleziona lingua" class="language-switcher">
+<button aria-expanded="false" class="language-current" onclick="toggleLanguageMenu(event)" type="button"><span class="language-code">IT</span><span aria-hidden="true">⌄</span></button>
+<div class="language-options" role="menu">
+<button data-lang="it" onclick="changeLanguage('it')" type="button">Italiano</button>
+<button data-lang="en" onclick="changeLanguage('en')" type="button">English</button>
+<button data-lang="es" onclick="changeLanguage('es')" type="button">Español</button>
+<button data-lang="de" onclick="changeLanguage('de')" type="button">Deutsch</button>
+<button data-lang="fr" onclick="changeLanguage('fr')" type="button">Français</button>
+</div></div><button aria-controls="mobile-menu" aria-expanded="false" aria-label="Apri il menu" class="mobile-menu-toggle" id="mobile-menu-button" onclick="return toggleMobileMenu(event)" type="button"><span></span><span></span><span></span></button>
 </header>
 <nav aria-hidden="true" aria-label="Menu principale mobile" class="mobile-menu" id="mobile-menu">
 <a href="#camera">La Camera</a>
@@ -56,7 +64,13 @@
 <a href="#trasporti">Come muoversi</a><a href="#spiagge">Spiagge</a>
 <a href="#galleria">Gallery</a>
 <a href="#contatti">Contatti</a>
-<a class="btn sage" href="#prenota">Prenota ora</a>
+<div aria-label="Seleziona lingua" class="mobile-language-switcher">
+<button onclick="changeLanguage('it')" type="button">IT</button>
+<button onclick="changeLanguage('en')" type="button">EN</button>
+<button onclick="changeLanguage('es')" type="button">ES</button>
+<button onclick="changeLanguage('de')" type="button">DE</button>
+<button onclick="changeLanguage('fr')" type="button">FR</button>
+</div><a class="btn sage" href="#prenota">Prenota ora</a>
 </nav>
 <main>
 <section class="hero">
@@ -156,76 +170,75 @@
 <p class="places-note">Grazie alla posizione centrale puoi esplorare Quartu a piedi e raggiungere facilmente  Cagliari, il Poetto e il Parco di Molentargius. Le fermate BUS CTM e ARST nelle immediate vicinanze collegano comodamente le più belle spiagge del Sud Sardegna.</p>
 </div>
 </section>
-
 <section class="section local-guide" id="locali">
-<div class="container"><div class="local-guide-head"><div><p class="eyebrow">Vivi Quartu a piedi</p><h2>A due passi da Marconi306</h2><p class="lead">I nostri locali preferiti, tutti raggiungibili comodamente a piedi in pochi minuti.</p></div><div class="local-guide-badge">Lascia pure l’auto parcheggiata</div></div><div class="local-categories"><details class="local-category" open>
+<div class="container"><div class="local-guide-head"><div><p class="eyebrow">Vivi Quartu a piedi</p><h2>A due passi da Marconi306</h2><p class="lead">I nostri locali preferiti, tutti raggiungibili comodamente a piedi in pochi minuti.</p></div><div class="local-guide-badge">Lascia pure l’auto parcheggiata</div></div><div class="local-categories"><details class="local-category" open="">
 <summary class="local-category-title"><span class="local-category-name"><span>☕</span><strong>Colazione</strong></span><span class="local-category-count">3 locali</span></summary>
 <div class="local-grid"><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=EGO+Caf%C3%A9+Bar+Lounge+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri EGO Café Bar Lounge su Google Maps"><img src="assets/img/locali/ego-cafe.jpg" loading="lazy" alt="EGO Café Bar Lounge a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">☕</span><span class="local-walk">🚶 meno di 1 min · 40 m</span></div><h3>EGO Café Bar Lounge</h3><p>Caffè, colazioni e atmosfera lounge.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=EGO+Caf%C3%A9+Bar+Lounge+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri EGO Café Bar Lounge su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=EGO+Caf%C3%A9+Bar+Lounge+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="EGO Café Bar Lounge a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/ego-cafe.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">☕</span><span class="local-walk">🚶 meno di 1 min · 40 m</span></div><h3>EGO Café Bar Lounge</h3><p>Caffè, colazioni e atmosfera lounge.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=EGO+Caf%C3%A9+Bar+Lounge+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=La+Padaria+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri La Padaria su Google Maps"><img src="assets/img/locali/la-padaria.jpg" loading="lazy" alt="La Padaria a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">☕</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>La Padaria</h3><p>Pane, lievitati e colazioni artigianali.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=La+Padaria+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri La Padaria su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=La+Padaria+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="La Padaria a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/la-padaria.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">☕</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>La Padaria</h3><p>Pane, lievitati e colazioni artigianali.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=La+Padaria+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Dulcis+Pasticceria+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Dulcis Pasticceria su Google Maps"><img src="assets/img/locali/dulcis.jpg" loading="lazy" alt="Dulcis Pasticceria a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">☕</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Dulcis Pasticceria</h3><p>Pasticceria e dolci per iniziare bene la giornata.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Dulcis+Pasticceria+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Dulcis Pasticceria su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Dulcis+Pasticceria+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Dulcis Pasticceria a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/dulcis.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">☕</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Dulcis Pasticceria</h3><p>Pasticceria e dolci per iniziare bene la giornata.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Dulcis+Pasticceria+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article></div>
 </details><details class="local-category">
 <summary class="local-category-title"><span class="local-category-name"><span>🍹</span><strong>Aperitivo</strong></span><span class="local-category-count">3 locali</span></summary>
 <div class="local-grid"><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Enoteca+Wineria+Sant%27Elena+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Enoteca Wineria Sant&#x27;Elena su Google Maps"><img src="assets/img/locali/wineria-santelena.jpg" loading="lazy" alt="Enoteca Wineria Sant&#x27;Elena a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍹</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Enoteca Wineria Sant&#x27;Elena</h3><p>Vini, taglieri e aperitivi nel centro storico.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Enoteca+Wineria+Sant%27Elena+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Enoteca Wineria Sant'Elena su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Enoteca+Wineria+Sant%27Elena+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Enoteca Wineria Sant'Elena a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/wineria-santelena.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍹</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Enoteca Wineria Sant'Elena</h3><p>Vini, taglieri e aperitivi nel centro storico.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Enoteca+Wineria+Sant%27Elena+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=The+Old+Tips+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri The Old Tips su Google Maps"><img src="assets/img/locali/the-old-tips.jpg" loading="lazy" alt="The Old Tips a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍹</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>The Old Tips</h3><p>Drink e atmosfera informale in un locale caratteristico.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=The+Old+Tips+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri The Old Tips su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=The+Old+Tips+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="The Old Tips a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/the-old-tips.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍹</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>The Old Tips</h3><p>Drink e atmosfera informale in un locale caratteristico.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=The+Old+Tips+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Locanda+Caddeo+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Locanda Caddeo su Google Maps"><img src="assets/img/locali/locanda-caddeo.jpg" loading="lazy" alt="Locanda Caddeo a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍹</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Locanda Caddeo</h3><p>Un indirizzo piacevole per aperitivo e serata.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Locanda+Caddeo+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Locanda Caddeo su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Locanda+Caddeo+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Locanda Caddeo a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/locanda-caddeo.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍹</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Locanda Caddeo</h3><p>Un indirizzo piacevole per aperitivo e serata.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Locanda+Caddeo+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article></div>
 </details><details class="local-category">
 <summary class="local-category-title"><span class="local-category-name"><span>🍕</span><strong>Pizza</strong></span><span class="local-category-count">3 locali</span></summary>
 <div class="local-grid"><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Vecchio+Forno+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Vecchio Forno su Google Maps"><img src="assets/img/locali/vecchio-forno.jpg" loading="lazy" alt="Vecchio Forno a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍕</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Vecchio Forno</h3><p>Pizza in piazza, accanto alla Basilica.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Vecchio+Forno+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Vecchio Forno su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Vecchio+Forno+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Vecchio Forno a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/vecchio-forno.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍕</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Vecchio Forno</h3><p>Pizza in piazza, accanto alla Basilica.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Vecchio+Forno+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Antares+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Antares su Google Maps"><img src="assets/img/locali/antares.jpg" loading="lazy" alt="Antares a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍕</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Antares</h3><p>Pizzeria e bisteccheria con tavoli all’aperto.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Antares+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Antares su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Antares+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Antares a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/antares.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍕</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Antares</h3><p>Pizzeria e bisteccheria con tavoli all’aperto.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Antares+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Rosanna+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Rosanna su Google Maps"><img src="assets/img/locali/rosanna.jpg" loading="lazy" alt="Rosanna a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍕</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Rosanna</h3><p>Pizza e atmosfera vivace all’aperto.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Rosanna+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Rosanna su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Rosanna+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Rosanna a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/rosanna.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍕</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Rosanna</h3><p>Pizza e atmosfera vivace all’aperto.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Rosanna+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article></div>
 </details><details class="local-category">
 <summary class="local-category-title"><span class="local-category-name"><span>🍝</span><strong>Cena</strong></span><span class="local-category-count">3 locali</span></summary>
 <div class="local-grid"><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Pani+e+Casu+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Pani e Casu su Google Maps"><img src="assets/img/locali/pani-e-casu.jpg" loading="lazy" alt="Pani e Casu a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍝</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Pani e Casu</h3><p>Cucina sarda e sapori della tradizione.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Pani+e+Casu+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Pani e Casu su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Pani+e+Casu+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Pani e Casu a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/pani-e-casu.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍝</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Pani e Casu</h3><p>Cucina sarda e sapori della tradizione.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Pani+e+Casu+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Ark%C3%A9+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Arké su Google Maps"><img src="assets/img/locali/arke.jpg" loading="lazy" alt="Arké a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍝</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Arké</h3><p>Una proposta curata per una cena speciale.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Ark%C3%A9+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Arké su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Ark%C3%A9+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Arké a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/arke.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍝</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Arké</h3><p>Una proposta curata per una cena speciale.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Ark%C3%A9+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Pata+Negra+%E2%80%93+La+Jamoneria+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Pata Negra – La Jamoneria su Google Maps"><img src="assets/img/locali/pata-negra.jpg" loading="lazy" alt="Pata Negra – La Jamoneria a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍝</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Pata Negra – La Jamoneria</h3><p>Taglieri, prosciutti iberici e ottimi vini.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Pata+Negra+%E2%80%93+La+Jamoneria+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Pata Negra – La Jamoneria su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Pata+Negra+%E2%80%93+La+Jamoneria+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Pata Negra – La Jamoneria a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/pata-negra.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍝</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Pata Negra – La Jamoneria</h3><p>Taglieri, prosciutti iberici e ottimi vini.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Pata+Negra+%E2%80%93+La+Jamoneria+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article></div>
 </details><details class="local-category">
 <summary class="local-category-title"><span class="local-category-name"><span>🍣</span><strong>Sushi</strong></span><span class="local-category-count">3 locali</span></summary>
 <div class="local-grid"><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Miyabi+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Miyabi su Google Maps"><img src="assets/img/locali/miyabi.jpg" loading="lazy" alt="Miyabi a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍣</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Miyabi</h3><p>Cucina giapponese moderna in un ambiente elegante.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Miyabi+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Miyabi su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Miyabi+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Miyabi a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/miyabi.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍣</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Miyabi</h3><p>Cucina giapponese moderna in un ambiente elegante.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Miyabi+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Koko+Sushi+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Koko Sushi su Google Maps"><img src="assets/img/locali/koko-sushi.jpg" loading="lazy" alt="Koko Sushi a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍣</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Koko Sushi</h3><p>Sushi e specialità giapponesi.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Koko+Sushi+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Koko Sushi su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Koko+Sushi+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Koko Sushi a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/koko-sushi.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍣</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Koko Sushi</h3><p>Sushi e specialità giapponesi.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Koko+Sushi+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Taiji+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Taiji su Google Maps"><img src="assets/img/locali/taiji.jpg" loading="lazy" alt="Taiji a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍣</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Taiji</h3><p>Sushi, poke bowl e cucina asiatica.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Taiji+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Taiji su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Taiji+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Taiji a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/taiji.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍣</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Taiji</h3><p>Sushi, poke bowl e cucina asiatica.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Taiji+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article></div>
 </details><details class="local-category">
 <summary class="local-category-title"><span class="local-category-name"><span>🍦</span><strong>Gelato</strong></span><span class="local-category-count">2 locali</span></summary>
 <div class="local-grid"><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Kremet+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Kremet su Google Maps"><img src="assets/img/locali/kremet.jpg" loading="lazy" alt="Kremet a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍦</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Kremet</h3><p>Gelateria artigianale per una pausa fresca.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Kremet+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Kremet su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Kremet+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Kremet a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/kremet.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍦</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Kremet</h3><p>Gelateria artigianale per una pausa fresca.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Kremet+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article><article class="local-card">
-<a class="local-card-image" href="https://www.google.com/maps/search/?api=1&query=Ice+Street+Quartu+Sant%27Elena" target="_blank" rel="noopener" aria-label="Apri Ice Street su Google Maps"><img src="assets/img/locali/ice-street.jpg" loading="lazy" alt="Ice Street a Quartu Sant'Elena"></a>
-<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍦</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Ice Street</h3><p>Gelato e dolci nel cuore di Quartu.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&query=Ice+Street+Quartu+Sant%27Elena" target="_blank" rel="noopener"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
+<a aria-label="Apri Ice Street su Google Maps" class="local-card-image" href="https://www.google.com/maps/search/?api=1&amp;query=Ice+Street+Quartu+Sant%27Elena" rel="noopener" target="_blank"><img alt="Ice Street a Quartu Sant'Elena" loading="lazy" src="assets/img/locali/ice-street.jpg"/></a>
+<div class="local-card-body"><div class="local-card-top"><span class="local-pin">🍦</span><span class="local-walk">🚶 pochi minuti a piedi</span></div><h3>Ice Street</h3><p>Gelato e dolci nel cuore di Quartu.</p><a class="local-link" href="https://www.google.com/maps/search/?api=1&amp;query=Ice+Street+Quartu+Sant%27Elena" rel="noopener" target="_blank"><span>Indicazioni</span><span aria-hidden="true">↗</span></a></div>
 </article></div>
 </details></div></div>
 </section>
@@ -248,61 +261,61 @@
 </div>
 <div class="container beach-grid">
 <article class="beach-card">
-<img alt="Poetto - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-poetto.jpg"/>
+<img alt="Poetto - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-poetto.jpg">
 <div class="beach-copy"><span>🚗 12 min da Marconi306</span><h3>Poetto</h3><p>La spiaggia simbolo di Cagliari e Quartu Sant'Elena, ideale per mare, sport e relax.</p></div>
-</article>
+</img></article>
 <article class="beach-card">
-<img alt="Mari Pintau - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-mari-pintau.jpg"/>
+<img alt="Mari Pintau - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-mari-pintau.jpg">
 <div class="beach-copy"><span>🚗 25 min da Marconi306</span><h3>Mari Pintau</h3><p>Una delle calette più iconiche della costa di Quartu, famosa per il mare turchese.</p></div>
-</article>
+</img></article>
 <article class="beach-card">
-<img alt="Solanas - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-solanas.jpg"/>
+<img alt="Solanas - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-solanas.jpg">
 <div class="beach-copy"><span>🚗 35 min da Marconi306</span><h3>Solanas</h3><p>Una lunga spiaggia di sabbia dorata e mare cristallino, perfetta per famiglie e relax.</p></div>
-</article>
+</img></article>
 <article class="beach-card">
-<img alt="Campus - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-campus.jpg"/>
+<img alt="Campus - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-campus.jpg">
 <div class="beach-copy"><span>🚗 45 min da Marconi306</span><h3>Campus</h3><p>Una baia tranquilla con acque trasparenti, ideale per una giornata rilassante.</p></div>
-</article>
+</img></article>
 <article class="beach-card">
-<img alt="Campulongu - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-campulongu.jpg"/>
+<img alt="Campulongu - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-campulongu.jpg">
 <div class="beach-copy"><span>🚗 45 min da Marconi306</span><h3>Campulongu</h3><p>Una baia elegante e riparata, con mare limpido e paesaggi naturali.</p></div>
-</article>
+</img></article>
 <article class="beach-card">
-<img alt="Porto Giunco - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-porto-giunco.jpg"/>
+<img alt="Porto Giunco - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-porto-giunco.jpg">
 <div class="beach-copy"><span>🚗 50 min da Marconi306</span><h3>Porto Giunco</h3><p>Una delle spiagge più iconiche della Sardegna, dominata dalla storica torre.</p></div>
-</article>
+</img></article>
 <article class="beach-card">
-<img alt="Simius - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-simius.jpg"/>
+<img alt="Simius - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-simius.jpg">
 <div class="beach-copy"><span>🚗 50 min da Marconi306</span><h3>Simius</h3><p>Sabbia chiara, fondali bassi e acqua cristallina: ideale anche per famiglie.</p></div>
-</article>
+</img></article>
 <article class="beach-card">
-<img alt="Punta Molentis - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-punta-molentis.jpg"/>
+<img alt="Punta Molentis - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-punta-molentis.jpg">
 <div class="beach-copy"><span>🚗 55 min da Marconi306</span><h3>Punta Molentis</h3><p>Una baia spettacolare tra mare turchese e rocce granitiche.</p></div>
-</article>
+</img></article>
 <article class="beach-card">
-<img alt="Cala Sinzias - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-cala-sinzias.jpg"/>
+<img alt="Cala Sinzias - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-cala-sinzias.jpg">
 <div class="beach-copy"><span>🚗 55 min da Marconi306</span><h3>Cala Sinzias</h3><p>Una lunga distesa di sabbia chiara con mare turchese e ampi spazi.</p></div>
-</article>
+</img></article>
 <article class="beach-card">
-<img alt="Scoglio di Peppino - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-scoglio-peppino.jpg"/>
+<img alt="Scoglio di Peppino - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-scoglio-peppino.jpg">
 <div class="beach-copy"><span>🚗 60 min da Marconi306</span><h3>Scoglio di Peppino</h3><p>Il celebre scoglio granitico della Costa Rei, circondato da acque basse e trasparenti.</p></div>
-</article>
+</img></article>
 <article class="beach-card">
-<img alt="Costa Rei - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-costa-rei.jpg"/>
+<img alt="Costa Rei - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-costa-rei.jpg">
 <div class="beach-copy"><span>🚗 60 min da Marconi306</span><h3>Costa Rei</h3><p>Una delle spiagge più estese del sud Sardegna, con sabbia finissima e mare caraibico.</p></div>
-</article>
+</img></article>
 <article class="beach-card">
-<img alt="Su Giudeu - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-su-giudeu.jpg"/>
+<img alt="Su Giudeu - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-su-giudeu.jpg">
 <div class="beach-copy"><span>🚗 70 min da Marconi306</span><h3>Su Giudeu</h3><p>Una spiaggia celebre di Chia, con sabbia dorata e il caratteristico isolotto.</p></div>
-</article>
+</img></article>
 <article class="beach-card">
-<img alt="Cala Cipolla - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-cala-cipolla.jpg"/>
+<img alt="Cala Cipolla - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-cala-cipolla.jpg">
 <div class="beach-copy"><span>🚗 75 min da Marconi306</span><h3>Cala Cipolla</h3><p>Una piccola baia immersa nella macchia mediterranea, naturale e suggestiva.</p></div>
-</article>
+</img></article>
 <article class="beach-card">
-<img alt="Tuerredda - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-tuerredda.jpg"/>
+<img alt="Tuerredda - spiaggia del Sud Sardegna" loading="lazy" src="assets/img/beach-tuerredda.jpg">
 <div class="beach-copy"><span>🚗 75 min da Marconi306</span><h3>Tuerredda</h3><p>Una delle spiagge più amate della Sardegna, con acque cristalline e isolotto panoramico.</p></div>
-</article>
+</img></article>
 </div>
 </section>
 <section class="section">
@@ -314,30 +327,30 @@
 <section class="section direct availability-section" id="prenota">
 <div class="container availability-head">
 <div><p class="eyebrow">Disponibilità aggiornata</p><h2>Scegli le date del soggiorno</h2><p class="lead">Il calendario riunisce le prenotazioni presenti su Booking e Airbnb. Seleziona il giorno di arrivo e quello di partenza; la richiesta finale resta soggetta a conferma.</p></div>
-<div class="availability-legend" aria-label="Legenda calendario"><span><i class="legend-dot free"></i>Disponibile</span><span><i class="legend-dot busy"></i>Non disponibile</span><span><i class="legend-dot selected"></i>Selezionato</span></div>
+<div aria-label="Legenda calendario" class="availability-legend"><span><i class="legend-dot free"></i>Disponibile</span><span><i class="legend-dot busy"></i>Non disponibile</span><span><i class="legend-dot selected"></i>Selezionato</span></div>
 </div>
 <div class="container availability-layout">
-<div class="calendar-card" aria-live="polite">
-<div class="calendar-toolbar"><button class="calendar-nav" id="calendar-prev" type="button" aria-label="Mesi precedenti">‹</button><strong id="calendar-status">Caricamento disponibilità…</strong><button class="calendar-nav" id="calendar-next" type="button" aria-label="Mesi successivi">›</button></div>
+<div aria-live="polite" class="calendar-card">
+<div class="calendar-toolbar"><button aria-label="Mesi precedenti" class="calendar-nav" id="calendar-prev" type="button">‹</button><strong id="calendar-status">Caricamento disponibilità…</strong><button aria-label="Mesi successivi" class="calendar-nav" id="calendar-next" type="button">›</button></div>
 <div class="calendar-months" id="calendar-months"></div>
 <p class="calendar-note">Le date non disponibili provengono dai calendari collegati. La sincronizzazione iCal può richiedere del tempo: la prenotazione è confermata solo dopo la nostra risposta.</p>
 </div>
 <aside class="stay-card">
 <p class="eyebrow">Il tuo soggiorno</p>
 <div class="stay-dates"><div><span>Check-in</span><strong id="stay-arrival">Seleziona</strong></div><div><span>Check-out</span><strong id="stay-departure">Seleziona</strong></div></div>
-<label class="guest-field">Ospiti<select id="guests"><option value="1">1 ospite</option><option value="2" selected>2 ospiti</option></select></label>
+<label class="guest-field">Ospiti<select id="guests"><option value="1">1 ospite</option><option selected="" value="2">2 ospiti</option></select></label>
 <div class="stay-summary" id="stay-summary">Seleziona prima la data di arrivo e poi quella di partenza.</div>
 <button class="btn outline full calendar-reset" id="calendar-reset" type="button">Cancella le date</button>
-<a class="btn sage full disabled" href="#" id="wa-request" aria-disabled="true">Richiedi disponibilità su WhatsApp</a>
+<a aria-disabled="true" class="btn sage full disabled" href="#" id="wa-request">Richiedi disponibilità su WhatsApp</a>
 <a class="btn outline full" href="mailto:viamarconi306@gmail.com?subject=Richiesta%20disponibilit%C3%A0%20Marconi306">Richiedi via email</a>
 </aside>
 </div>
 </section>
 </main>
-<footer class="footer" id="contatti"><div class="footer-grid"><div><img alt="Marconi306" src="assets/logo/marconi306-mark.png" style="width:160px;margin-bottom:16px"/><p>Via Guglielmo Marconi 306<br/>Quartu Sant'Elena • Sardegna</p><p class="small">Locazione turistica gestita da privati. CIN IT092051C2000U3955.</p></div><div><p><a href="mailto:viamarconi306@gmail.com">viamarconi306@gmail.com</a></p><p><a href="https://wa.me/393278562974" target="_blank">WhatsApp</a></p><p><a href="privacy.html">Privacy</a></p></div></div></footer>
+<footer class="footer" id="contatti"><div class="footer-grid"><div><img alt="Marconi306" src="assets/logo/marconi306-mark.png" style="width:160px;margin-bottom:16px"><p>Via Guglielmo Marconi 306<br/>Quartu Sant'Elena • Sardegna</p><p class="small">Locazione turistica gestita da privati. CIN IT092051C2000U3955.</p></img></div><div><p><a href="mailto:viamarconi306@gmail.com">viamarconi306@gmail.com</a></p><p><a href="https://wa.me/393278562974" target="_blank">WhatsApp</a></p><p><a href="privacy.html">Privacy</a></p></div></div></footer>
 <a class="whatsapp" href="https://wa.me/393278562974" target="_blank">WhatsApp</a>
-<div class="lightbox" onclick="closeLightbox()"><button class="lb-close" onclick="event.stopPropagation();closeLightbox()">×</button><button class="lb-prev" onclick="event.stopPropagation();stepLightbox(-1)">‹</button><img alt="" id="lb-img" src=""/><button class="lb-next" onclick="event.stopPropagation();stepLightbox(1)">›</button></div>
-<script src="script.js?v=7.2"></script>
+<div class="lightbox" onclick="closeLightbox()"><button class="lb-close" onclick="event.stopPropagation();closeLightbox()">×</button><button class="lb-prev" onclick="event.stopPropagation();stepLightbox(-1)">‹</button><img alt="" id="lb-img" src=""><button class="lb-next" onclick="event.stopPropagation();stepLightbox(1)">›</button></img></div>
+<script src="script.js?v=7.3"></script>
 <script>
 (function(){
   function getParts(){
@@ -383,5 +396,11 @@
   });
 })();
 </script>
-</body>
+<div aria-hidden="true" id="google_translate_element"></div>
+<script>
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({pageLanguage:'it',includedLanguages:'it,en,es,de,fr',autoDisplay:false},'google_translate_element');
+}
+</script>
+<script defer="" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script></body>
 </html>

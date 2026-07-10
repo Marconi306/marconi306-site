@@ -199,3 +199,26 @@ body.menu-open{overflow:hidden}
 .local-guide .lead{max-width:700px}
 @media(min-width:641px){.local-category{border:0;background:transparent;border-radius:0;overflow:visible}.local-category-title{pointer-events:none;padding:0 0 14px;background:transparent}.local-category-title:after,.local-category-count{display:none}.local-category:not([open])>.local-grid{display:grid}.local-category>.local-grid{padding:0}.local-category-name{font-size:1.45rem}.local-category-name strong{font-family:Georgia,serif}.local-card-body{min-height:220px}}
 @media(max-width:640px){.local-categories{gap:12px}.local-category:not([open])>.local-grid{display:none}.local-card-body{min-height:auto}.local-guide-head{margin-bottom:24px}.local-guide-badge{font-size:.78rem}.local-category-title{padding:16px}.local-category-name{font-size:1.1rem}.local-category>.local-grid{padding:0 12px 14px}.local-card-image{aspect-ratio:4/3}}
+
+
+/* Versione 7.3: selettore multilingua */
+.language-switcher{position:relative;margin-left:auto;margin-right:10px;z-index:120}
+.language-current{min-width:58px;height:42px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-weight:900;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+.language-options{position:absolute;right:0;top:calc(100% + 8px);min-width:150px;padding:7px;background:#fff;border:1px solid var(--line);box-shadow:0 15px 40px rgba(35,30,24,.15);display:none}
+.language-switcher.is-open .language-options{display:grid}
+.language-options button{border:0;background:transparent;text-align:left;padding:10px 12px;cursor:pointer;font:inherit;color:var(--ink)}
+.language-options button:hover,.language-options button.is-active{background:var(--cream);color:var(--sage-dark);font-weight:800}
+.mobile-language-switcher{display:flex;gap:7px;flex-wrap:wrap;padding:10px 0 18px}
+.mobile-language-switcher button{border:1px solid var(--line);background:var(--paper);min-width:42px;padding:8px 9px;font-weight:900;cursor:pointer}
+.mobile-language-switcher button.is-active{background:var(--sage);border-color:var(--sage);color:#fff}
+#google_translate_element,.goog-te-banner-frame,.goog-te-balloon-frame{display:none!important}
+body{top:0!important}
+.goog-text-highlight{background:transparent!important;box-shadow:none!important}
+@media(max-width:980px){.language-switcher{margin-left:auto;margin-right:8px}.language-current{height:40px}}
+@media(max-width:640px){.language-switcher{display:none}}
+
+/* Desktop: tutte le categorie della guida sono sempre visibili */
+@media(min-width:641px){
+  .local-category>summary{cursor:default}
+  .local-category>summary:after{display:none!important}
+}

@@ -33,3 +33,9 @@ Aggiornamenti:
 - Inserite card individuali con collegamenti Google Maps.
 - Guida locale trasformata in categorie richiudibili su smartphone.
 - Rimossa ogni immagine illustrativa/stock dalla sezione.
+
+
+## Versione 7.3
+- Ripristinato il multilingua: italiano, inglese, spagnolo, tedesco e francese.
+- Tutte le categorie “A due passi” sono aperte su desktop.
+- Su smartphone le categorie funzionano come accordion con apertura esclusiva.

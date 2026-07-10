@@ -158,3 +158,86 @@ $('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#ar
     .catch(()=>{loaded=false;document.getElementById('calendar-status').textContent='Disponibilità non caricata';monthsRoot.innerHTML='<p class="calendar-note">Il calendario non è temporaneamente disponibile. Contattaci direttamente su WhatsApp.</p>';updateSummary();});
   render();
 })();
+
+
+/* Versione 7.3: selettore multilingua e comportamento guida locale */
+function toggleLanguageMenu(event) {
+  if (event) event.stopPropagation();
+  const switcher = document.querySelector('.language-switcher');
+  if (!switcher) return false;
+  const open = switcher.classList.toggle('is-open');
+  const button = switcher.querySelector('.language-current');
+  if (button) button.setAttribute('aria-expanded', String(open));
+  return false;
+}
+
+function getCurrentLanguage() {
+  const match = document.cookie.match(/(?:^|; )googtrans=\/it\/([^;]+)/);
+  return match ? match[1] : 'it';
+}
+
+function setLanguageCookie(value) {
+  const maxAge = 60 * 60 * 24 * 365;
+  document.cookie = `googtrans=${value};path=/;max-age=${maxAge};SameSite=Lax`;
+  document.cookie = `googtrans=${value};path=/;domain=.marconi306.it;max-age=${maxAge};SameSite=Lax`;
+}
+
+function changeLanguage(lang) {
+  const allowed = ['it', 'en', 'es', 'de', 'fr'];
+  if (!allowed.includes(lang)) return;
+  if (lang === 'it') {
+    document.cookie = 'googtrans=;path=/;max-age=0';
+    document.cookie = 'googtrans=;path=/;domain=.marconi306.it;max-age=0';
+  } else {
+    setLanguageCookie(`/it/${lang}`);
+  }
+  window.location.reload();
+}
+
+function updateLanguageUI() {
+  const lang = getCurrentLanguage();
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.language-code').forEach(el => { el.textContent = lang.toUpperCase(); });
+  document.querySelectorAll('[data-lang]').forEach(el => el.classList.toggle('is-active', el.dataset.lang === lang));
+  document.querySelectorAll('.mobile-language-switcher button').forEach(el => {
+    el.classList.toggle('is-active', el.textContent.trim().toLowerCase() === lang);
+  });
+}
+
+function syncLocalGuideDetails() {
+  const categories = Array.from(document.querySelectorAll('.local-category'));
+  if (!categories.length) return;
+  if (window.matchMedia('(min-width: 641px)').matches) {
+    categories.forEach(category => { category.open = true; });
+  } else {
+    const hasOpen = categories.some(category => category.open);
+    if (!hasOpen) categories[0].open = true;
+  }
+}
+
+function enableMobileAccordion() {
+  document.querySelectorAll('.local-category').forEach(category => {
+    category.addEventListener('toggle', () => {
+      if (!category.open || window.matchMedia('(min-width: 641px)').matches) return;
+      document.querySelectorAll('.local-category').forEach(other => {
+        if (other !== category) other.open = false;
+      });
+    });
+  });
+}
+
+document.addEventListener('click', event => {
+  const switcher = document.querySelector('.language-switcher');
+  if (switcher && !switcher.contains(event.target)) {
+    switcher.classList.remove('is-open');
+    const button = switcher.querySelector('.language-current');
+    if (button) button.setAttribute('aria-expanded', 'false');
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateLanguageUI();
+  syncLocalGuideDetails();
+  enableMobileAccordion();
+});
+window.addEventListener('resize', syncLocalGuideDetails);
