@@ -7,6 +7,7 @@ function closeLightbox(){$('.lightbox').style.display='none';}
 function stepLightbox(d){lb=(lb+d+gallery.length)%gallery.length;$('#lb-img').src=gallery[lb];}
 window.openLightbox=openLightbox; window.closeLightbox=closeLightbox; window.stepLightbox=stepLightbox;
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e.key==='ArrowRight')stepLightbox(1);if(e.key==='ArrowLeft')stepLightbox(-1);});
+$('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#arrival').value||'...';const d=$('#departure').value||'...';const g=$('#guests').value||'2';const msg=`Ciao, vorrei ricevere la migliore tariffa diretta per Marconi306 dal ${a} al ${d} per ${g} ospiti.`;window.open('https://wa.me/393278562974?text='+encodeURIComponent(msg),'_blank')});
 
 // Menu mobile: funzione di supporto. La gestione principale è anche inline in index.html per evitare problemi di cache.
 (function(){
@@ -40,51 +41,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   });
 })();
 
-// Scorrimento affidabile verso la sezione Prenota.
-// Compensa l'header fisso e riallinea la sezione dopo il caricamento asincrono del calendario.
-(function(){
-  function closeMobileMenu(){
-    const menu=document.getElementById('mobile-menu');
-    const toggle=document.getElementById('mobile-menu-button') || document.querySelector('.mobile-menu-toggle');
-    if(menu){
-      menu.classList.remove('is-open');
-      menu.setAttribute('aria-hidden','true');
-    }
-    if(toggle){
-      toggle.classList.remove('is-open');
-      toggle.setAttribute('aria-expanded','false');
-    }
-    document.body.classList.remove('menu-open');
-  }
-
-  function scrollToBooking(behavior='smooth'){
-    const target=document.getElementById('prenota');
-    if(!target) return;
-    const header=document.querySelector('.header');
-    const offset=(header ? header.getBoundingClientRect().height : 0) + 14;
-    const top=target.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({top:Math.max(0,top),behavior});
-  }
-
-  document.querySelectorAll('a[href="#prenota"]').forEach(link=>{
-    link.addEventListener('click',function(event){
-      event.preventDefault();
-      closeMobileMenu();
-      history.replaceState(null,'','#prenota');
-      requestAnimationFrame(()=>scrollToBooking('smooth'));
-      // Il calendario modifica leggermente l'altezza della pagina quando riceve i dati iCal.
-      // Questi riallineamenti mantengono la sezione nella posizione corretta al primo clic.
-      window.setTimeout(()=>scrollToBooking('auto'),180);
-      window.setTimeout(()=>scrollToBooking('auto'),650);
-    });
-  });
-
-  window.addEventListener('calendar:ready',()=>{
-    if(location.hash==='#prenota') window.setTimeout(()=>scrollToBooking('auto'),40);
-  });
-})();
-
-// Calendario disponibilità Booking + Airbnb con tariffe dirette
+// Calendario disponibilità Booking + Airbnb (senza prezzi)
 (function(){
   const monthsRoot = document.getElementById('calendar-months');
   if (!monthsRoot) return;
@@ -107,25 +64,6 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   function formatDate(iso){ return iso ? new Intl.DateTimeFormat('it-IT',{day:'numeric',month:'long',year:'numeric'}).format(fromIso(iso)) : 'Seleziona'; }
   function nightsBetween(a,b){ return Math.round((fromIso(b)-fromIso(a))/86400000); }
   function eachNight(a,b){ const out=[]; for(let x=a;x<b;x=addDay(x)) out.push(x); return out; }
-  function nightlyRate(iso){
-    const d=fromIso(iso);
-    const y=d.getFullYear(), m=d.getMonth()+1, day=d.getDate();
-    if(y===2026 && m===7) return 85;
-    if(y===2026 && m===8) return day>=10 && day<=16 ? 120 : 100;
-    if(y===2026 && m===9) return 85;
-    if(y===2026 && m===10) return 80;
-    if(y===2026 && m===11) return 70;
-    if(y===2026 && m===12) return [24,25,26,30,31].includes(day) ? 80 : 70;
-    if(y===2027 && m===1) return day===1 ? 80 : 70;
-    return null;
-  }
-  function stayQuote(a,b){
-    const nights=eachNight(a,b);
-    const rows=nights.map(date=>({date,rate:nightlyRate(date)}));
-    const complete=rows.every(row=>Number.isFinite(row.rate));
-    return {rows,complete,total:complete?rows.reduce((sum,row)=>sum+row.rate,0):null};
-  }
-  function euro(value){ return new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(value); }
   function validDeparture(candidate){
     if(!arrival || candidate<=arrival) return false;
     return !eachNight(arrival,candidate).some(day=>blocked.has(day));
@@ -149,24 +87,14 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
     for(let i=0;i<offset;i++){ const e=document.createElement('span');e.className='calendar-empty';grid.appendChild(e); }
     for(let day=1;day<=days;day++){
       const iso=localIso(new Date(y,m,day));
-      const btn=document.createElement('button'); btn.type='button';btn.className='calendar-day';btn.dataset.date=iso;
-      const rate=nightlyRate(iso);
-      const dayNumber=document.createElement('span');
-      dayNumber.className='calendar-day-number';
-      dayNumber.textContent=String(day);
-      btn.appendChild(dayNumber);
-      const dayPrice=document.createElement('span');
-      dayPrice.className='calendar-day-price';
-      dayPrice.textContent=rate!==null ? `${rate} €` : 'Su richiesta';
-      btn.appendChild(dayPrice);
-      if(rate===null) btn.classList.add('rate-unset');
+      const btn=document.createElement('button'); btn.type='button';btn.className='calendar-day';btn.textContent=day;btn.dataset.date=iso;
       if(iso<todayIso) btn.classList.add('past');
       if(blocked.has(iso)) btn.classList.add('busy');
       if(arrival===iso) btn.classList.add('selected','checkin');
       if(departure===iso) btn.classList.add('selected','checkout');
       if(arrival && departure && iso>arrival && iso<departure) btn.classList.add('range');
       btn.disabled=!loaded || !canChoose(iso);
-      btn.setAttribute('aria-label',`${day} ${monthNames[m]} ${y}${blocked.has(iso)?', non disponibile':rate!==null?`, disponibile, ${rate} euro a notte`:', disponibile, tariffa su richiesta'}`);
+      btn.setAttribute('aria-label',`${day} ${monthNames[m]} ${y}${blocked.has(iso)?', non disponibile':', disponibile'}`);
       btn.addEventListener('click',()=>selectDate(iso));
       grid.appendChild(btn);
     }
@@ -190,18 +118,10 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
     const wa=document.getElementById('wa-request');
     if(arrival && departure){
       const nights=nightsBetween(arrival,departure);
-      const quote=stayQuote(arrival,departure);
-      if(quote.complete){
-        summary.innerHTML=`<strong>${nights} ${nights===1?'notte':'notti'}</strong><span class="stay-total">Totale soggiorno: <b>${euro(quote.total)}</b></span><small>Tariffa della camera. Eventuale tassa di soggiorno esclusa.</small>`;
-        wa.textContent=`Richiedi ${nights} ${nights===1?'notte':'notti'} • ${euro(quote.total)}`;
-      } else {
-        summary.innerHTML=`<strong>${nights} ${nights===1?'notte':'notti'}</strong><span class="stay-total">Tariffa da confermare</span><small>Alcune date selezionate non hanno ancora un prezzo pubblicato.</small>`;
-        wa.textContent='Richiedi disponibilità e tariffa';
-      }
+      summary.innerHTML=`<strong>${nights} ${nights===1?'notte':'notti'}</strong><br>Disponibilità visualizzata sul sito, da confermare direttamente con il proprietario.`;
       wa.classList.remove('disabled');wa.setAttribute('aria-disabled','false');wa.href='#';
     } else {
       summary.textContent=arrival?'Ora seleziona la data di partenza.':'Seleziona prima la data di arrivo e poi quella di partenza.';
-      wa.textContent='Richiedi disponibilità su WhatsApp';
       wa.classList.add('disabled');wa.setAttribute('aria-disabled','true');wa.href='#';
     }
   }
@@ -212,16 +132,14 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
     e.preventDefault(); if(!arrival||!departure) return;
     const guests=document.getElementById('guests').value;
     const nights=nightsBetween(arrival,departure);
-    const quote=stayQuote(arrival,departure);
-    const priceText=quote.complete?` Il totale indicato dal sito è ${euro(quote.total)}, esclusa l'eventuale tassa di soggiorno.`:' La tariffa per queste date è da confermare.';
-    const msg=`Buongiorno, vorrei richiedere la disponibilità di Marconi306 dal ${formatDate(arrival)} al ${formatDate(departure)} (${nights} ${nights===1?'notte':'notti'}) per ${guests} ${guests==='1'?'ospite':'ospiti'}.${priceText} Le date risultano disponibili sul sito; attendo conferma. Grazie!`;
+    const msg=`Buongiorno, vorrei richiedere la disponibilità di Marconi306 dal ${formatDate(arrival)} al ${formatDate(departure)} (${nights} ${nights===1?'notte':'notti'}) per ${guests} ${guests==='1'?'ospite':'ospiti'}. Le date risultano disponibili sul sito; attendo conferma. Grazie!`;
     window.open('https://wa.me/393278562974?text='+encodeURIComponent(msg),'_blank','noopener');
   });
   let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(render,150);});
 
   fetch('/api/availability',{headers:{'Accept':'application/json'}})
     .then(r=>{if(!r.ok) throw new Error('availability');return r.json();})
-    .then(data=>{loadRanges(data.blockedRanges);loaded=true;document.getElementById('calendar-status').textContent='Calendario aggiornato';render();window.dispatchEvent(new Event('calendar:ready'));})
-    .catch(()=>{loaded=false;document.getElementById('calendar-status').textContent='Disponibilità non caricata';monthsRoot.innerHTML='<p class="calendar-note">Il calendario non è temporaneamente disponibile. Contattaci direttamente su WhatsApp.</p>';updateSummary();window.dispatchEvent(new Event('calendar:ready'));});
+    .then(data=>{loadRanges(data.blockedRanges);loaded=true;document.getElementById('calendar-status').textContent='Calendario aggiornato';render();})
+    .catch(()=>{loaded=false;document.getElementById('calendar-status').textContent='Disponibilità non caricata';monthsRoot.innerHTML='<p class="calendar-note">Il calendario non è temporaneamente disponibile. Contattaci direttamente su WhatsApp.</p>';updateSummary();});
   render();
 })();
