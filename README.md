@@ -70,3 +70,11 @@ Aggiornamenti:
 - Aggiunto un campo totale separato e stabile nel riquadro “Il tuo soggiorno”.
 - Il totale viene ricalcolato notte per notte dopo la selezione del check-out.
 - Gestito chiaramente il caso di date prive di tariffa.
+
+
+## Versione 8.0
+- Rifatta completamente la sezione “Come muoversi”.
+- Aggiunte card per fermate CTM, Poetto, Cagliari, stazione, aeroporto e collegamenti estivi.
+- Inseriti collegamenti diretti a Google Maps e alle fonti ufficiali CTM/Trenitalia.
+- Aggiunta area “App utili” con CTM BusFinder, Trenitalia e Google Maps.
+- Layout ottimizzato per desktop e mobile.

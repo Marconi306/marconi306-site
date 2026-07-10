@@ -297,3 +297,33 @@ body{top:0!important}
 .booking-total strong{font-size:1.5rem;color:var(--sage-dark,#53634e)}
 #booking-total-note{display:block;margin-top:9px;line-height:1.4;opacity:.72}
 #booking-total-note[hidden]{display:none!important}
+
+
+/* Versione 8.0: nuova sezione Come muoversi */
+.mobility{background:linear-gradient(180deg,var(--sage-light),#f8f6f1)}
+.mobility-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:30px}
+.mobility-head .lead{max-width:760px}
+.mobility-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.mobility-card{display:flex;gap:20px;background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:26px;min-height:270px;box-shadow:0 12px 30px rgba(35,43,33,.06)}
+.mobility-card.featured{grid-column:1/-1;min-height:auto}
+.mobility-card.summer{background:linear-gradient(145deg,#fff8e7,#fff)}
+.mobility-icon{flex:0 0 52px;width:52px;height:52px;border-radius:16px;background:var(--sage-light);display:grid;place-items:center;font-size:1.7rem}
+.mobility-copy{display:flex;flex-direction:column;min-width:0}
+.mobility-kicker{text-transform:uppercase;letter-spacing:.12em;font-size:.73rem;font-weight:800;color:var(--sage-dark);margin:0 0 7px}
+.mobility-card h3{font-size:1.65rem;margin:0 0 10px}
+.mobility-card p{color:var(--muted);line-height:1.6;margin:0 0 16px}
+.mobility-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;margin-bottom:17px}
+.mobility-tags span{font-size:.78rem;font-weight:750;padding:6px 10px;border-radius:999px;background:var(--sage-light);color:var(--sage-dark)}
+.mobility-link{font-weight:800;text-decoration:none;color:var(--sage-dark);align-self:flex-start}
+.mobility-link:hover{text-decoration:underline}
+.mobility-tools{margin-top:24px;padding:28px;border-radius:20px;background:var(--sage-dark);color:#fff;display:grid;grid-template-columns:.9fr 1.6fr;gap:28px;align-items:center}
+.mobility-tools h3{font-size:1.8rem;margin:0 0 8px}
+.mobility-tools p{margin:0;line-height:1.55;color:rgba(255,255,255,.8)}
+.mobility-tools .eyebrow{color:#fff;margin-bottom:6px}
+.mobility-apps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mobility-apps a{display:flex;flex-direction:column;gap:5px;min-height:138px;padding:18px;border-radius:15px;background:rgba(255,255,255,.1);color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.14)}
+.mobility-apps a:hover{background:rgba(255,255,255,.16)}
+.mobility-apps span{font-size:1.5rem}.mobility-apps small{color:rgba(255,255,255,.72);line-height:1.35}
+.mobility-note{margin-top:16px;padding:15px 18px;border-left:4px solid var(--sage-dark);background:rgba(255,255,255,.65);font-size:.92rem;line-height:1.5}
+@media(max-width:900px){.mobility-head{align-items:flex-start;flex-direction:column}.mobility-grid{grid-template-columns:1fr}.mobility-card.featured{grid-column:auto}.mobility-tools{grid-template-columns:1fr}.mobility-apps{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:640px){.mobility{padding-top:58px}.mobility-head{margin-bottom:20px}.mobility-card{padding:20px;gap:14px;min-height:auto;border-radius:16px}.mobility-icon{flex-basis:44px;width:44px;height:44px;border-radius:13px;font-size:1.35rem}.mobility-card h3{font-size:1.35rem}.mobility-card p{font-size:.94rem}.mobility-tools{padding:22px;border-radius:16px}.mobility-apps{grid-template-columns:1fr}.mobility-apps a{min-height:auto}.mobility-note{font-size:.86rem}}
