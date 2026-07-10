@@ -8,6 +8,4 @@ Aggiornamenti:
 - metadati e dati strutturati migliorati;
 - calendario e prezzi non ancora pubblicati: saranno definiti in una fase successiva.
 
-
-## Changelog
-- 2026-07-10: Trigger nuovo deploy Cloudflare e preparazione sincronizzazione calendario Booking/Airbnb.
+- 10/07/2026: aggiunte tariffe dirette da luglio 2026 a gennaio 2027, con periodi speciali.
