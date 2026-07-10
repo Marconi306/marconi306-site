@@ -40,3 +40,106 @@ $('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#ar
     menu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
   });
 })();
+
+// Calendario disponibilità Booking + Airbnb (senza prezzi)
+(function(){
+  const monthsRoot = document.getElementById('calendar-months');
+  if (!monthsRoot) return;
+
+  const monthNames = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+  const weekdays = ['Lun','Mar','Mer','Gio','Ven','Sab','Dom'];
+  const todayIso = localIso(new Date());
+  let cursor = new Date(); cursor.setDate(1); cursor.setHours(0,0,0,0);
+  let blocked = new Set();
+  let arrival = null;
+  let departure = null;
+  let loaded = false;
+
+  function localIso(date){
+    const y=date.getFullYear(), m=String(date.getMonth()+1).padStart(2,'0'), d=String(date.getDate()).padStart(2,'0');
+    return `${y}-${m}-${d}`;
+  }
+  function fromIso(iso){ const [y,m,d]=iso.split('-').map(Number); return new Date(y,m-1,d); }
+  function addDay(iso, n=1){ const d=fromIso(iso); d.setDate(d.getDate()+n); return localIso(d); }
+  function formatDate(iso){ return iso ? new Intl.DateTimeFormat('it-IT',{day:'numeric',month:'long',year:'numeric'}).format(fromIso(iso)) : 'Seleziona'; }
+  function nightsBetween(a,b){ return Math.round((fromIso(b)-fromIso(a))/86400000); }
+  function eachNight(a,b){ const out=[]; for(let x=a;x<b;x=addDay(x)) out.push(x); return out; }
+  function validDeparture(candidate){
+    if(!arrival || candidate<=arrival) return false;
+    return !eachNight(arrival,candidate).some(day=>blocked.has(day));
+  }
+  function canChoose(iso){
+    if(iso<todayIso) return false;
+    if(!arrival || departure) return !blocked.has(iso);
+    return validDeparture(iso);
+  }
+  function loadRanges(ranges){
+    blocked.clear();
+    (ranges||[]).forEach(r=>{ for(let x=r.start;x<r.end;x=addDay(x)) blocked.add(x); });
+  }
+  function renderMonth(base){
+    const y=base.getFullYear(), m=base.getMonth();
+    const first=new Date(y,m,1); const days=new Date(y,m+1,0).getDate();
+    const offset=(first.getDay()+6)%7;
+    const wrap=document.createElement('section'); wrap.className='calendar-month';
+    wrap.innerHTML=`<h3>${monthNames[m]} ${y}</h3><div class="calendar-weekdays">${weekdays.map(w=>`<span>${w}</span>`).join('')}</div><div class="calendar-days"></div>`;
+    const grid=wrap.querySelector('.calendar-days');
+    for(let i=0;i<offset;i++){ const e=document.createElement('span');e.className='calendar-empty';grid.appendChild(e); }
+    for(let day=1;day<=days;day++){
+      const iso=localIso(new Date(y,m,day));
+      const btn=document.createElement('button'); btn.type='button';btn.className='calendar-day';btn.textContent=day;btn.dataset.date=iso;
+      if(iso<todayIso) btn.classList.add('past');
+      if(blocked.has(iso)) btn.classList.add('busy');
+      if(arrival===iso) btn.classList.add('selected','checkin');
+      if(departure===iso) btn.classList.add('selected','checkout');
+      if(arrival && departure && iso>arrival && iso<departure) btn.classList.add('range');
+      btn.disabled=!loaded || !canChoose(iso);
+      btn.setAttribute('aria-label',`${day} ${monthNames[m]} ${y}${blocked.has(iso)?', non disponibile':', disponibile'}`);
+      btn.addEventListener('click',()=>selectDate(iso));
+      grid.appendChild(btn);
+    }
+    return wrap;
+  }
+  function render(){
+    monthsRoot.innerHTML='';
+    monthsRoot.appendChild(renderMonth(new Date(cursor.getFullYear(),cursor.getMonth(),1)));
+    if(window.innerWidth>980) monthsRoot.appendChild(renderMonth(new Date(cursor.getFullYear(),cursor.getMonth()+1,1)));
+    updateSummary();
+  }
+  function selectDate(iso){
+    if(!arrival || departure){ arrival=iso; departure=null; }
+    else if(validDeparture(iso)){ departure=iso; }
+    render();
+  }
+  function updateSummary(){
+    document.getElementById('stay-arrival').textContent=formatDate(arrival);
+    document.getElementById('stay-departure').textContent=formatDate(departure);
+    const summary=document.getElementById('stay-summary');
+    const wa=document.getElementById('wa-request');
+    if(arrival && departure){
+      const nights=nightsBetween(arrival,departure);
+      summary.innerHTML=`<strong>${nights} ${nights===1?'notte':'notti'}</strong><br>Disponibilità visualizzata sul sito, da confermare direttamente con il proprietario.`;
+      wa.classList.remove('disabled');wa.setAttribute('aria-disabled','false');wa.href='#';
+    } else {
+      summary.textContent=arrival?'Ora seleziona la data di partenza.':'Seleziona prima la data di arrivo e poi quella di partenza.';
+      wa.classList.add('disabled');wa.setAttribute('aria-disabled','true');wa.href='#';
+    }
+  }
+  document.getElementById('calendar-prev').addEventListener('click',()=>{ const now=new Date();now.setDate(1); if(cursor>now){cursor.setMonth(cursor.getMonth()-1);render();} });
+  document.getElementById('calendar-next').addEventListener('click',()=>{cursor.setMonth(cursor.getMonth()+1);render();});
+  document.getElementById('calendar-reset').addEventListener('click',()=>{arrival=null;departure=null;render();});
+  document.getElementById('wa-request').addEventListener('click',e=>{
+    e.preventDefault(); if(!arrival||!departure) return;
+    const guests=document.getElementById('guests').value;
+    const nights=nightsBetween(arrival,departure);
+    const msg=`Buongiorno, vorrei richiedere la disponibilità di Marconi306 dal ${formatDate(arrival)} al ${formatDate(departure)} (${nights} ${nights===1?'notte':'notti'}) per ${guests} ${guests==='1'?'ospite':'ospiti'}. Le date risultano disponibili sul sito; attendo conferma. Grazie!`;
+    window.open('https://wa.me/393278562974?text='+encodeURIComponent(msg),'_blank','noopener');
+  });
+  let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(render,150);});
+
+  fetch('/api/availability',{headers:{'Accept':'application/json'}})
+    .then(r=>{if(!r.ok) throw new Error('availability');return r.json();})
+    .then(data=>{loadRanges(data.blockedRanges);loaded=true;document.getElementById('calendar-status').textContent='Calendario aggiornato';render();})
+    .catch(()=>{loaded=false;document.getElementById('calendar-status').textContent='Disponibilità non caricata';monthsRoot.innerHTML='<p class="calendar-note">Il calendario non è temporaneamente disponibile. Contattaci direttamente su WhatsApp.</p>';updateSummary();});
+  render();
+})();

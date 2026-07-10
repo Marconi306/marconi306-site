@@ -103,3 +103,38 @@ body.menu-open{overflow:hidden}
 .transport-grid p{margin:0;color:var(--muted);line-height:1.65}
 .transport-callout{margin-top:22px;padding:20px 24px;background:var(--sage-dark);color:white;text-align:center;line-height:1.6}
 @media(max-width:1000px){.transport-grid{grid-template-columns:1fr}.transport-grid article{min-height:auto}}
+
+/* Calendario disponibilità v5 */
+.availability-section{background:linear-gradient(180deg,var(--cream),var(--paper))}
+.availability-head{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:32px}
+.availability-head>div:first-child{max-width:760px}
+.availability-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.82rem;font-weight:800;color:var(--muted)}
+.availability-legend span{display:flex;align-items:center;gap:7px}
+.legend-dot{width:12px;height:12px;border-radius:50%;display:inline-block;border:1px solid var(--line)}
+.legend-dot.free{background:var(--paper)}.legend-dot.busy{background:#d7d1c8}.legend-dot.selected{background:var(--sage)}
+.availability-layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,.7fr);gap:26px;align-items:start}
+.calendar-card,.stay-card{background:var(--paper);border:1px solid var(--line);box-shadow:0 18px 50px rgba(50,40,28,.09)}
+.calendar-card{padding:24px}.stay-card{padding:28px;position:sticky;top:110px}
+.calendar-toolbar{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:12px;margin-bottom:22px;text-align:center}
+.calendar-toolbar strong{font-size:.92rem;color:var(--muted)}
+.calendar-nav{width:44px;height:44px;border:1px solid var(--line);background:var(--cream);font-size:1.7rem;cursor:pointer;color:var(--ink)}
+.calendar-months{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+.calendar-month h3{font-size:1.75rem;text-align:center;margin:0 0 14px;text-transform:capitalize}
+.calendar-weekdays,.calendar-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.calendar-weekdays span{text-align:center;font-size:.68rem;font-weight:900;text-transform:uppercase;color:var(--muted);padding:5px 0}
+.calendar-day,.calendar-empty{aspect-ratio:1/1;min-width:0}
+.calendar-day{border:1px solid transparent;background:var(--cream);color:var(--ink);cursor:pointer;font:inherit;font-weight:800;position:relative;transition:.18s ease}
+.calendar-day:hover:not(:disabled){border-color:var(--sage);transform:translateY(-1px)}
+.calendar-day:disabled{cursor:not-allowed;color:#aaa;background:#eeeae4;text-decoration:line-through}
+.calendar-day.past{opacity:.45}.calendar-day.selected,.calendar-day.range{background:var(--sage);color:white}.calendar-day.range{opacity:.72}
+.calendar-day.checkin:after,.calendar-day.checkout:after{content:'';position:absolute;left:50%;bottom:5px;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:currentColor}
+.calendar-note{margin:22px 0 0;color:var(--muted);font-size:.82rem;line-height:1.55}
+.stay-dates{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+.stay-dates>div{padding:15px;background:var(--cream);border:1px solid var(--line)}
+.stay-dates span{display:block;font-size:.7rem;text-transform:uppercase;font-weight:900;color:var(--muted);margin-bottom:6px}.stay-dates strong{font-size:1rem}
+.guest-field{display:block;font-size:.75rem;text-transform:uppercase;font-weight:900;color:var(--muted);margin:16px 0}.guest-field select{display:block;width:100%;margin-top:8px;padding:13px;border:1px solid var(--line);background:white;font:inherit;color:var(--ink)}
+.stay-summary{padding:16px;margin:16px 0;background:var(--sage-light);line-height:1.55;font-size:.92rem}
+.calendar-reset{margin-bottom:10px;background:transparent;cursor:pointer}
+.btn.disabled{opacity:.48;pointer-events:none}
+@media(max-width:980px){.availability-head{display:block}.availability-legend{margin-top:18px}.availability-layout{grid-template-columns:1fr}.stay-card{position:static}.calendar-months{grid-template-columns:1fr}}
+@media(max-width:600px){.calendar-card,.stay-card{padding:18px}.calendar-days,.calendar-weekdays{gap:3px}.calendar-day{font-size:.82rem}.availability-legend{gap:10px}.stay-dates{grid-template-columns:1fr}}
