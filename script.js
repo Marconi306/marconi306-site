@@ -215,15 +215,65 @@ function syncLocalGuideDetails() {
   }
 }
 
+function scrollToLocalCategory(category, behavior = 'smooth') {
+  if (!category) return;
+  const header = document.querySelector('.header');
+  const mobileNav = document.querySelector('.local-mobile-nav');
+  const headerHeight = header ? header.getBoundingClientRect().height : 0;
+  const navHeight = mobileNav && getComputedStyle(mobileNav).display !== 'none'
+    ? mobileNav.getBoundingClientRect().height : 0;
+  const offset = headerHeight + navHeight + 10;
+  const top = category.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top: Math.max(0, top), behavior });
+}
+
+function updateLocalNavState(category) {
+  document.querySelectorAll('[data-local-target]').forEach(button => {
+    button.classList.toggle('is-active', button.dataset.localTarget === category?.id);
+  });
+}
+
+function openLocalCategory(category, shouldScroll = true) {
+  if (!category) return;
+  const isMobile = window.matchMedia('(max-width: 640px)').matches;
+  if (isMobile) {
+    document.querySelectorAll('.local-category').forEach(other => {
+      if (other !== category) other.open = false;
+    });
+  }
+  category.open = true;
+  updateLocalNavState(category);
+  if (shouldScroll) {
+    requestAnimationFrame(() => requestAnimationFrame(() => scrollToLocalCategory(category)));
+  }
+}
+
 function enableMobileAccordion() {
   document.querySelectorAll('.local-category').forEach(category => {
-    category.addEventListener('toggle', () => {
-      if (!category.open || window.matchMedia('(min-width: 641px)').matches) return;
-      document.querySelectorAll('.local-category').forEach(other => {
-        if (other !== category) other.open = false;
+    const summary = category.querySelector('summary');
+    if (summary) {
+      summary.addEventListener('click', event => {
+        if (!window.matchMedia('(max-width: 640px)').matches) return;
+        event.preventDefault();
+        if (category.open) {
+          category.open = false;
+          updateLocalNavState(null);
+        } else {
+          openLocalCategory(category, true);
+        }
       });
+    }
+  });
+
+  document.querySelectorAll('[data-local-target]').forEach(button => {
+    button.addEventListener('click', () => {
+      const category = document.getElementById(button.dataset.localTarget);
+      openLocalCategory(category, true);
     });
   });
+
+  const initiallyOpen = document.querySelector('.local-category[open]');
+  updateLocalNavState(initiallyOpen);
 }
 
 document.addEventListener('click', event => {

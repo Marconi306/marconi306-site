@@ -39,3 +39,10 @@ Aggiornamenti:
 - Ripristinato il multilingua: italiano, inglese, spagnolo, tedesco e francese.
 - Tutte le categorie “A due passi” sono aperte su desktop.
 - Su smartphone le categorie funzionano come accordion con apertura esclusiva.
+
+
+## Versione 7.4
+- Ottimizzata la guida locale su smartphone.
+- Aggiunta una barra orizzontale delle categorie.
+- Corretto lo scorrimento: la categoria selezionata viene aperta e posizionata correttamente sotto l’intestazione.
+- Migliorate dimensioni, spaziature e leggibilità delle card su mobile.
