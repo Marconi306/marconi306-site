@@ -19,8 +19,9 @@ Aggiornamenti:
 ## Versione 6.2
 - Tariffe calendario aggiornate: luglio €85; agosto €100 (€120 dal 10 al 16); settembre €85; ottobre €80; novembre €70; dicembre €70 (€80 il 24, 25, 26, 30 e 31); gennaio 2027 €70 (€80 il 1° gennaio).
 
-
-## Versione 7
+## Versione 7.1
+- Sostituito Kemu Caffè con EGO Café Bar Lounge.
 - Aggiunta la sezione “A due passi da Marconi306”.
-- Inserite 18 attività divise per colazione, aperitivo, pizza, cena, sushi e gelato.
-- Collegamenti diretti a Google Maps e layout responsive.
+- Aggiunte fotografie illustrative ottimizzate per le sei categorie.
+- Inseriti collegamenti Google Maps per tutti i locali.
+- Immagini di atmosfera utilizzate secondo licenza Unsplash; non rappresentano necessariamente i singoli esercizi.
