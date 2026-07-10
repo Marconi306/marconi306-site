@@ -13,3 +13,5 @@ Aggiornamenti:
 - 10/07/2026: calendario semplificato; prezzi rimossi dalle singole date e totale mostrato nel riepilogo del soggiorno.
 
 - 10/07/2026: corretto lo scorrimento dei pulsanti “Prenota ora” verso il calendario, con compensazione dell'header e del caricamento iCal.
+
+- 10/07/2026: correzione compatibilità Firefox del calendario; giorno e prezzo su righe separate.

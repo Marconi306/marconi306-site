@@ -151,7 +151,14 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
       const iso=localIso(new Date(y,m,day));
       const btn=document.createElement('button'); btn.type='button';btn.className='calendar-day';btn.dataset.date=iso;
       const rate=nightlyRate(iso);
-      btn.innerHTML=`<span class="calendar-day-number">${day}</span>`;
+      const dayNumber=document.createElement('span');
+      dayNumber.className='calendar-day-number';
+      dayNumber.textContent=String(day);
+      btn.appendChild(dayNumber);
+      const dayPrice=document.createElement('span');
+      dayPrice.className='calendar-day-price';
+      dayPrice.textContent=rate!==null ? `${rate} €` : 'Su richiesta';
+      btn.appendChild(dayPrice);
       if(rate===null) btn.classList.add('rate-unset');
       if(iso<todayIso) btn.classList.add('past');
       if(blocked.has(iso)) btn.classList.add('busy');
