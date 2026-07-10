@@ -9,3 +9,5 @@ Aggiornamenti:
 - calendario e prezzi non ancora pubblicati: saranno definiti in una fase successiva.
 
 - 10/07/2026: aggiunte tariffe dirette da luglio 2026 a gennaio 2027, con periodi speciali.
+
+- 10/07/2026: calendario semplificato; prezzi rimossi dalle singole date e totale mostrato nel riepilogo del soggiorno.

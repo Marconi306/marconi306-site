@@ -107,7 +107,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
       const iso=localIso(new Date(y,m,day));
       const btn=document.createElement('button'); btn.type='button';btn.className='calendar-day';btn.dataset.date=iso;
       const rate=nightlyRate(iso);
-      btn.innerHTML=`<span class="calendar-day-number">${day}</span>${rate!==null?`<small>${rate}€</small>`:''}`;
+      btn.innerHTML=`<span class="calendar-day-number">${day}</span>`;
       if(rate===null) btn.classList.add('rate-unset');
       if(iso<todayIso) btn.classList.add('past');
       if(blocked.has(iso)) btn.classList.add('busy');
