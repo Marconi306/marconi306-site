@@ -182,3 +182,20 @@ body.menu-open{overflow:hidden}
   .local-card-image{aspect-ratio:16/10}
   .local-card-body{padding:18px}
 }
+
+/* Versione 7.2 - guida locale con foto reali */
+.local-category{border:1px solid var(--line);background:rgba(255,255,255,.55);border-radius:18px;overflow:hidden}
+.local-category-title{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;margin:0;background:var(--paper);user-select:none}
+.local-category-title::-webkit-details-marker{display:none}
+.local-category-name{display:flex;align-items:center;gap:10px;font-size:1.32rem}
+.local-category-count{font-size:.76rem;font-weight:900;color:var(--sage-dark);text-transform:uppercase;letter-spacing:.08em}
+.local-category-title:after{content:'+';font-size:1.45rem;line-height:1;margin-left:8px;color:var(--sage-dark)}
+.local-category[open]>.local-category-title:after{content:'–'}
+.local-category>.local-grid{padding:0 16px 18px}
+.local-category[open]>.local-grid{animation:localReveal .22s ease}
+@keyframes localReveal{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+.local-card-image img{object-position:center}
+.local-card-body{min-height:210px}
+.local-guide .lead{max-width:700px}
+@media(min-width:641px){.local-category{border:0;background:transparent;border-radius:0;overflow:visible}.local-category-title{pointer-events:none;padding:0 0 14px;background:transparent}.local-category-title:after,.local-category-count{display:none}.local-category:not([open])>.local-grid{display:grid}.local-category>.local-grid{padding:0}.local-category-name{font-size:1.45rem}.local-category-name strong{font-family:Georgia,serif}.local-card-body{min-height:220px}}
+@media(max-width:640px){.local-categories{gap:12px}.local-category:not([open])>.local-grid{display:none}.local-card-body{min-height:auto}.local-guide-head{margin-bottom:24px}.local-guide-badge{font-size:.78rem}.local-category-title{padding:16px}.local-category-name{font-size:1.1rem}.local-category>.local-grid{padding:0 12px 14px}.local-card-image{aspect-ratio:4/3}}

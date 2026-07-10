@@ -25,3 +25,11 @@ Aggiornamenti:
 - Aggiunte fotografie illustrative ottimizzate per le sei categorie.
 - Inseriti collegamenti Google Maps per tutti i locali.
 - Immagini di atmosfera utilizzate secondo licenza Unsplash; non rappresentano necessariamente i singoli esercizi.
+
+
+## Versione 7.2
+- Inserite 17 fotografie reali dei locali consigliati.
+- Eliminata Vineria Giró.
+- Inserite card individuali con collegamenti Google Maps.
+- Guida locale trasformata in categorie richiudibili su smartphone.
+- Rimossa ogni immagine illustrativa/stock dalla sezione.
