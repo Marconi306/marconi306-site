@@ -143,3 +143,26 @@ body.menu-open{overflow:hidden}
 .btn.disabled{opacity:.48;pointer-events:none}
 @media(max-width:980px){.availability-head{display:block}.availability-legend{margin-top:18px}.availability-layout{grid-template-columns:1fr}.stay-card{position:static}.calendar-months{grid-template-columns:1fr}}
 @media(max-width:600px){.calendar-card,.stay-card{padding:14px}.calendar-days,.calendar-weekdays{gap:2px}.calendar-day{font-size:.82rem;min-height:46px;padding:2px 0}.calendar-day-number{font-size:.8rem}.calendar-day-price{display:block;font-size:.56rem;margin-top:3px}.availability-legend{gap:10px}.stay-dates{grid-template-columns:1fr}}
+
+
+/* Versione 7: guida locale a piedi */
+.local-guide{background:linear-gradient(180deg,var(--paper),var(--cream))}
+.local-guide-head{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:34px}
+.local-guide-head>div:first-child{max-width:760px}
+.local-guide-badge{padding:12px 16px;border:1px solid var(--sage);background:var(--sage-light);font-weight:900;font-size:.82rem;white-space:nowrap}
+.local-categories{display:grid;gap:34px}
+.local-category-title{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.local-category-title span{font-size:1.45rem}
+.local-category-title h3{font-size:1.65rem;margin:0}
+.local-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.local-card{background:var(--paper);border:1px solid var(--line);padding:22px;min-height:210px;display:flex;flex-direction:column;box-shadow:0 12px 34px rgba(50,40,28,.06);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.local-card:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(50,40,28,.10);border-color:var(--sage)}
+.local-card-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.local-pin{width:42px;height:42px;display:grid;place-items:center;background:var(--sage-light);font-size:1.25rem;border-radius:50%}
+.local-walk{font-size:.73rem;font-weight:900;color:var(--sage-dark);text-align:right}
+.local-card h3{font-size:1.35rem;margin:0 0 8px}
+.local-card p{margin:0 0 20px;color:var(--muted);line-height:1.55;font-size:.93rem}
+.local-link{margin-top:auto;display:inline-flex;align-items:center;justify-content:space-between;gap:14px;text-decoration:none;font-weight:900;color:var(--sage-dark);border-top:1px solid var(--line);padding-top:14px}
+.local-guide-note{margin:28px 0 0;color:var(--muted);font-size:.78rem;text-align:center}
+@media(max-width:1000px){.local-guide-head{display:block}.local-guide-badge{display:inline-block;margin-top:18px}.local-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.local-grid{grid-template-columns:1fr}.local-card{min-height:auto}.local-categories{gap:28px}.local-category-title h3{font-size:1.45rem}.local-guide-badge{white-space:normal}}
