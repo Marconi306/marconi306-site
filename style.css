@@ -92,3 +92,14 @@ body.menu-open{overflow:hidden}
 @media (max-width:640px){
   #mobile-menu.mobile-menu{top:118px;left:12px;right:12px}
 }
+
+/* Versione 4.0: trasporti e contenuti locali */
+.places-note{max-width:900px;margin:34px auto 0;text-align:center;color:var(--muted);font-size:1.05rem;line-height:1.7}
+.transport{background:var(--sage-light)}
+.transport-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.transport-grid article{background:var(--paper);border:1px solid var(--line);padding:28px;min-height:230px}
+.transport-grid article>span{display:block;font-size:2rem;margin-bottom:14px}
+.transport-grid h3{font-size:1.8rem;margin:0 0 10px}
+.transport-grid p{margin:0;color:var(--muted);line-height:1.65}
+.transport-callout{margin-top:22px;padding:20px 24px;background:var(--sage-dark);color:white;text-align:center;line-height:1.6}
+@media(max-width:1000px){.transport-grid{grid-template-columns:1fr}.transport-grid article{min-height:auto}}

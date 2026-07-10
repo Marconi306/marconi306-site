@@ -1,5 +1,9 @@
-# Marconi306
+Marconi306 – versione 4.0
 
-Sito statico pronto per GitHub + Cloudflare Pages.
-
-Caricare tutti i file e cartelle contenuti in questa cartella nella root del repository GitHub.
+Aggiornamenti:
+- testi SEO locali più completi;
+- distanze corrette per Basilica, Parco Matteotti, Via Eligio Porcu e Viale Colombo;
+- sezione Dintorni aggiornata con aeroporto;
+- nuova sezione “Muoversi senza auto” con terminal CTM e fermate ARST;
+- metadati e dati strutturati migliorati;
+- calendario e prezzi non ancora pubblicati: saranno definiti in una fase successiva.
