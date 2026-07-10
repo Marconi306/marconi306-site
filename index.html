@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;family=Inter:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=7.7" rel="stylesheet"/>
+<link href="style.css?v=7.8" rel="stylesheet"/>
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "LodgingBusiness",
@@ -351,7 +351,14 @@
 <p class="eyebrow">Il tuo soggiorno</p>
 <div class="stay-dates"><div><span>Check-in</span><strong id="stay-arrival">Seleziona</strong></div><div><span>Check-out</span><strong id="stay-departure">Seleziona</strong></div></div>
 <label class="guest-field">Ospiti<select id="guests"><option value="1">1 ospite</option><option selected="" value="2">2 ospiti</option></select></label>
-<div class="stay-summary" id="stay-summary">Seleziona prima la data di arrivo e poi quella di partenza.</div>
+<div class="stay-summary" id="stay-summary">
+  <div id="stay-summary-message">Seleziona prima la data di arrivo e poi quella di partenza.</div>
+  <div class="booking-total" id="booking-total" hidden>
+    <span>Totale soggiorno</span>
+    <strong id="booking-total-value">€0</strong>
+  </div>
+  <small id="booking-total-note" hidden>Disponibilità e importo finale soggetti a conferma del proprietario.</small>
+</div>
 <button class="btn outline full calendar-reset" id="calendar-reset" type="button">Cancella le date</button>
 <a aria-disabled="true" class="btn sage full disabled" href="#" id="wa-request">Richiedi disponibilità su WhatsApp</a>
 <a class="btn outline full" href="mailto:viamarconi306@gmail.com?subject=Richiesta%20disponibilit%C3%A0%20Marconi306">Richiedi via email</a>
@@ -362,7 +369,7 @@
 <footer class="footer" id="contatti"><div class="footer-grid"><div><img alt="Marconi306" src="assets/logo/marconi306-mark.png" style="width:160px;margin-bottom:16px"><p>Via Guglielmo Marconi 306<br/>Quartu Sant'Elena • Sardegna</p><p class="small">Locazione turistica gestita da privati. CIN IT092051C2000U3955.</p></img></div><div><p><a href="mailto:viamarconi306@gmail.com">viamarconi306@gmail.com</a></p><p><a href="https://wa.me/393278562974" target="_blank">WhatsApp</a></p><p><a href="privacy.html">Privacy</a></p></div></div></footer>
 <a class="whatsapp" href="https://wa.me/393278562974" target="_blank">WhatsApp</a>
 <div class="lightbox" onclick="closeLightbox()"><button class="lb-close" onclick="event.stopPropagation();closeLightbox()">×</button><button class="lb-prev" onclick="event.stopPropagation();stepLightbox(-1)">‹</button><img alt="" id="lb-img" src=""><button class="lb-next" onclick="event.stopPropagation();stepLightbox(1)">›</button></img></div>
-<script src="script.js?v=7.7"></script>
+<script src="script.js?v=7.8"></script>
 <script>
 (function(){
   function getParts(){

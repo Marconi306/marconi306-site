@@ -278,3 +278,22 @@ body{top:0!important}
 .stay-total-value{font-size:1.35rem;line-height:1;color:var(--sage-dark,#53634e)}
 .stay-total-unavailable{font-weight:700}
 .stay-summary small{display:block;line-height:1.45;opacity:.76}
+
+
+/* Versione 7.8: totale prenotazione sempre visibile */
+.booking-total{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-top:12px;
+  padding:14px 16px;
+  border:1px solid rgba(83,99,78,.18);
+  border-radius:14px;
+  background:#fff;
+}
+.booking-total[hidden]{display:none!important}
+.booking-total span{font-size:.95rem}
+.booking-total strong{font-size:1.5rem;color:var(--sage-dark,#53634e)}
+#booking-total-note{display:block;margin-top:9px;line-height:1.4;opacity:.72}
+#booking-total-note[hidden]{display:none!important}

@@ -140,21 +140,46 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
     render();
   }
   function updateSummary(){
-    document.getElementById('stay-arrival').textContent=formatDate(arrival);
-    document.getElementById('stay-departure').textContent=formatDate(departure);
-    const summary=document.getElementById('stay-summary');
+    const arrivalEl=document.getElementById('stay-arrival');
+    const departureEl=document.getElementById('stay-departure');
+    const message=document.getElementById('stay-summary-message');
+    const totalBox=document.getElementById('booking-total');
+    const totalValue=document.getElementById('booking-total-value');
+    const totalNote=document.getElementById('booking-total-note');
     const wa=document.getElementById('wa-request');
+
+    arrivalEl.textContent=formatDate(arrival);
+    departureEl.textContent=formatDate(departure);
+
     if(arrival && departure){
       const nights=nightsBetween(arrival,departure);
       const total=stayTotal(arrival,departure);
-      const totalRow=total!==null
-        ? `<span class="stay-total-label">Totale soggiorno</span><strong class="stay-total-value">${euro(total)}</strong>`
-        : `<span class="stay-total-unavailable">Totale da confermare</span>`;
-      summary.innerHTML=`<div class="stay-summary-nights"><strong>${nights} ${nights===1?'notte':'notti'}</strong></div><div class="stay-total">${totalRow}</div><small>Disponibilità e importo finale soggetti a conferma del proprietario.</small>`;
-      wa.classList.remove('disabled');wa.setAttribute('aria-disabled','false');wa.href='#';
-    } else {
-      summary.textContent=arrival?'Ora seleziona la data di partenza.':'Seleziona prima la data di arrivo e poi quella di partenza.';
-      wa.classList.add('disabled');wa.setAttribute('aria-disabled','true');wa.href='#';
+
+      message.innerHTML=`<strong>${nights} ${nights===1?'notte':'notti'}</strong>`;
+
+      if(total !== null){
+        totalValue.textContent=euro(total);
+        totalBox.hidden=false;
+        totalNote.hidden=false;
+      }else{
+        totalBox.hidden=true;
+        totalNote.hidden=false;
+        totalNote.textContent='Il totale non è disponibile per una o più date selezionate. Contattaci per la tariffa.';
+      }
+
+      wa.classList.remove('disabled');
+      wa.setAttribute('aria-disabled','false');
+      wa.href='#';
+    }else{
+      message.textContent=arrival
+        ? 'Ora seleziona la data di partenza.'
+        : 'Seleziona prima la data di arrivo e poi quella di partenza.';
+      totalBox.hidden=true;
+      totalNote.hidden=true;
+      totalNote.textContent='Disponibilità e importo finale soggetti a conferma del proprietario.';
+      wa.classList.add('disabled');
+      wa.setAttribute('aria-disabled','true');
+      wa.href='#';
     }
   }
   document.getElementById('calendar-prev').addEventListener('click',()=>{ const now=new Date();now.setDate(1); if(cursor>now){cursor.setMonth(cursor.getMonth()-1);render();} });

@@ -64,3 +64,9 @@ Aggiornamenti:
 - Rinominate la voce e la sezione “A due passi” in “Quartu da gustare”.
 - Aggiornato il testo introduttivo della guida gastronomica.
 - Spostata la sezione Spiagge prima di Come muoversi anche nel corpo della pagina.
+
+## Versione 7.8
+- Corretto definitivamente il riepilogo del totale prenotazione.
+- Aggiunto un campo totale separato e stabile nel riquadro “Il tuo soggiorno”.
+- Il totale viene ricalcolato notte per notte dopo la selezione del check-out.
+- Gestito chiaramente il caso di date prive di tariffa.
