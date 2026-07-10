@@ -40,6 +40,50 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   });
 })();
 
+// Scorrimento affidabile verso la sezione Prenota.
+// Compensa l'header fisso e riallinea la sezione dopo il caricamento asincrono del calendario.
+(function(){
+  function closeMobileMenu(){
+    const menu=document.getElementById('mobile-menu');
+    const toggle=document.getElementById('mobile-menu-button') || document.querySelector('.mobile-menu-toggle');
+    if(menu){
+      menu.classList.remove('is-open');
+      menu.setAttribute('aria-hidden','true');
+    }
+    if(toggle){
+      toggle.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded','false');
+    }
+    document.body.classList.remove('menu-open');
+  }
+
+  function scrollToBooking(behavior='smooth'){
+    const target=document.getElementById('prenota');
+    if(!target) return;
+    const header=document.querySelector('.header');
+    const offset=(header ? header.getBoundingClientRect().height : 0) + 14;
+    const top=target.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({top:Math.max(0,top),behavior});
+  }
+
+  document.querySelectorAll('a[href="#prenota"]').forEach(link=>{
+    link.addEventListener('click',function(event){
+      event.preventDefault();
+      closeMobileMenu();
+      history.replaceState(null,'','#prenota');
+      requestAnimationFrame(()=>scrollToBooking('smooth'));
+      // Il calendario modifica leggermente l'altezza della pagina quando riceve i dati iCal.
+      // Questi riallineamenti mantengono la sezione nella posizione corretta al primo clic.
+      window.setTimeout(()=>scrollToBooking('auto'),180);
+      window.setTimeout(()=>scrollToBooking('auto'),650);
+    });
+  });
+
+  window.addEventListener('calendar:ready',()=>{
+    if(location.hash==='#prenota') window.setTimeout(()=>scrollToBooking('auto'),40);
+  });
+})();
+
 // Calendario disponibilità Booking + Airbnb con tariffe dirette
 (function(){
   const monthsRoot = document.getElementById('calendar-months');
@@ -170,7 +214,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
 
   fetch('/api/availability',{headers:{'Accept':'application/json'}})
     .then(r=>{if(!r.ok) throw new Error('availability');return r.json();})
-    .then(data=>{loadRanges(data.blockedRanges);loaded=true;document.getElementById('calendar-status').textContent='Calendario aggiornato';render();})
-    .catch(()=>{loaded=false;document.getElementById('calendar-status').textContent='Disponibilità non caricata';monthsRoot.innerHTML='<p class="calendar-note">Il calendario non è temporaneamente disponibile. Contattaci direttamente su WhatsApp.</p>';updateSummary();});
+    .then(data=>{loadRanges(data.blockedRanges);loaded=true;document.getElementById('calendar-status').textContent='Calendario aggiornato';render();window.dispatchEvent(new Event('calendar:ready'));})
+    .catch(()=>{loaded=false;document.getElementById('calendar-status').textContent='Disponibilità non caricata';monthsRoot.innerHTML='<p class="calendar-note">Il calendario non è temporaneamente disponibile. Contattaci direttamente su WhatsApp.</p>';updateSummary();window.dispatchEvent(new Event('calendar:ready'));});
   render();
 })();

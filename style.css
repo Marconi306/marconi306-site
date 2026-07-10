@@ -138,3 +138,7 @@ body.menu-open{overflow:hidden}
 .btn.disabled{opacity:.48;pointer-events:none}
 @media(max-width:980px){.availability-head{display:block}.availability-legend{margin-top:18px}.availability-layout{grid-template-columns:1fr}.stay-card{position:static}.calendar-months{grid-template-columns:1fr}}
 @media(max-width:600px){.calendar-card,.stay-card{padding:18px}.calendar-days,.calendar-weekdays{gap:3px}.calendar-day{font-size:.82rem}.availability-legend{gap:10px}.stay-dates{grid-template-columns:1fr}}
+
+/* Mantiene la sezione di prenotazione visibile sotto l'header sticky. */
+#prenota{scroll-margin-top:110px}
+@media(max-width:1000px){#prenota{scroll-margin-top:96px}}
