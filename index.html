@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;family=Inter:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=7.4" rel="stylesheet"/>
+<link href="style.css?v=7.5" rel="stylesheet"/>
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "LodgingBusiness",
@@ -54,6 +54,7 @@
 <button data-lang="es" onclick="changeLanguage('es')" type="button">Español</button>
 <button data-lang="de" onclick="changeLanguage('de')" type="button">Deutsch</button>
 <button data-lang="fr" onclick="changeLanguage('fr')" type="button">Français</button>
+<button data-lang="ru" onclick="changeLanguage('ru')" type="button">Русский</button>
 </div></div><button aria-controls="mobile-menu" aria-expanded="false" aria-label="Apri il menu" class="mobile-menu-toggle" id="mobile-menu-button" onclick="return toggleMobileMenu(event)" type="button"><span></span><span></span><span></span></button>
 </header>
 <nav aria-hidden="true" aria-label="Menu principale mobile" class="mobile-menu" id="mobile-menu">
@@ -70,6 +71,7 @@
 <button onclick="changeLanguage('es')" type="button">ES</button>
 <button onclick="changeLanguage('de')" type="button">DE</button>
 <button onclick="changeLanguage('fr')" type="button">FR</button>
+<button onclick="changeLanguage('ru')" type="button">RU</button>
 </div><a class="btn sage" href="#prenota">Prenota ora</a>
 </nav>
 <main>
@@ -359,7 +361,7 @@
 <footer class="footer" id="contatti"><div class="footer-grid"><div><img alt="Marconi306" src="assets/logo/marconi306-mark.png" style="width:160px;margin-bottom:16px"><p>Via Guglielmo Marconi 306<br/>Quartu Sant'Elena • Sardegna</p><p class="small">Locazione turistica gestita da privati. CIN IT092051C2000U3955.</p></img></div><div><p><a href="mailto:viamarconi306@gmail.com">viamarconi306@gmail.com</a></p><p><a href="https://wa.me/393278562974" target="_blank">WhatsApp</a></p><p><a href="privacy.html">Privacy</a></p></div></div></footer>
 <a class="whatsapp" href="https://wa.me/393278562974" target="_blank">WhatsApp</a>
 <div class="lightbox" onclick="closeLightbox()"><button class="lb-close" onclick="event.stopPropagation();closeLightbox()">×</button><button class="lb-prev" onclick="event.stopPropagation();stepLightbox(-1)">‹</button><img alt="" id="lb-img" src=""><button class="lb-next" onclick="event.stopPropagation();stepLightbox(1)">›</button></img></div>
-<script src="script.js?v=7.4"></script>
+<script src="script.js?v=7.5"></script>
 <script>
 (function(){
   function getParts(){
@@ -408,7 +410,7 @@
 <div aria-hidden="true" id="google_translate_element"></div>
 <script>
 function googleTranslateElementInit(){
-  new google.translate.TranslateElement({pageLanguage:'it',includedLanguages:'it,en,es,de,fr',autoDisplay:false},'google_translate_element');
+  new google.translate.TranslateElement({pageLanguage:'it',includedLanguages:'it,en,es,de,fr,ru',autoDisplay:false},'google_translate_element');
 }
 </script>
 <script defer="" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script></body>

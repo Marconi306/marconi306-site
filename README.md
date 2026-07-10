@@ -46,3 +46,9 @@ Aggiornamenti:
 - Aggiunta una barra orizzontale delle categorie.
 - Corretto lo scorrimento: la categoria selezionata viene aperta e posizionata correttamente sotto l’intestazione.
 - Migliorate dimensioni, spaziature e leggibilità delle card su mobile.
+
+
+## Versione 7.5
+- Aggiunta la lingua russa al selettore desktop e mobile.
+- Abilitata la traduzione automatica in russo tramite Google Translate.
+- Aggiornata la versione cache di CSS e JavaScript.
