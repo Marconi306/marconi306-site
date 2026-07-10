@@ -1,6 +1,6 @@
 
 const $=(s,r=document)=>r.querySelector(s);
-const gallery=["assets/img/camera-01.jpg", "assets/img/camera-02.jpg", "assets/img/camera-03.jpg", "assets/img/camera-04.jpg", "assets/img/camera-05.jpg", "assets/img/camera-06.jpg", "assets/img/camera-07.jpg", "assets/img/camera-08.jpg", "assets/img/camera-09.jpg", "assets/img/camera-10.jpg", "assets/img/camera-11.jpg", "assets/img/camera-12.jpg", "assets/img/camera-13.jpg", "assets/img/camera-14.jpg", "assets/img/camera-15.jpg", "assets/img/camera-16.jpg", "assets/img/camera-17.jpg"];
+const gallery=["assets/img/camera-01.jpg", "assets/img/camera-02.jpg", "assets/img/camera-03.jpg", "assets/img/camera-04.jpg", "assets/img/camera-05.jpg", "assets/img/camera-06.jpg", "assets/img/camera-07.jpg", "assets/img/camera-08.jpg", "assets/img/camera-09.jpg", "assets/img/camera-10.jpg", "assets/img/camera-11.jpg", "assets/img/camera-12.jpg", "assets/img/camera-13.jpg", "assets/img/camera-14.jpg", "assets/img/camera-15.jpg", "assets/img/camera-16.jpg", "assets/img/camera-17.jpg", "assets/img/camera-18.jpg", "assets/img/camera-19.jpg"];
 let lb=0;
 function openLightbox(i){lb=i;$('#lb-img').src=gallery[lb];$('.lightbox').style.display='flex';}
 function closeLightbox(){$('.lightbox').style.display='none';}
@@ -41,7 +41,7 @@ $('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#ar
   });
 })();
 
-// Calendario disponibilità Booking + Airbnb (senza prezzi)
+// Calendario disponibilità Booking + Airbnb con prezzi giornalieri
 (function(){
   const monthsRoot = document.getElementById('calendar-months');
   if (!monthsRoot) return;
@@ -62,6 +62,16 @@ $('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#ar
   function fromIso(iso){ const [y,m,d]=iso.split('-').map(Number); return new Date(y,m-1,d); }
   function addDay(iso, n=1){ const d=fromIso(iso); d.setDate(d.getDate()+n); return localIso(d); }
   function formatDate(iso){ return iso ? new Intl.DateTimeFormat('it-IT',{day:'numeric',month:'long',year:'numeric'}).format(fromIso(iso)) : 'Seleziona'; }
+  function nightlyPrice(iso){
+    const [y,m,d]=iso.split('-').map(Number);
+    if(y!==2026) return null;
+    if(m===7) return 79;
+    if(m===8) return d>=10 && d<=16 ? 120 : 89;
+    if(m===9 || m===10) return 69;
+    if(m===11) return 59;
+    if(m===12) return [24,25,26,31].includes(d) ? 79 : 59;
+    return null;
+  }
   function nightsBetween(a,b){ return Math.round((fromIso(b)-fromIso(a))/86400000); }
   function eachNight(a,b){ const out=[]; for(let x=a;x<b;x=addDay(x)) out.push(x); return out; }
   function validDeparture(candidate){
@@ -87,14 +97,16 @@ $('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#ar
     for(let i=0;i<offset;i++){ const e=document.createElement('span');e.className='calendar-empty';grid.appendChild(e); }
     for(let day=1;day<=days;day++){
       const iso=localIso(new Date(y,m,day));
-      const btn=document.createElement('button'); btn.type='button';btn.className='calendar-day';btn.textContent=day;btn.dataset.date=iso;
+      const btn=document.createElement('button'); btn.type='button';btn.className='calendar-day';btn.dataset.date=iso;
+      const price=nightlyPrice(iso);
+      btn.innerHTML=`<span class="calendar-day-number">${day}</span>${price ? `<span class="calendar-day-price">€${price}</span>` : ''}`;
       if(iso<todayIso) btn.classList.add('past');
       if(blocked.has(iso)) btn.classList.add('busy');
       if(arrival===iso) btn.classList.add('selected','checkin');
       if(departure===iso) btn.classList.add('selected','checkout');
       if(arrival && departure && iso>arrival && iso<departure) btn.classList.add('range');
       btn.disabled=!loaded || !canChoose(iso);
-      btn.setAttribute('aria-label',`${day} ${monthNames[m]} ${y}${blocked.has(iso)?', non disponibile':', disponibile'}`);
+      btn.setAttribute('aria-label',`${day} ${monthNames[m]} ${y}${blocked.has(iso)?', non disponibile':', disponibile'}${price ? `, ${price} euro a notte` : ''}`);
       btn.addEventListener('click',()=>selectDate(iso));
       grid.appendChild(btn);
     }
