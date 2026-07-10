@@ -260,3 +260,21 @@ body{top:0!important}
   .local-card-top{margin-bottom:11px}
   .local-walk{font-size:.72rem}
 }
+
+
+/* Versione 7.6: totale dinamico del soggiorno */
+.stay-summary-nights{margin-bottom:10px}
+.stay-total{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin:8px 0 10px;
+  padding:12px 14px;
+  border-radius:12px;
+  background:rgba(112,132,105,.10);
+}
+.stay-total-label{font-size:.92rem}
+.stay-total-value{font-size:1.35rem;line-height:1;color:var(--sage-dark,#53634e)}
+.stay-total-unavailable{font-weight:700}
+.stay-summary small{display:block;line-height:1.45;opacity:.76}

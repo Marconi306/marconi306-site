@@ -52,3 +52,15 @@ Aggiornamenti:
 - Aggiunta la lingua russa al selettore desktop e mobile.
 - Abilitata la traduzione automatica in russo tramite Google Translate.
 - Aggiornata la versione cache di CSS e JavaScript.
+
+## Versione 7.6
+- Ripristinato il calcolo automatico del totale del soggiorno.
+- Il totale somma correttamente ogni notte, incluse le tariffe speciali.
+- Aggiunto il totale indicativo al messaggio WhatsApp.
+- Rimosso un vecchio listener WhatsApp che poteva generare un doppio messaggio.
+
+## Versione 7.7
+- Riordinato il menu: La Camera, Servizi, Gallery, Dintorni, Quartu da gustare, Spiagge, Come muoversi, Contatti.
+- Rinominate la voce e la sezione “A due passi” in “Quartu da gustare”.
+- Aggiornato il testo introduttivo della guida gastronomica.
+- Spostata la sezione Spiagge prima di Come muoversi anche nel corpo della pagina.

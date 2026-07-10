@@ -7,7 +7,6 @@ function closeLightbox(){$('.lightbox').style.display='none';}
 function stepLightbox(d){lb=(lb+d+gallery.length)%gallery.length;$('#lb-img').src=gallery[lb];}
 window.openLightbox=openLightbox; window.closeLightbox=closeLightbox; window.stepLightbox=stepLightbox;
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e.key==='ArrowRight')stepLightbox(1);if(e.key==='ArrowLeft')stepLightbox(-1);});
-$('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#arrival').value||'...';const d=$('#departure').value||'...';const g=$('#guests').value||'2';const msg=`Ciao, vorrei ricevere la migliore tariffa diretta per Marconi306 dal ${a} al ${d} per ${g} ospiti.`;window.open('https://wa.me/393278562974?text='+encodeURIComponent(msg),'_blank')});
 
 // Menu mobile: funzione di supporto. La gestione principale è anche inline in index.html per evitare problemi di cache.
 (function(){
@@ -77,6 +76,20 @@ $('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#ar
   }
   function nightsBetween(a,b){ return Math.round((fromIso(b)-fromIso(a))/86400000); }
   function eachNight(a,b){ const out=[]; for(let x=a;x<b;x=addDay(x)) out.push(x); return out; }
+  function stayTotal(a,b){
+    if(!a || !b) return null;
+    const prices = eachNight(a,b).map(nightlyPrice);
+    return prices.every(price => Number.isFinite(price))
+      ? prices.reduce((sum, price) => sum + price, 0)
+      : null;
+  }
+  function euro(value){
+    return new Intl.NumberFormat('it-IT',{
+      style:'currency',
+      currency:'EUR',
+      maximumFractionDigits:0
+    }).format(value);
+  }
   function validDeparture(candidate){
     if(!arrival || candidate<=arrival) return false;
     return !eachNight(arrival,candidate).some(day=>blocked.has(day));
@@ -133,7 +146,11 @@ $('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#ar
     const wa=document.getElementById('wa-request');
     if(arrival && departure){
       const nights=nightsBetween(arrival,departure);
-      summary.innerHTML=`<strong>${nights} ${nights===1?'notte':'notti'}</strong><br>Disponibilità visualizzata sul sito, da confermare direttamente con il proprietario.`;
+      const total=stayTotal(arrival,departure);
+      const totalRow=total!==null
+        ? `<span class="stay-total-label">Totale soggiorno</span><strong class="stay-total-value">${euro(total)}</strong>`
+        : `<span class="stay-total-unavailable">Totale da confermare</span>`;
+      summary.innerHTML=`<div class="stay-summary-nights"><strong>${nights} ${nights===1?'notte':'notti'}</strong></div><div class="stay-total">${totalRow}</div><small>Disponibilità e importo finale soggetti a conferma del proprietario.</small>`;
       wa.classList.remove('disabled');wa.setAttribute('aria-disabled','false');wa.href='#';
     } else {
       summary.textContent=arrival?'Ora seleziona la data di partenza.':'Seleziona prima la data di arrivo e poi quella di partenza.';
@@ -147,7 +164,9 @@ $('#wa-request')?.addEventListener('click',e=>{e.preventDefault();const a=$('#ar
     e.preventDefault(); if(!arrival||!departure) return;
     const guests=document.getElementById('guests').value;
     const nights=nightsBetween(arrival,departure);
-    const msg=`Buongiorno, vorrei richiedere la disponibilità di Marconi306 dal ${formatDate(arrival)} al ${formatDate(departure)} (${nights} ${nights===1?'notte':'notti'}) per ${guests} ${guests==='1'?'ospite':'ospiti'}. Le date risultano disponibili sul sito; attendo conferma. Grazie!`;
+    const total=stayTotal(arrival,departure);
+    const totalText=total!==null ? `, totale indicativo ${euro(total)}` : '';
+    const msg=`Buongiorno, vorrei richiedere la disponibilità di Marconi306 dal ${formatDate(arrival)} al ${formatDate(departure)} (${nights} ${nights===1?'notte':'notti'}${totalText}) per ${guests} ${guests==='1'?'ospite':'ospiti'}. Le date risultano disponibili sul sito; attendo conferma del prezzo e della prenotazione. Grazie!`;
     window.open('https://wa.me/393278562974?text='+encodeURIComponent(msg),'_blank','noopener');
   });
   let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(render,150);});
