@@ -340,3 +340,35 @@ body{top:0!important}
 }
 .mobility-subhead h3{margin:3px 0 6px;font-size:1.55rem}
 .mobility-subhead p:last-child{margin:0;line-height:1.55}
+
+
+/* Versione 9.0: lingua cinese e distanze reali */
+.local-card-top{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.local-walk{
+  font-weight:700;
+  font-size:.92rem;
+}
+.local-nearby{
+  display:inline-flex;
+  align-items:center;
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(112,132,105,.12);
+  border:1px solid rgba(83,99,78,.16);
+  font-size:.78rem;
+  font-weight:700;
+  white-space:nowrap;
+}
+@media(max-width:640px){
+  .local-card-body{padding:16px}
+  .local-card-body h3{font-size:1.14rem}
+  .local-card-body p{font-size:.94rem;line-height:1.45}
+  .local-card-top{align-items:flex-start}
+  .local-walk{font-size:.88rem}
+  .local-nearby{font-size:.74rem;padding:4px 8px}
+}

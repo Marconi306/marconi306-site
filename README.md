@@ -92,3 +92,12 @@ Aggiornamenti:
 - Evidenziata la sezione “Escursioni in giornata”.
 - Resa più chiara la risorsa ARST extraurbana.
 - Aggiunto marker di build 8.2 e aggiornamento cache.
+
+## Versione 9.0
+- Aggiunto il cinese semplificato (简体中文) al selettore desktop e mobile.
+- Abilitata la traduzione automatica in cinese tramite Google Translate.
+- Inserite le distanze reali e i tempi a piedi per tutti i 17 locali di “Quartu da gustare”.
+- Aggiornata l’introduzione della sezione.
+- Evidenziati in modo discreto i locali raggiungibili in 1–3 minuti.
+- Migliorata la leggibilità delle card su smartphone.
+- Aggiunto marker build 9.0 e aggiornamento cache.
