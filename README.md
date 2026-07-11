@@ -78,3 +78,17 @@ Aggiornamenti:
 - Inseriti collegamenti diretti a Google Maps e alle fonti ufficiali CTM/Trenitalia.
 - Aggiunta area “App utili” con CTM BusFinder, Trenitalia e Google Maps.
 - Layout ottimizzato per desktop e mobile.
+
+## Versione 8.1
+- Aggiunte le card Villasimius e Costa Rei nella sezione “Come muoversi”.
+- Indicati tempi orientativi in auto.
+- Inserite le linee ARST 101 e 135 con partenza dall’Autostazione di Cagliari.
+- Aggiunto il collegamento agli orari extraurbani ARST tra le risorse utili.
+- Aggiornata la nota sulle verifiche degli orari.
+
+## Versione 8.2
+- Rigenerata partendo dallo ZIP fornito dall'utente.
+- Confermate le card Villasimius e Costa Rei con linee ARST 101/135.
+- Evidenziata la sezione “Escursioni in giornata”.
+- Resa più chiara la risorsa ARST extraurbana.
+- Aggiunto marker di build 8.2 e aggiornamento cache.

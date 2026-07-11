@@ -327,3 +327,16 @@ body{top:0!important}
 .mobility-note{margin-top:16px;padding:15px 18px;border-left:4px solid var(--sage-dark);background:rgba(255,255,255,.65);font-size:.92rem;line-height:1.5}
 @media(max-width:900px){.mobility-head{align-items:flex-start;flex-direction:column}.mobility-grid{grid-template-columns:1fr}.mobility-card.featured{grid-column:auto}.mobility-tools{grid-template-columns:1fr}.mobility-apps{grid-template-columns:1fr 1fr 1fr}}
 @media(max-width:640px){.mobility{padding-top:58px}.mobility-head{margin-bottom:20px}.mobility-card{padding:20px;gap:14px;min-height:auto;border-radius:16px}.mobility-icon{flex-basis:44px;width:44px;height:44px;border-radius:13px;font-size:1.35rem}.mobility-card h3{font-size:1.35rem}.mobility-card p{font-size:.94rem}.mobility-tools{padding:22px;border-radius:16px}.mobility-apps{grid-template-columns:1fr}.mobility-apps a{min-height:auto}.mobility-note{font-size:.86rem}}
+
+
+/* Versione 8.2: intestazione escursioni extraurbane */
+.mobility-subhead{
+  grid-column:1/-1;
+  margin:18px 0 2px;
+  padding:20px 22px;
+  border-left:4px solid var(--sage-dark,#53634e);
+  background:rgba(112,132,105,.08);
+  border-radius:0 14px 14px 0;
+}
+.mobility-subhead h3{margin:3px 0 6px;font-size:1.55rem}
+.mobility-subhead p:last-child{margin:0;line-height:1.55}
