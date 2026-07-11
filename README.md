@@ -101,3 +101,9 @@ Aggiornamenti:
 - Evidenziati in modo discreto i locali raggiungibili in 1–3 minuti.
 - Migliorata la leggibilità delle card su smartphone.
 - Aggiunto marker build 9.0 e aggiornamento cache.
+
+## Versione 9.1
+- Aggiunto il giapponese (日本語) al selettore desktop.
+- Aggiunto il pulsante JP nel selettore mobile.
+- Abilitata la traduzione automatica in giapponese tramite Google Translate.
+- Aggiornati marker build e cache alla versione 9.1.

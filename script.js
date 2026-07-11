@@ -227,7 +227,7 @@ function setLanguageCookie(value) {
 }
 
 function changeLanguage(lang) {
-  const allowed = ['it', 'en', 'es', 'de', 'fr', 'ru', 'zh-CN'];
+  const allowed = ['it', 'en', 'es', 'de', 'fr', 'ru', 'zh-CN', 'ja'];
   if (!allowed.includes(lang)) return;
   if (lang === 'it') {
     document.cookie = 'googtrans=;path=/;max-age=0';
