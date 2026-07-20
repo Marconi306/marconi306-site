@@ -112,3 +112,10 @@ Aggiornamenti:
 - Aggiunta la card “Orari del soggiorno” nella sezione Servizi.
 - Aggiunta la sezione Recensioni con widget Elfsight All-in-One Reviews (Booking.com + Airbnb).
 - Aggiunta la voce “Recensioni” nei menu desktop e mobile.
+
+
+## Versione 9.3
+- Voce **Recensioni** spostata alla fine del percorso di navigazione, subito prima di **Contatti**.
+- Sezione recensioni spostata dopo l'area prenotazione e prima del footer/contatti.
+- Menu desktop compattato e mantenuto su una sola riga.
+- Header desktop reso più ampio e pulsante **Prenota ora** leggermente ridimensionato.

@@ -420,3 +420,35 @@ body{top:0!important}
   .stay-hours{grid-template-columns:1fr}
   .reviews-section{padding-top:22px;padding-bottom:38px}
 }
+
+/* v9.3 — Header desktop più ampio e menu su una sola riga */
+@media (min-width:1001px){
+  .header{
+    padding-left:max(2vw,28px);
+    padding-right:max(2vw,28px);
+    gap:18px;
+  }
+  .logo{flex:0 0 auto}
+  .logo img{width:220px}
+  .nav{
+    flex:1 1 auto;
+    justify-content:flex-end;
+    gap:clamp(13px,1.05vw,22px);
+    font-size:clamp(.78rem,.72vw,.88rem);
+    white-space:nowrap;
+    min-width:0;
+  }
+  .nav > a:not(.btn){white-space:nowrap}
+  .nav .btn{
+    flex:0 0 auto;
+    width:auto;
+    padding:12px 18px;
+    font-size:.78rem;
+    line-height:1.15;
+  }
+  .language-switcher{flex:0 0 auto;margin-left:0}
+}
+@media (min-width:1500px){
+  .header{padding-left:clamp(42px,7vw,140px);padding-right:clamp(42px,4.5vw,90px)}
+  .logo img{width:235px}
+}
