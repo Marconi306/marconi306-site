@@ -372,3 +372,51 @@ body{top:0!important}
   .local-walk{font-size:.88rem}
   .local-nearby{font-size:.74rem;padding:4px 8px}
 }
+
+/* Versione 9.2: orari del soggiorno e recensioni Booking/Airbnb */
+.stay-hours-card{
+  grid-column:1 / -1;
+}
+.stay-hours{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin:14px 0 12px;
+}
+.stay-hours > div{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  padding:14px 16px;
+  border:1px solid rgba(83,99,78,.16);
+  border-radius:14px;
+  background:rgba(112,132,105,.07);
+}
+.stay-hours small{
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--sage-dark,#53634e);
+}
+.stay-hours strong{
+  font-size:1.08rem;
+}
+.reviews-section{
+  padding-top:36px;
+  padding-bottom:52px;
+  background:#fff;
+}
+.reviews-widget-wrap{
+  width:100%;
+  overflow:hidden;
+}
+.reviews-widget-wrap noscript{
+  display:block;
+  padding:18px;
+  text-align:center;
+}
+@media(max-width:640px){
+  .stay-hours{grid-template-columns:1fr}
+  .reviews-section{padding-top:22px;padding-bottom:38px}
+}

@@ -107,3 +107,8 @@ Aggiornamenti:
 - Aggiunto il pulsante JP nel selettore mobile.
 - Abilitata la traduzione automatica in giapponese tramite Google Translate.
 - Aggiornati marker build e cache alla versione 9.1.
+
+## Versione 9.2
+- Aggiunta la card “Orari del soggiorno” nella sezione Servizi.
+- Aggiunta la sezione Recensioni con widget Elfsight All-in-One Reviews (Booking.com + Airbnb).
+- Aggiunta la voce “Recensioni” nei menu desktop e mobile.
