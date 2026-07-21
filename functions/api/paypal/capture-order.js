@@ -11,7 +11,10 @@ export async function onRequestPost({ request, env }) {
     const booking = await env.DB.prepare('SELECT * FROM bookings WHERE paypal_order_id = ?1 LIMIT 1').bind(orderID).first();
     if (!booking || booking.status !== 'HOLD') throw new Error('Prenotazione non trovata o sessione scaduta.');
     if (await hasExternalConflict(env, booking.start_date, booking.end_date) || await hasConflict(env.DB, booking.start_date, booking.end_date, booking.id)) {
-      await env.DB.prepare("UPDATE bookings SET status = 'CANCELLED' WHERE id = ?1").bind(booking.id).run();
+      await env.DB.batch([
+        env.DB.prepare('DELETE FROM booking_nights WHERE booking_id = ?1').bind(booking.id),
+        env.DB.prepare("UPDATE bookings SET status = 'CANCELLED' WHERE id = ?1").bind(booking.id)
+      ]);
       return Response.json({ error: 'Le date non sono più disponibili. Il pagamento non è stato acquisito.' }, { status: 409 });
     }
 
@@ -25,7 +28,7 @@ export async function onRequestPost({ request, env }) {
     const payment = capture.purchase_units?.[0]?.payments?.captures?.[0];
     const paidCents = Math.round(Number(payment?.amount?.value || 0) * 100);
     if (payment?.amount?.currency_code !== 'EUR' || paidCents !== booking.amount_cents) {
-      throw new Error('Importo del pagamento non corrispondente.');
+      throw new Error('Importo del pagamento non corrispondente. Contatta Marconi306 indicando il pagamento PayPal.');
     }
 
     await env.DB.prepare(`

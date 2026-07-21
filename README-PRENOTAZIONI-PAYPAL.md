@@ -1,4 +1,4 @@
-# Marconi306 v10.0 — prenotazione diretta semplice
+# Marconi306 v10.2 — prenotazione diretta semplice
 
 Questa versione mantiene il sito statico esistente e aggiunge soltanto il flusso necessario per prenotare e pagare online.
 
@@ -18,7 +18,7 @@ Non include dashboard, gestionale o automazioni aggiuntive. Le notifiche di paga
 
 Creare in Cloudflare un database chiamato `marconi306-bookings`, quindi eseguire nella sua Console il file:
 
-`migrations/0001_bookings.sql`
+`migrations/0001_bookings.sql` e subito dopo `migrations/0002_booking_nights.sql`
 
 Nel progetto Pages aggiungere il binding D1:
 
@@ -60,5 +60,7 @@ La sincronizzazione iCal delle piattaforme non è istantanea. Il sito ricontroll
 - pagamento anticipato del 100%;
 - tassa di soggiorno esclusa dal pagamento online;
 - blocco pagamento di 10 minuti;
+- blocco atomico delle singole notti per ridurre il rischio di doppie prenotazioni simultanee;
+- sconto del 10% calcolato anche dal server quando viene selezionato 1 ospite;
 - prezzo ricalcolato e verificato dal server;
 - nessun pagamento acquisito se le date risultano occupate.

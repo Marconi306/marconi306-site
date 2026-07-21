@@ -36,13 +36,32 @@ export function calculateStay(start, end, guests = 2) {
   const prices = eachNight(start, end).map(nightlyPrice);
   if (!prices.every(Number.isFinite)) throw new Error('Tariffa non disponibile per le date selezionate.');
   if (![1, 2].includes(Number(guests))) throw new Error('Numero di ospiti non valido.');
-  const base = prices.reduce((sum, price) => sum + price, 0);
-  const discount = Number(guests) === 1 ? Math.round(base * 0.10 * 100) / 100 : 0;
-  return { nights, base, discount, total: base - discount };
+  const baseCents = prices.reduce((sum, price) => sum + Math.round(price * 100), 0);
+  const discountCents = Number(guests) === 1 ? Math.round(baseCents * 0.10) : 0;
+  const totalCents = baseCents - discountCents;
+  return {
+    nights,
+    base: baseCents / 100,
+    discount: discountCents / 100,
+    total: totalCents / 100,
+    baseCents,
+    discountCents,
+    totalCents
+  };
+}
+
+export function sqliteDateTime(date = new Date()) {
+  return date.toISOString().slice(0, 19).replace('T', ' ');
 }
 
 export async function cleanExpiredHolds(db) {
-  await db.prepare("DELETE FROM bookings WHERE status = 'HOLD' AND hold_expires_at <= datetime('now')").run();
+  const expired = await db.prepare("SELECT id FROM bookings WHERE status = 'HOLD' AND hold_expires_at <= datetime('now')").all();
+  const ids = (expired.results || []).map(row => row.id);
+  if (!ids.length) return;
+  await db.batch(ids.flatMap(id => [
+    db.prepare('DELETE FROM booking_nights WHERE booking_id = ?1').bind(id),
+    db.prepare("UPDATE bookings SET status = 'CANCELLED' WHERE id = ?1").bind(id)
+  ]));
 }
 
 export async function hasConflict(db, start, end, excludeId = '') {
@@ -75,7 +94,6 @@ export function validateGuest(data) {
 export function randomId(prefix = 'M306') {
   return `${prefix}-${crypto.randomUUID()}`;
 }
-
 
 function unfoldIcal(text) {
   return String(text || '').replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '').split(/\r?\n/);
@@ -113,7 +131,7 @@ function parseIcalRanges(text) {
 async function fetchIcalRanges(url, label) {
   if (!url) throw new Error(`${label} non configurato.`);
   const response = await fetch(url, {
-    headers: { 'User-Agent': 'Marconi306-Booking/1.0' },
+    headers: { 'User-Agent': 'Marconi306-Booking/1.1' },
     cf: { cacheTtl: 60, cacheEverything: true }
   });
   if (!response.ok) throw new Error(`${label} non raggiungibile.`);
