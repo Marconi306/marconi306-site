@@ -161,3 +161,6 @@ Il dominio o sottodominio usato in `BOOKING_EMAIL_FROM` deve essere verificato n
 Pannello protetto disponibile in `/admin/`. Richiede il secret Cloudflare `ADMIN_PASSWORD`.
 Permette ricerca, filtri, dettaglio prenotazioni, annullamento con liberazione date e reinvio email.
 L'annullamento non effettua rimborsi PayPal automatici.
+
+## v10.9 — Export iCal prenotazioni dirette
+Feed dinamico pubblico: `https://marconi306.it/api/calendar.ics`.
