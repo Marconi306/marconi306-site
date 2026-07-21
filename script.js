@@ -203,7 +203,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   document.getElementById('calendar-prev').addEventListener('click',()=>{ const now=new Date();now.setDate(1); if(cursor>now){cursor.setMonth(cursor.getMonth()-1);render();} });
   document.getElementById('calendar-next').addEventListener('click',()=>{cursor.setMonth(cursor.getMonth()+1);render();});
   document.getElementById('calendar-reset').addEventListener('click',()=>{arrival=null;departure=null;render();});
-  document.getElementById('guests').addEventListener('change',updateSummary);
+  const guestsSelect=document.getElementById('guests');
+  guestsSelect.addEventListener('change',updateSummary);
+  guestsSelect.addEventListener('input',updateSummary);
   const modal=document.getElementById('booking-modal');
   const bookingForm=document.getElementById('booking-form');
   const bookingError=document.getElementById('booking-error');
