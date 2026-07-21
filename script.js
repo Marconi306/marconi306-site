@@ -279,9 +279,19 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
           const result=await response.json();
           if(!response.ok) throw new Error(result.error||'Impossibile completare la prenotazione.');
           try { sessionStorage.setItem('m306BookingSuccess',JSON.stringify(result)); } catch (_) {}
-          window.location.assign('/?prenotazione=confermata');
+          showBookingSuccess(result);
         },
-        onCancel(){ showBookingError('Pagamento annullato. Le date torneranno disponibili al termine del blocco temporaneo.'); },
+        async onCancel(data){
+          try {
+            if(data?.orderID){
+              await fetch('/api/paypal/cancel-order',{
+                method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+                body:JSON.stringify({orderID:data.orderID})
+              });
+            }
+          } catch (_) {}
+          showBookingError('Pagamento annullato. Le date sono nuovamente disponibili.');
+        },
         onError(error){ console.error(error); showBookingError(error.message||'Si è verificato un errore durante il pagamento.'); }
       }).render('#paypal-button-container');
       paypalRendered=true;
@@ -302,18 +312,22 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden) closeBooking();});
   let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(render,150);});
 
+  function showBookingSuccess(result){
+    bookingForm.hidden=true;
+    paypalLoading.hidden=true;
+    document.getElementById('booking-success').hidden=false;
+    document.getElementById('booking-success-message').innerHTML=`Soggiorno dal <strong>${formatDate(result.start)}</strong> al <strong>${formatDate(result.end)}</strong>, totale <strong>${euro(Number(result.amount))}</strong>.<br>Codice prenotazione: <strong>${result.bookingCode}</strong><br><small>Conserva questo codice. Se il servizio email è configurato, riceverai anche il riepilogo all'indirizzo indicato.</small>`;
+    modal.hidden=false;
+    document.body.classList.add('modal-open');
+    try { sessionStorage.removeItem('m306BookingSuccess'); } catch (_) {}
+  }
   function restoreBookingSuccess(){
     const params=new URLSearchParams(window.location.search);
     if(params.get('prenotazione')!=='confermata') return;
     let result=null;
     try { result=JSON.parse(sessionStorage.getItem('m306BookingSuccess')||'null'); } catch (_) {}
     if(!result) return;
-    bookingForm.hidden=true;
-    document.getElementById('booking-success').hidden=false;
-    document.getElementById('booking-success-message').innerHTML=`Soggiorno dal <strong>${formatDate(result.start)}</strong> al <strong>${formatDate(result.end)}</strong>, totale <strong>${euro(Number(result.amount))}</strong>.<br>Codice: <strong>${result.bookingCode}</strong>`;
-    modal.hidden=false;
-    document.body.classList.add('modal-open');
-    try { sessionStorage.removeItem('m306BookingSuccess'); } catch (_) {}
+    showBookingSuccess(result);
     history.replaceState({},document.title,window.location.pathname+window.location.hash);
   }
   restoreBookingSuccess();

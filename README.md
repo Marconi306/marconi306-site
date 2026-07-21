@@ -139,3 +139,19 @@ Aggiunto flusso di prenotazione e pagamento PayPal con Cloudflare Pages Function
 - Ridotta la cache disponibilità per limitare il rischio di conflitti.
 - Aggiunto database D1 e calendario iCal delle prenotazioni dirette.
 - Nessuna dashboard o gestionale aggiuntivo.
+
+
+## Versione 10.6 - Produzione
+
+- Conferma mostrata immediatamente nella pagina dopo l'acquisizione PayPal.
+- Codice prenotazione ben visibile al cliente.
+- Annullamento PayPal libera immediatamente le date in HOLD.
+- Pulizia automatica degli HOLD scaduti mantenuta come protezione aggiuntiva.
+- Email cliente e host tramite Resend, con chiavi di idempotenza anti-duplicato.
+
+Per attivare le email aggiungere in Cloudflare Pages:
+- `RESEND_API_KEY` (Secret)
+- `BOOKING_EMAIL_FROM` (es. `Marconi306 <prenotazioni@send.marconi306.it>`)
+- `BOOKING_NOTIFICATION_EMAIL` (l'indirizzo che deve ricevere le nuove prenotazioni)
+
+Il dominio o sottodominio usato in `BOOKING_EMAIL_FROM` deve essere verificato nel pannello Resend.

@@ -14,14 +14,15 @@ function formatItalianDate(iso) {
   }).format(date);
 }
 
-async function sendResendEmail(env, payload) {
+async function sendResendEmail(env, payload, idempotencyKey) {
   if (!env.RESEND_API_KEY || !env.BOOKING_EMAIL_FROM) return { skipped: true };
 
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Idempotency-Key': idempotencyKey
     },
     body: JSON.stringify({
       from: env.BOOKING_EMAIL_FROM,
@@ -49,6 +50,10 @@ export async function sendBookingEmails(env, booking, bookingCode) {
   const checkOut = formatItalianDate(booking.end_date);
   const guestName = `${booking.first_name} ${booking.last_name}`.trim();
   const notes = booking.notes ? `<p><strong>Note:</strong> ${escapeHtml(booking.notes)}</p>` : '';
+
+  const guestText = `Prenotazione confermata – Marconi306\n\nGentile ${booking.first_name},\nCodice prenotazione: ${bookingCode}\nCheck-in: ${checkIn}\nCheck-out: ${checkOut}\nOspiti: ${booking.guests}\nTotale pagato: ${amount}\n\nLa tassa di soggiorno di €1 per persona per notte non è inclusa e sarà riscossa in contanti al check-in.\n\nMarconi306`;
+
+  const ownerText = `Nuova prenotazione diretta\n\nCodice: ${bookingCode}\nOspite: ${guestName}\nEmail: ${booking.email}\nTelefono: ${booking.phone}\nCheck-in: ${checkIn}\nCheck-out: ${checkOut}\nNotti: ${booking.nights}\nOspiti: ${booking.guests}\nTotale: ${amount}\nCapture PayPal: ${booking.paypal_capture_id || ''}`;
 
   const guestHtml = `
     <div style="font-family:Arial,sans-serif;line-height:1.6;color:#1c342a;max-width:640px;margin:auto">
@@ -85,8 +90,9 @@ export async function sendBookingEmails(env, booking, bookingCode) {
       to: booking.email,
       subject: `Prenotazione confermata – Marconi306 – ${bookingCode}`,
       html: guestHtml,
+      text: guestText,
       reply_to: env.BOOKING_NOTIFICATION_EMAIL || undefined
-    })
+    }, `${booking.id}-guest-confirmation`)
   ];
 
   if (env.BOOKING_NOTIFICATION_EMAIL) {
@@ -94,8 +100,9 @@ export async function sendBookingEmails(env, booking, bookingCode) {
       to: env.BOOKING_NOTIFICATION_EMAIL,
       subject: `Nuova prenotazione diretta – ${guestName} – ${checkIn}`,
       html: ownerHtml,
+      text: ownerText,
       reply_to: booking.email
-    }));
+    }, `${booking.id}-owner-notification`));
   }
 
   const results = await Promise.allSettled(sends);
