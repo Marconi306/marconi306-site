@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Gestione prenotazioni | Marconi306</title>
+  <link rel="icon" href="/favicon.png">
+  <link rel="stylesheet" href="/admin/admin.css?v=10.7">
+</head>
+<body>
+  <main class="shell">
+    <section id="login-view" class="login-card">
+      <img src="/assets/logo/marconi306-mark.png" alt="" class="mark">
+      <p class="eyebrow">MARCONI306</p>
+      <h1>Pannello prenotazioni</h1>
+      <p class="muted">Inserisci la password amministratore.</p>
+      <form id="login-form">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <button type="submit">Accedi</button>
+        <p id="login-error" class="error" role="alert"></p>
+      </form>
+    </section>
+
+    <section id="admin-view" hidden>
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">MARCONI306</p>
+          <h1>Gestione prenotazioni</h1>
+        </div>
+        <div class="header-actions">
+          <a href="/" class="secondary">Apri il sito</a>
+          <button id="logout" class="secondary">Esci</button>
+        </div>
+      </header>
+
+      <section class="stats" aria-label="Riepilogo">
+        <article><span>Confermate</span><strong id="stat-confirmed">0</strong></article>
+        <article><span>In attesa</span><strong id="stat-holds">0</strong></article>
+        <article><span>Annullate</span><strong id="stat-cancelled">0</strong></article>
+        <article><span>Incasso lordo</span><strong id="stat-revenue">€0</strong></article>
+      </section>
+
+      <section class="toolbar">
+        <input id="search" type="search" placeholder="Cerca nome, email, telefono o codice">
+        <select id="status-filter" aria-label="Filtra per stato">
+          <option value="ALL">Tutte</option>
+          <option value="CONFIRMED">Confermate</option>
+          <option value="HOLD">In attesa</option>
+          <option value="CANCELLED">Annullate</option>
+        </select>
+        <button id="refresh" class="secondary">Aggiorna</button>
+      </section>
+
+      <p id="notice" class="notice" hidden></p>
+      <div id="loading" class="loading">Caricamento…</div>
+      <section id="booking-list" class="booking-list" aria-live="polite"></section>
+      <p id="empty" class="empty" hidden>Nessuna prenotazione trovata.</p>
+    </section>
+  </main>
+
+  <dialog id="details-dialog">
+    <div class="dialog-head">
+      <div><p class="eyebrow">DETTAGLIO</p><h2 id="dialog-title">Prenotazione</h2></div>
+      <button id="close-dialog" class="icon-button" aria-label="Chiudi">×</button>
+    </div>
+    <div id="dialog-content"></div>
+    <div id="dialog-actions" class="dialog-actions"></div>
+  </dialog>
+
+  <script src="/admin/admin.js?v=10.7" defer></script>
+</body>
+</html>

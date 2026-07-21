@@ -38,7 +38,7 @@ async function sendResendEmail(env, payload, idempotencyKey) {
   return response.json();
 }
 
-export async function sendBookingEmails(env, booking, bookingCode) {
+export async function sendBookingEmails(env, booking, bookingCode, options = {}) {
   if (!env.RESEND_API_KEY || !env.BOOKING_EMAIL_FROM) {
     return { configured: false };
   }
@@ -85,6 +85,8 @@ export async function sendBookingEmails(env, booking, bookingCode) {
       ${notes}
     </div>`;
 
+  const idempotencySuffix = options.idempotencySuffix ? `-${options.idempotencySuffix}` : '';
+
   const sends = [
     sendResendEmail(env, {
       to: booking.email,
@@ -92,7 +94,7 @@ export async function sendBookingEmails(env, booking, bookingCode) {
       html: guestHtml,
       text: guestText,
       reply_to: env.BOOKING_NOTIFICATION_EMAIL || undefined
-    }, `${booking.id}-guest-confirmation`)
+    }, `${booking.id}-guest-confirmation${idempotencySuffix}`)
   ];
 
   if (env.BOOKING_NOTIFICATION_EMAIL) {
@@ -102,7 +104,7 @@ export async function sendBookingEmails(env, booking, bookingCode) {
       html: ownerHtml,
       text: ownerText,
       reply_to: booking.email
-    }, `${booking.id}-owner-notification`));
+    }, `${booking.id}-owner-notification${idempotencySuffix}`));
   }
 
   const results = await Promise.allSettled(sends);

@@ -155,3 +155,9 @@ Per attivare le email aggiungere in Cloudflare Pages:
 - `BOOKING_NOTIFICATION_EMAIL` (l'indirizzo che deve ricevere le nuove prenotazioni)
 
 Il dominio o sottodominio usato in `BOOKING_EMAIL_FROM` deve essere verificato nel pannello Resend.
+
+## v10.7 — Pannello amministrativo
+
+Pannello protetto disponibile in `/admin/`. Richiede il secret Cloudflare `ADMIN_PASSWORD`.
+Permette ricerca, filtri, dettaglio prenotazioni, annullamento con liberazione date e reinvio email.
+L'annullamento non effettua rimborsi PayPal automatici.
