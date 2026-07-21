@@ -4,6 +4,8 @@ const loginView = $('#login-view');
 const adminView = $('#admin-view');
 const list = $('#booking-list');
 const dialog = $('#details-dialog');
+const cancelDialog = $('#cancel-dialog');
+let cancellationBooking = null;
 
 function euro(cents) { return (Number(cents || 0) / 100).toLocaleString('it-IT', { style: 'currency', currency: 'EUR' }); }
 function parseDate(iso) { return iso ? new Date(`${iso}T12:00:00`) : null; }
@@ -160,12 +162,43 @@ function openDetails(id){
 }
 function makeButton(text,className,handler){const button=document.createElement('button');button.textContent=text;button.className=className;button.addEventListener('click',handler);return button;}
 function makeLink(text,href,className){const link=document.createElement('a');link.textContent=text;link.href=href;link.target='_blank';link.rel='noopener';link.className=className;return link;}
-async function cancelBooking(b){
-  const warning=b.paypal_capture_id?'Questa operazione libera le date ma NON esegue il rimborso PayPal. Confermi?':'Confermi l’annullamento e la liberazione delle date?';
-  if(!confirm(warning))return;
-  try{const result=await api('/api/admin/cancel',{method:'POST',body:JSON.stringify({id:b.id})});dialog.close();notify(result.message);await loadBookings();}
-  catch(err){alert(err.message);}
+const cancellationPreviews={
+  overlap:'A causa della contemporanea conferma di un’altra prenotazione per le stesse date, la prenotazione dell’ospite è risultata successiva. Verranno comunicate le scuse e il rimborso integrale da effettuare separatamente.',
+  guest_request:'L’email confermerà che la prenotazione è stata annullata su richiesta dell’ospite e che l’eventuale rimborso sarà calcolato secondo le condizioni accettate.',
+  property_issue:'L’email comunicherà che un imprevisto della struttura impedisce il soggiorno e che l’importo dovrà essere rimborsato integralmente.'
+};
+function updateCancellationPreview(){
+  $('#cancel-copy-preview').textContent=cancellationPreviews[$('#cancel-reason').value]||'';
 }
+function cancelBooking(b){
+  cancellationBooking=b;
+  $('#cancel-booking-summary').textContent=`${code(b)} · ${guestName(b)} · ${date(b.start_date)} → ${date(b.end_date)}`;
+  $('#cancel-reason').value='overlap';
+  $('#cancel-send-email').checked=true;
+  updateCancellationPreview();
+  dialog.close();
+  cancelDialog.showModal();
+}
+$('#cancel-reason').addEventListener('change',updateCancellationPreview);
+$('#close-cancel-dialog').addEventListener('click',()=>cancelDialog.close());
+$('#cancel-back').addEventListener('click',()=>cancelDialog.close());
+$('#cancel-form').addEventListener('submit',async event=>{
+  event.preventDefault();
+  if(!cancellationBooking)return;
+  const button=event.submitter; button.disabled=true;
+  try{
+    const result=await api('/api/admin/cancel',{method:'POST',body:JSON.stringify({
+      id:cancellationBooking.id,
+      reason:$('#cancel-reason').value,
+      sendEmail:$('#cancel-send-email').checked
+    })});
+    cancelDialog.close();
+    notify(result.message);
+    cancellationBooking=null;
+    await loadBookings();
+  }catch(err){alert(err.message);}
+  finally{button.disabled=false;}
+});
 async function resendEmails(id){
   if(!confirm('Reinviare la conferma all’ospite e la notifica all’host?'))return;
   try{const result=await api('/api/admin/resend',{method:'POST',body:JSON.stringify({id})});notify(`Email inviate: ${result.sent}. Errori: ${result.failed}.`);dialog.close();}

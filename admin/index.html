@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#173d33">
   <title>Dashboard prenotazioni | Marconi306</title>
   <link rel="icon" href="/favicon.png">
-  <link rel="stylesheet" href="/admin/admin.css?v=10.8">
+  <link rel="stylesheet" href="/admin/admin.css?v=11.0">
 </head>
 <body>
   <main class="shell">
@@ -101,6 +101,30 @@
     <div id="dialog-actions" class="dialog-actions"></div>
   </dialog>
 
-  <script src="/admin/admin.js?v=10.8" defer></script>
+
+  <dialog id="cancel-dialog" class="cancel-dialog">
+    <form id="cancel-form">
+      <div class="dialog-head">
+        <div><p class="eyebrow">ANNULLAMENTO</p><h2>Annulla e libera le date</h2></div>
+        <button type="button" id="close-cancel-dialog" class="icon-button" aria-label="Chiudi">×</button>
+      </div>
+      <p id="cancel-booking-summary" class="muted"></p>
+      <label for="cancel-reason">Motivo dell’annullamento</label>
+      <select id="cancel-reason" required>
+        <option value="overlap">Sovrapposizione di prenotazioni</option>
+        <option value="guest_request">Richiesta dell’ospite</option>
+        <option value="property_issue">Imprevisto della struttura</option>
+      </select>
+      <div id="cancel-copy-preview" class="email-preview"></div>
+      <label class="check-row"><input id="cancel-send-email" type="checkbox" checked> <span>Invia automaticamente l’email di annullamento all’ospite e una copia all’host</span></label>
+      <p class="refund-warning"><strong>Attenzione:</strong> questa operazione libera le date e aggiorna i calendari, ma non esegue il rimborso PayPal. L’eventuale rimborso deve essere disposto separatamente.</p>
+      <div class="dialog-actions">
+        <button type="button" id="cancel-back" class="secondary">Indietro</button>
+        <button type="submit" class="danger">Conferma annullamento</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="/admin/admin.js?v=11.0" defer></script>
 </body>
 </html>

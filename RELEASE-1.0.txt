@@ -1,0 +1,23 @@
+MARCONI306 — RELEASE 1.0
+
+Stato: pronta per il collaudo e la pubblicazione
+Data: 21 luglio 2026
+
+Funzioni incluse:
+- prenotazioni dirette con PayPal Live
+- salvataggio su Cloudflare D1
+- blocco automatico delle date
+- sincronizzazione iCal con Booking.com e Airbnb
+- pannello amministrativo
+- annullamento con scelta del motivo
+- email automatica di conferma e annullamento
+- pagina termini di prenotazione e cancellazione
+- accettazione obbligatoria di termini e privacy
+
+Politica di cancellazione:
+- cancellazione gratuita fino a 7 giorni prima del check-in
+- nei 7 giorni precedenti il check-in: importo totale dovuto, nessun rimborso
+- no-show: importo totale dovuto, nessun rimborso
+- annullamento imputabile a Marconi306: rimborso integrale
+
+Nota: il rimborso PayPal resta manuale.
