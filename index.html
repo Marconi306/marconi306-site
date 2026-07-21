@@ -403,11 +403,16 @@
 <label class="guest-field">Ospiti<select id="guests"><option value="1">1 ospite</option><option selected="" value="2">2 ospiti</option></select></label>
 <div class="stay-summary" id="stay-summary">
   <div id="stay-summary-message">Seleziona prima la data di arrivo e poi quella di partenza.</div>
+  <div class="single-guest-discount" id="single-guest-discount" hidden>🏷️ Sconto ospite singolo applicato (-10%)</div>
+  <div class="booking-breakdown" id="booking-breakdown" hidden>
+    <div><span>Tariffa soggiorno</span><strong id="booking-base-value">€0</strong></div>
+    <div id="booking-discount-row" hidden><span>Sconto ospite singolo</span><strong id="booking-discount-value">−€0</strong></div>
+  </div>
   <div class="booking-total" id="booking-total" hidden>
     <span>Totale soggiorno</span>
     <strong id="booking-total-value">€0</strong>
   </div>
-  <small id="booking-total-note" hidden>La tassa di soggiorno di €1 a persona per notte non è inclusa e si paga al check-in.</small>
+  <small id="booking-total-note" hidden>La tassa di soggiorno (€1 per persona per notte) non è inclusa nel totale e dovrà essere pagata in contanti al momento del check-in.</small>
 </div>
 <button class="btn outline full calendar-reset" id="calendar-reset" type="button">Cancella le date</button>
 <button aria-disabled="true" class="btn sage full disabled" id="open-booking" type="button">Prenota e paga ora</button>

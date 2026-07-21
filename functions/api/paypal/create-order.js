@@ -8,7 +8,7 @@ export async function onRequestPost({ request, env }) {
     const start = String(data.start || '');
     const end = String(data.end || '');
     const guest = validateGuest(data);
-    const stay = calculateStay(start, end);
+    const stay = calculateStay(start, end, guest.guests);
 
     await cleanExpiredHolds(env.DB);
     if (await hasExternalConflict(env, start, end) || await hasConflict(env.DB, start, end)) {

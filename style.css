@@ -483,3 +483,13 @@ body{top:0!important}
   .booking-form-grid,.booking-recap{grid-template-columns:1fr}
   .booking-recap div{flex-direction:row;justify-content:space-between;align-items:center}
 }
+
+
+/* v10.1 — sconto ospite singolo e riepilogo */
+.single-guest-discount{margin:12px 0 4px;padding:10px 12px;border-radius:12px;background:#eef5ed;color:#31553a;font-weight:700;font-size:.92rem}
+.booking-breakdown{margin-top:14px;padding:12px 0;border-top:1px solid rgba(28,52,42,.12);border-bottom:1px solid rgba(28,52,42,.12)}
+.booking-breakdown>div{display:flex;justify-content:space-between;gap:16px;padding:5px 0}
+.booking-breakdown span{color:#52645c}
+.booking-breakdown strong{white-space:nowrap}
+#booking-discount-row strong{color:#31553a}
+#booking-recap small{display:block;margin-top:10px;color:#66736d;line-height:1.45}

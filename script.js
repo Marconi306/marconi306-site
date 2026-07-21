@@ -76,13 +76,15 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   }
   function nightsBetween(a,b){ return Math.round((fromIso(b)-fromIso(a))/86400000); }
   function eachNight(a,b){ const out=[]; for(let x=a;x<b;x=addDay(x)) out.push(x); return out; }
-  function stayTotal(a,b){
+  function stayPricing(a,b,guests=Number(document.getElementById('guests')?.value || 2)){
     if(!a || !b) return null;
     const prices = eachNight(a,b).map(nightlyPrice);
-    return prices.every(price => Number.isFinite(price))
-      ? prices.reduce((sum, price) => sum + price, 0)
-      : null;
+    if(!prices.every(price => Number.isFinite(price))) return null;
+    const base = prices.reduce((sum, price) => sum + price, 0);
+    const discount = guests === 1 ? Math.round(base * 0.10 * 100) / 100 : 0;
+    return {base, discount, total: base - discount};
   }
+  function stayTotal(a,b){ return stayPricing(a,b)?.total ?? null; }
   function euro(value){
     return new Intl.NumberFormat('it-IT',{
       style:'currency',
@@ -146,6 +148,11 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
     const totalBox=document.getElementById('booking-total');
     const totalValue=document.getElementById('booking-total-value');
     const totalNote=document.getElementById('booking-total-note');
+    const breakdown=document.getElementById('booking-breakdown');
+    const baseValue=document.getElementById('booking-base-value');
+    const discountRow=document.getElementById('booking-discount-row');
+    const discountValue=document.getElementById('booking-discount-value');
+    const discountBadge=document.getElementById('single-guest-discount');
     const bookingButton=document.getElementById('open-booking');
 
     arrivalEl.textContent=formatDate(arrival);
@@ -153,15 +160,23 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
 
     if(arrival && departure){
       const nights=nightsBetween(arrival,departure);
-      const total=stayTotal(arrival,departure);
+      const pricing=stayPricing(arrival,departure);
+      const total=pricing?.total ?? null;
 
       message.innerHTML=`<strong>${nights} ${nights===1?'notte':'notti'}</strong>`;
 
-      if(total !== null){
-        totalValue.textContent=euro(total);
+      if(pricing){
+        baseValue.textContent=euro(pricing.base);
+        totalValue.textContent=euro(pricing.total);
+        breakdown.hidden=false;
         totalBox.hidden=false;
         totalNote.hidden=false;
+        discountRow.hidden=pricing.discount<=0;
+        discountBadge.hidden=pricing.discount<=0;
+        if(pricing.discount>0) discountValue.textContent=`−${euro(pricing.discount)}`;
       }else{
+        breakdown.hidden=true;
+        discountBadge.hidden=true;
         totalBox.hidden=true;
         totalNote.hidden=false;
         totalNote.textContent='Il totale non è disponibile per una o più date selezionate. Contattaci per la tariffa.';
@@ -175,9 +190,11 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
       message.textContent=arrival
         ? 'Ora seleziona la data di partenza.'
         : 'Seleziona prima la data di arrivo e poi quella di partenza.';
+      breakdown.hidden=true;
+      discountBadge.hidden=true;
       totalBox.hidden=true;
       totalNote.hidden=true;
-      totalNote.textContent='La tassa di soggiorno di €1 a persona per notte non è inclusa e si paga al check-in.';
+      totalNote.textContent='La tassa di soggiorno (€1 per persona per notte) non è inclusa nel totale e dovrà essere pagata in contanti al momento del check-in.';
       bookingButton.classList.add('disabled');
       bookingButton.setAttribute('aria-disabled','true');
       bookingButton.disabled = true;
@@ -186,6 +203,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   document.getElementById('calendar-prev').addEventListener('click',()=>{ const now=new Date();now.setDate(1); if(cursor>now){cursor.setMonth(cursor.getMonth()-1);render();} });
   document.getElementById('calendar-next').addEventListener('click',()=>{cursor.setMonth(cursor.getMonth()+1);render();});
   document.getElementById('calendar-reset').addEventListener('click',()=>{arrival=null;departure=null;render();});
+  document.getElementById('guests').addEventListener('change',updateSummary);
   const modal=document.getElementById('booking-modal');
   const bookingForm=document.getElementById('booking-form');
   const bookingError=document.getElementById('booking-error');
@@ -270,8 +288,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   }
   function openBooking(){
     if(!arrival||!departure||stayTotal(arrival,departure)===null) return;
-    const nights=nightsBetween(arrival,departure), total=stayTotal(arrival,departure);
-    document.getElementById('booking-recap').innerHTML=`<div><span>Check-in</span><strong>${formatDate(arrival)}</strong></div><div><span>Check-out</span><strong>${formatDate(departure)}</strong></div><div><span>${nights} ${nights===1?'notte':'notti'}</span><strong>${euro(total)}</strong></div>`;
+    const nights=nightsBetween(arrival,departure), pricing=stayPricing(arrival,departure);
+    const discountLine=pricing.discount>0?`<div><span>Sconto ospite singolo (-10%)</span><strong>−${euro(pricing.discount)}</strong></div>`:'';
+    document.getElementById('booking-recap').innerHTML=`<div><span>Check-in</span><strong>${formatDate(arrival)}</strong></div><div><span>Check-out</span><strong>${formatDate(departure)}</strong></div><div><span>${nights} ${nights===1?'notte':'notti'}</span><strong>${euro(pricing.base)}</strong></div>${discountLine}<div><span>Totale soggiorno</span><strong>${euro(pricing.total)}</strong></div><small>La tassa di soggiorno (€1 per persona per notte) si paga in contanti al check-in.</small>`;
     modal.hidden=false;
     document.body.classList.add('modal-open');
     preparePayPal();

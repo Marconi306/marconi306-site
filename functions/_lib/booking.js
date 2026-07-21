@@ -28,14 +28,17 @@ export function nightlyPrice(iso) {
   return null;
 }
 
-export function calculateStay(start, end) {
+export function calculateStay(start, end, guests = 2) {
   const nights = nightsBetween(start, end);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(start) || !/^\d{4}-\d{2}-\d{2}$/.test(end) || nights < 1 || nights > 30) {
     throw new Error('Date del soggiorno non valide.');
   }
   const prices = eachNight(start, end).map(nightlyPrice);
   if (!prices.every(Number.isFinite)) throw new Error('Tariffa non disponibile per le date selezionate.');
-  return { nights, total: prices.reduce((sum, price) => sum + price, 0) };
+  if (![1, 2].includes(Number(guests))) throw new Error('Numero di ospiti non valido.');
+  const base = prices.reduce((sum, price) => sum + price, 0);
+  const discount = Number(guests) === 1 ? Math.round(base * 0.10 * 100) / 100 : 0;
+  return { nights, base, discount, total: base - discount };
 }
 
 export async function cleanExpiredHolds(db) {
