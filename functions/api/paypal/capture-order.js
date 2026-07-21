@@ -1,5 +1,6 @@
 import { cleanExpiredHolds, hasConflict, hasExternalConflict } from '../../_lib/booking.js';
 import { paypalRequest } from '../../_lib/paypal.js';
+import { sendBookingEmails } from '../../_lib/email.js';
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -36,9 +37,18 @@ export async function onRequestPost({ request, env }) {
       confirmed_at = datetime('now'), hold_expires_at = NULL WHERE id = ?2
     `).bind(payment.id, booking.id).run();
 
+    const confirmedBooking = { ...booking, status: 'CONFIRMED', paypal_capture_id: payment.id };
+    const bookingCode = booking.id.split('-').slice(0, 2).join('-').toUpperCase();
+    try {
+      await sendBookingEmails(env, confirmedBooking, bookingCode);
+    } catch (emailError) {
+      // Il pagamento e la prenotazione restano confermati anche se l'email non parte.
+      console.error('Booking notification error', emailError);
+    }
+
     return Response.json({
       success: true,
-      bookingCode: booking.id.split('-').slice(0, 2).join('-').toUpperCase(),
+      bookingCode,
       start: booking.start_date,
       end: booking.end_date,
       amount: (booking.amount_cents / 100).toFixed(2)

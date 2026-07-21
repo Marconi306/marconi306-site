@@ -270,17 +270,16 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
         },
         async onApprove(data){
           clearBookingError();
+          paypalLoading.hidden=false;
+          paypalLoading.textContent='Pagamento ricevuto. Stiamo confermando la prenotazione…';
           const response=await fetch('/api/paypal/capture-order',{
             method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
             body:JSON.stringify({orderID:data.orderID})
           });
           const result=await response.json();
           if(!response.ok) throw new Error(result.error||'Impossibile completare la prenotazione.');
-          bookingForm.hidden=true;
-          document.getElementById('booking-success').hidden=false;
-          document.getElementById('booking-success-message').innerHTML=`Soggiorno dal <strong>${formatDate(result.start)}</strong> al <strong>${formatDate(result.end)}</strong>, totale <strong>${euro(Number(result.amount))}</strong>.<br>Codice: <strong>${result.bookingCode}</strong>`;
-          loaded=false;
-          setTimeout(()=>window.location.reload(),8000);
+          try { sessionStorage.setItem('m306BookingSuccess',JSON.stringify(result)); } catch (_) {}
+          window.location.assign('/?prenotazione=confermata');
         },
         onCancel(){ showBookingError('Pagamento annullato. Le date torneranno disponibili al termine del blocco temporaneo.'); },
         onError(error){ console.error(error); showBookingError(error.message||'Si è verificato un errore durante il pagamento.'); }
@@ -302,6 +301,22 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   document.querySelectorAll('[data-close-booking]').forEach(el=>el.addEventListener('click',closeBooking));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden) closeBooking();});
   let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(render,150);});
+
+  function restoreBookingSuccess(){
+    const params=new URLSearchParams(window.location.search);
+    if(params.get('prenotazione')!=='confermata') return;
+    let result=null;
+    try { result=JSON.parse(sessionStorage.getItem('m306BookingSuccess')||'null'); } catch (_) {}
+    if(!result) return;
+    bookingForm.hidden=true;
+    document.getElementById('booking-success').hidden=false;
+    document.getElementById('booking-success-message').innerHTML=`Soggiorno dal <strong>${formatDate(result.start)}</strong> al <strong>${formatDate(result.end)}</strong>, totale <strong>${euro(Number(result.amount))}</strong>.<br>Codice: <strong>${result.bookingCode}</strong>`;
+    modal.hidden=false;
+    document.body.classList.add('modal-open');
+    try { sessionStorage.removeItem('m306BookingSuccess'); } catch (_) {}
+    history.replaceState({},document.title,window.location.pathname+window.location.hash);
+  }
+  restoreBookingSuccess();
 
   fetch('/api/availability',{headers:{'Accept':'application/json'}})
     .then(r=>{if(!r.ok) throw new Error('availability');return r.json();})

@@ -64,3 +64,17 @@ La sincronizzazione iCal delle piattaforme non è istantanea. Il sito ricontroll
 - sconto del 10% calcolato anche dal server quando viene selezionato 1 ospite;
 - prezzo ricalcolato e verificato dal server;
 - nessun pagamento acquisito se le date risultano occupate.
+
+## 5 — Conferma persistente ed email (v10.4)
+
+Dopo un pagamento PayPal completato, la pagina principale viene ricaricata e mostra una conferma persistente con codice, date e importo. In questo modo il cliente non perde il messaggio quando la finestra PayPal si chiude.
+
+La pulizia degli HOLD scaduti viene eseguita automaticamente ogni volta che il sito carica la disponibilità e prima di creare o acquisire un ordine. Gli HOLD scaduti vengono marcati `CANCELLED` e le relative notti tornano disponibili.
+
+Le email sono facoltative e non possono mai bloccare una prenotazione già pagata. Per abilitarle aggiungere in Cloudflare:
+
+- `RESEND_API_KEY` — secret Resend;
+- `BOOKING_EMAIL_FROM` — mittente verificato, ad esempio `Marconi306 <prenotazioni@marconi306.it>`;
+- `BOOKING_NOTIFICATION_EMAIL` — indirizzo che riceve la notifica della nuova prenotazione, ad esempio `viamarconi306@gmail.com`.
+
+Senza queste tre variabili il pagamento e la prenotazione continuano a funzionare normalmente, ma non vengono inviate email personalizzate dal sito. La ricevuta PayPal resta comunque attiva.
