@@ -119,3 +119,15 @@ Aggiornamenti:
 - Sezione recensioni spostata dopo l'area prenotazione e prima del footer/contatti.
 - Menu desktop compattato e mantenuto su una sola riga.
 - Header desktop reso più ampio e pulsante **Prenota ora** leggermente ridimensionato.
+
+## Versione 9.4 — prenotazione diretta
+Aggiunto flusso di prenotazione e pagamento PayPal con Cloudflare Pages Functions e database D1. Vedere `README-PRENOTAZIONI-PAYPAL.md` prima della pubblicazione.
+
+
+## Versione 10.0 — prenotazione diretta semplice
+- Mantenuto il sito statico e la grafica esistente.
+- Aggiunto checkout PayPal server-side con Cloudflare Pages Functions.
+- Aggiunto controllo Booking/Airbnb anche prima della creazione e acquisizione del pagamento.
+- Ridotta la cache disponibilità per limitare il rischio di conflitti.
+- Aggiunto database D1 e calendario iCal delle prenotazioni dirette.
+- Nessuna dashboard o gestionale aggiuntivo.

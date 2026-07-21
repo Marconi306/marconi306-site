@@ -452,3 +452,34 @@ body{top:0!important}
   .header{padding-left:clamp(42px,7vw,140px);padding-right:clamp(42px,4.5vw,90px)}
   .logo img{width:235px}
 }
+
+/* v9.4 — prenotazione e pagamento diretto */
+.secure-payment-note{font-size:.82rem;line-height:1.45;text-align:center;color:var(--muted);margin:12px 0 6px}
+.booking-help-link{display:block;text-align:center;font-size:.88rem;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.booking-modal[hidden]{display:none}
+.booking-modal{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:20px}
+.booking-modal-backdrop{position:absolute;inset:0;background:rgba(20,24,22,.72);backdrop-filter:blur(5px)}
+.booking-dialog{position:relative;width:min(680px,100%);max-height:calc(100vh - 40px);overflow:auto;background:#fff;border-radius:24px;padding:34px;box-shadow:0 26px 80px rgba(0,0,0,.3)}
+.booking-close{position:absolute;right:16px;top:12px;border:0;background:transparent;font-size:2rem;line-height:1;cursor:pointer;color:var(--ink)}
+.booking-dialog h2{margin:4px 0 18px}
+.booking-recap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:14px;background:var(--cream,#f5f2eb);border-radius:14px;margin-bottom:20px}
+.booking-recap div{display:flex;flex-direction:column;gap:3px}
+.booking-recap span{font-size:.76rem;color:var(--muted)}
+.booking-recap strong{font-size:.95rem}
+.booking-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+#booking-form label{display:flex;flex-direction:column;gap:7px;font-size:.86rem;font-weight:700;margin-bottom:14px}
+#booking-form input,#booking-form textarea{width:100%;border:1px solid #d7d7d2;border-radius:10px;padding:12px 13px;font:inherit;background:#fff;color:var(--ink)}
+#booking-form input:focus,#booking-form textarea:focus{outline:2px solid rgba(118,139,118,.25);border-color:var(--sage)}
+#booking-form .booking-consent{flex-direction:row;align-items:flex-start;font-weight:400;line-height:1.45}
+.booking-consent input{width:auto!important;margin-top:3px}
+.booking-error{background:#fff1f0;border:1px solid #e4aaa5;color:#842b25;border-radius:10px;padding:11px 13px;margin:4px 0 14px;font-size:.9rem}
+.paypal-loading{text-align:center;color:var(--muted);font-size:.85rem;margin:10px 0 0}
+.booking-success{text-align:center;padding:24px 8px 8px}
+.success-icon{width:64px;height:64px;margin:0 auto 15px;border-radius:50%;display:grid;place-items:center;background:var(--sage);color:#fff;font-size:2rem}
+.booking-success h3{font-size:1.6rem;margin:0 0 10px}
+.modal-open{overflow:hidden}
+@media(max-width:640px){
+  .booking-dialog{padding:28px 18px;border-radius:18px}
+  .booking-form-grid,.booking-recap{grid-template-columns:1fr}
+  .booking-recap div{flex-direction:row;justify-content:space-between;align-items:center}
+}

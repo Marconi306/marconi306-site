@@ -388,14 +388,14 @@
 </section>
 <section class="section direct availability-section" id="prenota">
 <div class="container availability-head">
-<div><p class="eyebrow">Disponibilità aggiornata</p><h2>Scegli le date del soggiorno</h2><p class="lead">Il calendario riunisce le prenotazioni presenti su Booking e Airbnb. Seleziona il giorno di arrivo e quello di partenza; la richiesta finale resta soggetta a conferma.</p></div>
+<div><p class="eyebrow">Disponibilità aggiornata</p><h2>Scegli le date del soggiorno</h2><p class="lead">Il calendario riunisce le disponibilità di Booking, Airbnb e delle prenotazioni dirette. Seleziona arrivo e partenza, inserisci i dati e completa il pagamento per ricevere la conferma immediata.</p></div>
 <div aria-label="Legenda calendario" class="availability-legend"><span><i class="legend-dot free"></i>Disponibile</span><span><i class="legend-dot busy"></i>Non disponibile</span><span><i class="legend-dot selected"></i>Selezionato</span></div>
 </div>
 <div class="container availability-layout">
 <div aria-live="polite" class="calendar-card">
 <div class="calendar-toolbar"><button aria-label="Mesi precedenti" class="calendar-nav" id="calendar-prev" type="button">‹</button><strong id="calendar-status">Caricamento disponibilità…</strong><button aria-label="Mesi successivi" class="calendar-nav" id="calendar-next" type="button">›</button></div>
 <div class="calendar-months" id="calendar-months"></div>
-<p class="calendar-note">Le date non disponibili provengono dai calendari collegati. La sincronizzazione iCal può richiedere del tempo: la prenotazione è confermata solo dopo la nostra risposta.</p>
+<p class="calendar-note">Le date non disponibili provengono dai calendari collegati e dalle prenotazioni dirette. Durante il pagamento il periodo viene riservato per 10 minuti.</p>
 </div>
 <aside class="stay-card">
 <p class="eyebrow">Il tuo soggiorno</p>
@@ -407,11 +407,12 @@
     <span>Totale soggiorno</span>
     <strong id="booking-total-value">€0</strong>
   </div>
-  <small id="booking-total-note" hidden>Disponibilità e importo finale soggetti a conferma del proprietario.</small>
+  <small id="booking-total-note" hidden>La tassa di soggiorno di €1 a persona per notte non è inclusa e si paga al check-in.</small>
 </div>
 <button class="btn outline full calendar-reset" id="calendar-reset" type="button">Cancella le date</button>
-<a aria-disabled="true" class="btn sage full disabled" href="#" id="wa-request">Richiedi disponibilità su WhatsApp</a>
-<a class="btn outline full" href="mailto:viamarconi306@gmail.com?subject=Richiesta%20disponibilit%C3%A0%20Marconi306">Richiedi via email</a>
+<button aria-disabled="true" class="btn sage full disabled" id="open-booking" type="button">Prenota e paga ora</button>
+<p class="secure-payment-note">Pagamento sicuro con PayPal o carta. La conferma è immediata dopo il pagamento.</p>
+<a class="booking-help-link" href="https://wa.me/393278562974" target="_blank" rel="noopener">Hai bisogno di aiuto? Scrivici su WhatsApp</a>
 </aside>
 </div>
 </section>
@@ -423,11 +424,41 @@
 </div>
 </section>
 </main>
+<div class="booking-modal" id="booking-modal" hidden>
+  <div class="booking-modal-backdrop" data-close-booking></div>
+  <section class="booking-dialog" role="dialog" aria-modal="true" aria-labelledby="booking-dialog-title">
+    <button class="booking-close" type="button" aria-label="Chiudi" data-close-booking>×</button>
+    <p class="eyebrow">Prenotazione diretta</p>
+    <h2 id="booking-dialog-title">Completa la prenotazione</h2>
+    <div class="booking-recap" id="booking-recap"></div>
+    <form id="booking-form">
+      <div class="booking-form-grid">
+        <label>Nome<input name="firstName" autocomplete="given-name" required></label>
+        <label>Cognome<input name="lastName" autocomplete="family-name" required></label>
+        <label>Email<input name="email" type="email" autocomplete="email" required></label>
+        <label>Telefono<input name="phone" type="tel" autocomplete="tel" required></label>
+      </div>
+      <label>Note facoltative<textarea name="notes" rows="3" placeholder="Orario di arrivo previsto o altre informazioni"></textarea></label>
+      <label class="booking-consent"><input name="terms" type="checkbox" required> <span>Confermo di aver letto le <a href="privacy.html" target="_blank">informazioni sulla privacy</a> e accetto le condizioni della prenotazione.</span></label>
+      <div class="booking-error" id="booking-error" role="alert" hidden></div>
+      <div id="paypal-button-container"></div>
+      <p class="paypal-loading" id="paypal-loading">Compila tutti i campi per visualizzare le opzioni di pagamento.</p>
+    </form>
+    <div class="booking-success" id="booking-success" hidden>
+      <div class="success-icon">✓</div>
+      <h3>Prenotazione confermata</h3>
+      <p id="booking-success-message"></p>
+      <p>Riceverai anche la conferma del pagamento da PayPal. Conserva il codice della prenotazione.</p>
+      <button class="btn sage" type="button" data-close-booking>Chiudi</button>
+    </div>
+  </section>
+</div>
+
 <footer class="footer" id="contatti"><div class="footer-grid"><div><img alt="Marconi306" src="assets/logo/marconi306-mark.png" style="width:160px;margin-bottom:16px"><p>Via Guglielmo Marconi 306<br/>Quartu Sant'Elena • Sardegna</p><p class="small">Locazione turistica gestita da privati. CIN IT092051C2000U3955.</p></img></div><div><p><a href="mailto:viamarconi306@gmail.com">viamarconi306@gmail.com</a></p><p><a href="https://wa.me/393278562974" target="_blank">WhatsApp</a></p><p><a href="privacy.html">Privacy</a></p></div></div></footer>
 <a class="whatsapp" href="https://wa.me/393278562974" target="_blank">WhatsApp</a>
 <div class="lightbox" onclick="closeLightbox()"><button class="lb-close" onclick="event.stopPropagation();closeLightbox()">×</button><button class="lb-prev" onclick="event.stopPropagation();stepLightbox(-1)">‹</button><img alt="" id="lb-img" src=""><button class="lb-next" onclick="event.stopPropagation();stepLightbox(1)">›</button></img></div>
 <script src="https://elfsightcdn.com/platform.js" async></script>
-<script src="script.js?v=9.3"></script>
+<script src="script.js?v=9.4"></script>
 <script>
 (function(){
   function getParts(){

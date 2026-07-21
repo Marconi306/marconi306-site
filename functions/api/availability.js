@@ -63,7 +63,7 @@ async function fetchCalendar(url, source) {
   if (!url) throw new Error(`Variabile ${source} non configurata`);
   const response = await fetch(url, {
     headers: { 'User-Agent': 'Marconi306-Availability/1.0' },
-    cf: { cacheTtl: 300, cacheEverything: true }
+    cf: { cacheTtl: 60, cacheEverything: true }
   });
   if (!response.ok) throw new Error(`${source}: risposta ${response.status}`);
   return parseEvents(await response.text(), source);
@@ -75,10 +75,16 @@ export async function onRequestGet(context) {
       fetchCalendar(context.env.BOOKING_ICAL_URL, 'Booking'),
       fetchCalendar(context.env.AIRBNB_ICAL_URL, 'Airbnb')
     ]);
-    const blockedRanges = mergeRanges([...booking, ...airbnb]);
+    let direct = [];
+    if (context.env.DB) {
+      await context.env.DB.prepare("DELETE FROM bookings WHERE status = 'HOLD' AND hold_expires_at <= datetime('now')").run();
+      const { results = [] } = await context.env.DB.prepare("SELECT start_date AS start, end_date AS end FROM bookings WHERE status='CONFIRMED' OR (status='HOLD' AND hold_expires_at > datetime('now'))").all();
+      direct = results;
+    }
+    const blockedRanges = mergeRanges([...booking, ...airbnb, ...direct]);
     return Response.json(
       { blockedRanges, updatedAt: new Date().toISOString() },
-      { headers: { 'Cache-Control': 'public, max-age=300, s-maxage=300' } }
+      { headers: { 'Cache-Control': 'no-store' } }
     );
   } catch (error) {
     console.error('Availability error', error);

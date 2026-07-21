@@ -146,7 +146,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
     const totalBox=document.getElementById('booking-total');
     const totalValue=document.getElementById('booking-total-value');
     const totalNote=document.getElementById('booking-total-note');
-    const wa=document.getElementById('wa-request');
+    const bookingButton=document.getElementById('open-booking');
 
     arrivalEl.textContent=formatDate(arrival);
     departureEl.textContent=formatDate(departure);
@@ -167,33 +167,119 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
         totalNote.textContent='Il totale non è disponibile per una o più date selezionate. Contattaci per la tariffa.';
       }
 
-      wa.classList.remove('disabled');
-      wa.setAttribute('aria-disabled','false');
-      wa.href='#';
+      const enabled = total !== null;
+      bookingButton.classList.toggle('disabled', !enabled);
+      bookingButton.setAttribute('aria-disabled', String(!enabled));
+      bookingButton.disabled = !enabled;
     }else{
       message.textContent=arrival
         ? 'Ora seleziona la data di partenza.'
         : 'Seleziona prima la data di arrivo e poi quella di partenza.';
       totalBox.hidden=true;
       totalNote.hidden=true;
-      totalNote.textContent='Disponibilità e importo finale soggetti a conferma del proprietario.';
-      wa.classList.add('disabled');
-      wa.setAttribute('aria-disabled','true');
-      wa.href='#';
+      totalNote.textContent='La tassa di soggiorno di €1 a persona per notte non è inclusa e si paga al check-in.';
+      bookingButton.classList.add('disabled');
+      bookingButton.setAttribute('aria-disabled','true');
+      bookingButton.disabled = true;
     }
   }
   document.getElementById('calendar-prev').addEventListener('click',()=>{ const now=new Date();now.setDate(1); if(cursor>now){cursor.setMonth(cursor.getMonth()-1);render();} });
   document.getElementById('calendar-next').addEventListener('click',()=>{cursor.setMonth(cursor.getMonth()+1);render();});
   document.getElementById('calendar-reset').addEventListener('click',()=>{arrival=null;departure=null;render();});
-  document.getElementById('wa-request').addEventListener('click',e=>{
-    e.preventDefault(); if(!arrival||!departure) return;
-    const guests=document.getElementById('guests').value;
-    const nights=nightsBetween(arrival,departure);
-    const total=stayTotal(arrival,departure);
-    const totalText=total!==null ? `, totale indicativo ${euro(total)}` : '';
-    const msg=`Buongiorno, vorrei richiedere la disponibilità di Marconi306 dal ${formatDate(arrival)} al ${formatDate(departure)} (${nights} ${nights===1?'notte':'notti'}${totalText}) per ${guests} ${guests==='1'?'ospite':'ospiti'}. Le date risultano disponibili sul sito; attendo conferma del prezzo e della prenotazione. Grazie!`;
-    window.open('https://wa.me/393278562974?text='+encodeURIComponent(msg),'_blank','noopener');
-  });
+  const modal=document.getElementById('booking-modal');
+  const bookingForm=document.getElementById('booking-form');
+  const bookingError=document.getElementById('booking-error');
+  const paypalContainer=document.getElementById('paypal-button-container');
+  const paypalLoading=document.getElementById('paypal-loading');
+  let paypalRendered=false;
+
+  function showBookingError(message){
+    bookingError.textContent=message;
+    bookingError.hidden=false;
+  }
+  function clearBookingError(){ bookingError.hidden=true; bookingError.textContent=''; }
+  function bookingPayload(){
+    const formData=new FormData(bookingForm);
+    return {
+      start:arrival,
+      end:departure,
+      guests:Number(document.getElementById('guests').value),
+      firstName:formData.get('firstName'),
+      lastName:formData.get('lastName'),
+      email:formData.get('email'),
+      phone:formData.get('phone'),
+      notes:formData.get('notes')
+    };
+  }
+  function formReady(){ return bookingForm.reportValidity(); }
+  function loadPayPalSdk(clientId, mode){
+    return new Promise((resolve,reject)=>{
+      if(window.paypal) return resolve();
+      const script=document.createElement('script');
+      script.src=`https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=EUR&intent=capture&components=buttons&locale=it_IT`;
+      script.dataset.environment=mode;
+      script.onload=resolve;
+      script.onerror=()=>reject(new Error('Impossibile caricare PayPal.'));
+      document.head.appendChild(script);
+    });
+  }
+  async function preparePayPal(){
+    if(paypalRendered) return;
+    try{
+      const configResponse=await fetch('/api/paypal/config',{headers:{Accept:'application/json'}});
+      const config=await configResponse.json();
+      if(!config.configured) throw new Error('Il pagamento online non è ancora configurato. Contattaci su WhatsApp.');
+      await loadPayPalSdk(config.clientId,config.mode);
+      paypalLoading.textContent='Compila i dati e scegli PayPal oppure carta.';
+      window.paypal.Buttons({
+        style:{layout:'vertical',shape:'rect',label:'pay'},
+        onClick(data,actions){
+          clearBookingError();
+          if(!formReady()) return actions.reject();
+          return actions.resolve();
+        },
+        async createOrder(){
+          clearBookingError();
+          const response=await fetch('/api/paypal/create-order',{
+            method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+            body:JSON.stringify(bookingPayload())
+          });
+          const result=await response.json();
+          if(!response.ok) throw new Error(result.error||'Impossibile avviare il pagamento.');
+          return result.id;
+        },
+        async onApprove(data){
+          clearBookingError();
+          const response=await fetch('/api/paypal/capture-order',{
+            method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+            body:JSON.stringify({orderID:data.orderID})
+          });
+          const result=await response.json();
+          if(!response.ok) throw new Error(result.error||'Impossibile completare la prenotazione.');
+          bookingForm.hidden=true;
+          document.getElementById('booking-success').hidden=false;
+          document.getElementById('booking-success-message').innerHTML=`Soggiorno dal <strong>${formatDate(result.start)}</strong> al <strong>${formatDate(result.end)}</strong>, totale <strong>${euro(Number(result.amount))}</strong>.<br>Codice: <strong>${result.bookingCode}</strong>`;
+          loaded=false;
+          setTimeout(()=>window.location.reload(),8000);
+        },
+        onCancel(){ showBookingError('Pagamento annullato. Le date torneranno disponibili al termine del blocco temporaneo.'); },
+        onError(error){ console.error(error); showBookingError(error.message||'Si è verificato un errore durante il pagamento.'); }
+      }).render('#paypal-button-container');
+      paypalRendered=true;
+    }catch(error){ showBookingError(error.message); paypalLoading.hidden=true; }
+  }
+  function openBooking(){
+    if(!arrival||!departure||stayTotal(arrival,departure)===null) return;
+    const nights=nightsBetween(arrival,departure), total=stayTotal(arrival,departure);
+    document.getElementById('booking-recap').innerHTML=`<div><span>Check-in</span><strong>${formatDate(arrival)}</strong></div><div><span>Check-out</span><strong>${formatDate(departure)}</strong></div><div><span>${nights} ${nights===1?'notte':'notti'}</span><strong>${euro(total)}</strong></div>`;
+    modal.hidden=false;
+    document.body.classList.add('modal-open');
+    preparePayPal();
+  }
+  function closeBooking(){ modal.hidden=true; document.body.classList.remove('modal-open'); }
+  document.getElementById('open-booking').addEventListener('click',openBooking);
+  document.querySelectorAll('[data-close-booking]').forEach(el=>el.addEventListener('click',closeBooking));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden) closeBooking();});
   let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(render,150);});
 
   fetch('/api/availability',{headers:{'Accept':'application/json'}})
