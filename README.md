@@ -1,3 +1,11 @@
+
+## Versione 10.5 – stabilizzazione HOLD
+
+- Gli HOLD scaduti vengono annullati automaticamente e le relative notti liberate.
+- La pulizia viene eseguita sia prima di creare/catturare un pagamento sia a ogni controllo della disponibilità.
+- Anche eventuali HOLD privi di scadenza vengono neutralizzati, evitando blocchi permanenti.
+- Cache JavaScript aggiornata a `script.js?v=10.5`.
+
 Marconi306 – versione 4.0
 
 Aggiornamenti:

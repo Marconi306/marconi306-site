@@ -78,3 +78,8 @@ Le email sono facoltative e non possono mai bloccare una prenotazione già pagat
 - `BOOKING_NOTIFICATION_EMAIL` — indirizzo che riceve la notifica della nuova prenotazione, ad esempio `viamarconi306@gmail.com`.
 
 Senza queste tre variabili il pagamento e la prenotazione continuano a funzionare normalmente, ma non vengono inviate email personalizzate dal sito. La ricevuta PayPal resta comunque attiva.
+
+
+## Stabilizzazione v10.5
+
+Gli HOLD durano 10 minuti. Alla prima richiesta di disponibilità, al nuovo tentativo di pagamento o alla cattura di un ordine, ogni HOLD scaduto viene impostato su `CANCELLED` e le righe corrispondenti in `booking_nights` vengono eliminate. Anche un HOLD anomalo senza `hold_expires_at` viene liberato automaticamente.

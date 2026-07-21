@@ -55,13 +55,21 @@ export function sqliteDateTime(date = new Date()) {
 }
 
 export async function cleanExpiredHolds(db) {
-  const expired = await db.prepare("SELECT id FROM bookings WHERE status = 'HOLD' AND hold_expires_at <= datetime('now')").all();
+  // Un HOLD senza scadenza è considerato non valido: in questo modo nessun
+  // tentativo di pagamento incompleto può bloccare le date indefinitamente.
+  const expired = await db.prepare(`
+    SELECT id FROM bookings
+    WHERE status = 'HOLD'
+      AND (hold_expires_at IS NULL OR hold_expires_at <= datetime('now'))
+  `).all();
   const ids = (expired.results || []).map(row => row.id);
-  if (!ids.length) return;
+  if (!ids.length) return 0;
+
   await db.batch(ids.flatMap(id => [
     db.prepare('DELETE FROM booking_nights WHERE booking_id = ?1').bind(id),
-    db.prepare("UPDATE bookings SET status = 'CANCELLED' WHERE id = ?1").bind(id)
+    db.prepare("UPDATE bookings SET status = 'CANCELLED', hold_expires_at = NULL WHERE id = ?1").bind(id)
   ]));
+  return ids.length;
 }
 
 export async function hasConflict(db, start, end, excludeId = '') {

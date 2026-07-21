@@ -1,3 +1,5 @@
+import { cleanExpiredHolds } from '../_lib/booking.js';
+
 function unfoldIcal(text) {
   return text.replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '').split(/\r?\n/);
 }
@@ -77,8 +79,13 @@ export async function onRequestGet(context) {
     ]);
     let direct = [];
     if (context.env.DB) {
-      await context.env.DB.prepare("DELETE FROM bookings WHERE status = 'HOLD' AND hold_expires_at <= datetime('now')").run();
-      const { results = [] } = await context.env.DB.prepare("SELECT start_date AS start, end_date AS end FROM bookings WHERE status='CONFIRMED' OR (status='HOLD' AND hold_expires_at > datetime('now'))").all();
+      await cleanExpiredHolds(context.env.DB);
+      const { results = [] } = await context.env.DB.prepare(`
+        SELECT start_date AS start, end_date AS end
+        FROM bookings
+        WHERE status = 'CONFIRMED'
+           OR (status = 'HOLD' AND hold_expires_at > datetime('now'))
+      `).all();
       direct = results;
     }
     const blockedRanges = mergeRanges([...booking, ...airbnb, ...direct]);
