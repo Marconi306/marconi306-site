@@ -1,5 +1,5 @@
-import { verifyAdminToken, unauthorized } from '../../../_lib/admin-auth.js';
-import { pricingForDates } from '../../../_lib/pricing.js';
+import { verifyAdminToken, unauthorized } from '../../_lib/admin-auth.js';
+import { pricingForDates } from '../../_lib/pricing.js';
 export async function onRequestGet({request,env}){
   if(!await verifyAdminToken(request,env.ADMIN_PASSWORD)) return unauthorized();
   const u=new URL(request.url), start=u.searchParams.get('start'), end=u.searchParams.get('end');
