@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#173d33">
   <title>Dashboard prenotazioni | Marconi306</title>
   <link rel="icon" href="/favicon.png">
-  <link rel="stylesheet" href="/admin/admin.css?v=11.1">
+  <link rel="stylesheet" href="/admin/admin.css?v=11.1.1">
 </head>
 <body>
   <main class="shell">
@@ -54,10 +54,22 @@
       <section class="management-card pricing-manager" aria-labelledby="pricing-title">
         <div class="section-head management-head">
           <div><p class="eyebrow">TARIFFE E DISPONIBILITÀ</p><h2 id="pricing-title">Calendario</h2></div>
-          <div class="calendar-nav"><button id="pricing-prev" class="secondary compact">←</button><button id="pricing-today" class="secondary compact">Oggi</button><button id="pricing-next" class="secondary compact">→</button></div>
         </div>
-        <p class="muted">Seleziona il primo e l’ultimo giorno del periodo da modificare. Le date prenotate sono protette.</p>
-        <div id="pricing-calendar" class="admin-calendar" aria-live="polite"></div>
+        <p class="muted">Visualizza i prezzi già impostati e seleziona il primo e l’ultimo giorno del periodo da modificare. Le date non disponibili sono protette.</p>
+        <div class="admin-calendar-card">
+          <div class="admin-calendar-toolbar">
+            <button id="pricing-prev" class="admin-calendar-nav" type="button" aria-label="Mesi precedenti">‹</button>
+            <div class="admin-calendar-status"><strong id="pricing-status">Calendario aggiornato</strong><button id="pricing-today" type="button">Torna a oggi</button></div>
+            <button id="pricing-next" class="admin-calendar-nav" type="button" aria-label="Mesi successivi">›</button>
+          </div>
+          <div id="pricing-calendar" class="admin-calendar" aria-live="polite"></div>
+          <div class="admin-calendar-legend" aria-label="Legenda calendario">
+            <span><i class="legend-free"></i>Disponibile</span>
+            <span><i class="legend-booked"></i>Non disponibile</span>
+            <span><i class="legend-closed"></i>Chiuso manualmente</span>
+            <span><i class="legend-selected"></i>Periodo selezionato</span>
+          </div>
+        </div>
         <form id="pricing-form" class="pricing-form">
           <label>Dal<input id="pricing-start" type="date" required></label>
           <label>Al (compreso)<input id="pricing-end" type="date" required></label>
@@ -144,6 +156,6 @@
     </form>
   </dialog>
 
-  <script src="/admin/admin.js?v=11.1" defer></script>
+  <script src="/admin/admin.js?v=11.1.1" defer></script>
 </body>
 </html>

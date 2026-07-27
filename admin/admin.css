@@ -7,3 +7,38 @@
 
 /* Release 1.1 — calendario prezzi */
 .pricing-manager{margin-bottom:24px}.calendar-nav{display:flex;gap:8px}.admin-calendar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin:22px 0}.admin-month{border:1px solid #ded7ca;border-radius:18px;padding:16px;background:#fff}.admin-month h3{margin:0 0 14px;text-transform:capitalize}.admin-weekdays,.admin-days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.admin-weekdays span{text-align:center;font-size:.72rem;font-weight:800;color:#6d756f;padding:4px}.admin-day{min-height:68px;border:1px solid #e5dfd5;background:#faf8f4;border-radius:10px;padding:7px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;color:#173d33;cursor:pointer}.admin-day:hover{border-color:#567a68}.admin-day.selected{outline:2px solid #567a68;background:#edf3ef}.admin-day.range{background:#f1eee6}.admin-day.booked{background:#f4dfdc;border-color:#d7aaa3;cursor:not-allowed}.admin-day.closed{background:#e6e6e2;text-decoration:line-through}.admin-day.today{box-shadow:inset 0 0 0 2px #c8a968}.admin-day small{font-weight:800}.pricing-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:end;padding-top:18px;border-top:1px solid #ded7ca}.pricing-form label{display:grid;gap:7px}.pricing-form input{width:100%}.pricing-close{align-self:center}.pricing-actions{display:flex;gap:10px;grid-column:1/-1}.pricing-actions button{width:auto}@media(max-width:900px){.admin-calendar{grid-template-columns:1fr}.pricing-form{grid-template-columns:1fr 1fr}}@media(max-width:600px){.pricing-form{grid-template-columns:1fr}.admin-day{min-height:55px;padding:5px;font-size:.8rem}.admin-day small{font-size:.68rem}.calendar-nav{width:100%;justify-content:space-between}}
+
+/* Release 1.1.1 — calendario amministrativo allineato al calendario pubblico */
+.admin-calendar-card{margin:22px 0 0;padding:24px;background:#fff;border:1px solid var(--line);box-shadow:0 18px 50px rgba(50,40,28,.09)}
+.admin-calendar-toolbar{display:grid;grid-template-columns:56px 1fr 56px;align-items:center;gap:12px;margin-bottom:28px;text-align:center}
+.admin-calendar-nav{width:56px;height:56px;border:1px solid var(--line);background:var(--soft);font:400 2rem/1 Georgia,"Times New Roman",serif;color:var(--ink);cursor:pointer}
+.admin-calendar-nav:hover{border-color:var(--accent);background:#fff}
+.admin-calendar-status{display:grid;justify-items:center;gap:5px;color:#715d43}
+.admin-calendar-status strong{font-size:1rem}
+.admin-calendar-status button{border:0;background:transparent;padding:0;color:var(--accent);font:700 .78rem/1.2 Inter,system-ui,sans-serif;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.admin-calendar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;margin:0}
+.admin-month{border:0;border-radius:0;padding:0;background:transparent}
+.admin-month h3{font:400 1.9rem/1.1 Georgia,"Times New Roman",serif;text-align:center;margin:0 0 20px;text-transform:capitalize;color:#112f2a}
+.admin-weekdays,.admin-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.admin-weekdays span{text-align:center;font-size:.68rem;font-weight:900;text-transform:uppercase;color:#765f43;padding:5px 0}
+.admin-empty,.admin-day{aspect-ratio:1/1;min-width:0}
+.admin-day{min-height:0;border:1px solid transparent;background:var(--soft);color:var(--ink);cursor:pointer;font:inherit;font-weight:800;position:relative;transition:.18s ease;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;padding:3px 1px;border-radius:0}
+.admin-day-number{display:block;font-size:.9rem}
+.admin-day-price{display:block;margin-top:5px;font-size:.64rem;line-height:1;font-weight:900;white-space:nowrap;color:#3f6756}
+.admin-day:hover:not(:disabled){border-color:var(--accent);transform:translateY(-1px)}
+.admin-day.past{opacity:.45}
+.admin-day.booked{cursor:not-allowed;color:#a8a8a8;background:#eeeae4;text-decoration:line-through}
+.admin-day.booked .admin-day-price{color:#aaa;text-decoration:none}
+.admin-day.closed{cursor:pointer;background:#dcded9;color:#5e665f}
+.admin-day.closed:after{content:'CHIUSA';position:absolute;bottom:4px;font-size:.44rem;letter-spacing:.06em}
+.admin-day.today{box-shadow:inset 0 0 0 2px #c8a968}
+.admin-day.selected,.admin-day.range{background:var(--accent);color:#fff;text-decoration:none}
+.admin-day.range{opacity:.75}
+.admin-day.selected .admin-day-price,.admin-day.range .admin-day-price{color:#fff}
+.admin-day.has-note:before{content:'';position:absolute;right:5px;top:5px;width:5px;height:5px;border-radius:50%;background:#c8a968}
+.admin-calendar-legend{display:flex;flex-wrap:wrap;gap:14px 22px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line);font-size:.78rem;color:#6c756f}
+.admin-calendar-legend span{display:flex;align-items:center;gap:7px}.admin-calendar-legend i{width:13px;height:13px;border:1px solid var(--line);display:inline-block;background:var(--soft)}
+.admin-calendar-legend .legend-booked{background:#eeeae4}.admin-calendar-legend .legend-closed{background:#dcded9}.admin-calendar-legend .legend-selected{background:var(--accent)}
+.pricing-form{margin-top:0}
+@media(max-width:900px){.admin-calendar{grid-template-columns:1fr}.admin-calendar-card{padding:18px}}
+@media(max-width:600px){.admin-calendar-card{padding:12px}.admin-calendar-toolbar{grid-template-columns:46px 1fr 46px}.admin-calendar-nav{width:46px;height:46px}.admin-days,.admin-weekdays{gap:2px}.admin-day{min-height:46px}.admin-day-number{font-size:.8rem}.admin-day-price{font-size:.56rem}.admin-month h3{font-size:1.55rem}.admin-calendar-legend{gap:9px 14px}}

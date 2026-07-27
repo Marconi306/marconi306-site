@@ -1,0 +1,8 @@
+MARCONI306 — RELEASE 1.1.1
+
+- Calendario amministrativo ridisegnato con lo stesso formato del calendario pubblico.
+- Due mesi affiancati, prezzi visibili in ogni giornata e navigazione mensile.
+- Visualizzazione delle date non disponibili provenienti da Booking, Airbnb e prenotazioni dirette.
+- Evidenza delle chiusure manuali, del giorno corrente e del periodo selezionato.
+- Selezione di un giorno o intervallo direttamente dal calendario.
+- Compilazione automatica del modulo quando si seleziona una singola data.
