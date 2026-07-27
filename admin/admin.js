@@ -30,7 +30,7 @@ async function api(path, options={}) {
   return data;
 }
 
-function showAdmin() { loginView.hidden = true; adminView.hidden = false; setTodayLabel(); loadBookings(); }
+function showAdmin() { loginView.hidden = true; adminView.hidden = false; setTodayLabel(); loadBookings().then(loadPricing); }
 function logout() { state.token=''; sessionStorage.removeItem('m306_admin_token'); adminView.hidden=true; loginView.hidden=false; }
 function notify(message) { const el=$('#notice'); el.textContent=message; el.hidden=false; setTimeout(()=>el.hidden=true,6000); }
 function setTodayLabel(){ $('#today-label').textContent=new Intl.DateTimeFormat('it-IT',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date()); }
@@ -221,3 +221,47 @@ $('#period-filter').addEventListener('change',applyFilters);
 $('#export-csv').addEventListener('click',exportCsv);
 let timer; $('#search').addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(applyFilters,250);});
 if(state.token) showAdmin();
+
+// Release 1.1 — calendario prezzi e chiusure
+const pricingState={cursor:new Date(new Date().getFullYear(),new Date().getMonth(),1),prices:{},selectionStart:null,selectionEnd:null};
+function pricingIso(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function pricingAdd(iso,n=1){const [y,m,d]=iso.split('-').map(Number),x=new Date(y,m-1,d);x.setDate(x.getDate()+n);return pricingIso(x)}
+function pricingMonthEnd(){const d=new Date(pricingState.cursor.getFullYear(),pricingState.cursor.getMonth()+2,1);return pricingIso(d)}
+async function loadPricing(){
+  if(!state.token)return;
+  const start=pricingIso(pricingState.cursor),end=pricingMonthEnd();
+  try{const data=await api(`/api/admin/pricing?start=${start}&end=${end}`);pricingState.prices=data.prices||{};renderPricingCalendar();}
+  catch(err){showPricingMessage(err.message,true)}
+}
+function renderPricingCalendar(){
+  const root=$('#pricing-calendar');if(!root)return;root.innerHTML='';
+  for(let offset=0;offset<2;offset++){
+    const base=new Date(pricingState.cursor.getFullYear(),pricingState.cursor.getMonth()+offset,1), y=base.getFullYear(),m=base.getMonth();
+    const section=document.createElement('section');section.className='admin-month';
+    section.innerHTML=`<h3>${new Intl.DateTimeFormat('it-IT',{month:'long',year:'numeric'}).format(base)}</h3><div class="admin-weekdays">${['L','M','M','G','V','S','D'].map(x=>`<span>${x}</span>`).join('')}</div><div class="admin-days"></div>`;
+    const grid=section.querySelector('.admin-days'),offsetDays=(base.getDay()+6)%7;
+    for(let i=0;i<offsetDays;i++)grid.append(document.createElement('span'));
+    for(let day=1;day<=new Date(y,m+1,0).getDate();day++){
+      const iso=pricingIso(new Date(y,m,day)),info=pricingState.prices[iso]||{},b=state.bookings.some(x=>x.status==='CONFIRMED'&&x.start_date<=iso&&x.end_date>iso);
+      const btn=document.createElement('button');btn.type='button';btn.className='admin-day';btn.dataset.date=iso;
+      btn.innerHTML=`<span>${day}</span><small>${Number.isFinite(info.price)?euro(Math.round(info.price*100)):'—'}</small>`;
+      if(b)btn.classList.add('booked');if(info.closed)btn.classList.add('closed');if(iso===isoToday())btn.classList.add('today');
+      if(pricingState.selectionStart===iso||pricingState.selectionEnd===iso)btn.classList.add('selected');
+      if(pricingState.selectionStart&&pricingState.selectionEnd&&iso>pricingState.selectionStart&&iso<pricingState.selectionEnd)btn.classList.add('range');
+      btn.disabled=b;btn.addEventListener('click',()=>selectPricingDate(iso));grid.append(btn);
+    }
+    root.append(section);
+  }
+}
+function selectPricingDate(iso){
+  if(!pricingState.selectionStart||pricingState.selectionEnd){pricingState.selectionStart=iso;pricingState.selectionEnd=null;}
+  else if(iso<pricingState.selectionStart){pricingState.selectionEnd=pricingState.selectionStart;pricingState.selectionStart=iso;}
+  else pricingState.selectionEnd=iso;
+  $('#pricing-start').value=pricingState.selectionStart||'';$('#pricing-end').value=pricingState.selectionEnd||pricingState.selectionStart||'';renderPricingCalendar();
+}
+function showPricingMessage(text,error=false){const el=$('#pricing-message');el.textContent=text;el.hidden=false;el.classList.toggle('error',error);setTimeout(()=>el.hidden=true,4500)}
+$('#pricing-prev')?.addEventListener('click',()=>{pricingState.cursor.setMonth(pricingState.cursor.getMonth()-1);loadPricing()});
+$('#pricing-next')?.addEventListener('click',()=>{pricingState.cursor.setMonth(pricingState.cursor.getMonth()+1);loadPricing()});
+$('#pricing-today')?.addEventListener('click',()=>{pricingState.cursor=new Date(new Date().getFullYear(),new Date().getMonth(),1);loadPricing()});
+$('#pricing-form')?.addEventListener('submit',async e=>{e.preventDefault();const start=$('#pricing-start').value,endInclusive=$('#pricing-end').value;if(!start||!endInclusive)return;try{const r=await api('/api/admin/pricing',{method:'POST',body:JSON.stringify({start,end:pricingAdd(endInclusive),price:$('#pricing-price').value,closed:$('#pricing-closed').checked,note:$('#pricing-note').value})});showPricingMessage(r.message);await loadPricing();}catch(err){showPricingMessage(err.message,true)}});
+$('#pricing-reset')?.addEventListener('click',async()=>{const start=$('#pricing-start').value,end=$('#pricing-end').value;if(!start||!end)return; if(!confirm('Rimuovere prezzi e chiusure personalizzati nel periodo selezionato?'))return;try{const r=await api('/api/admin/pricing',{method:'DELETE',body:JSON.stringify({start,end:pricingAdd(end)})});showPricingMessage(r.message);await loadPricing();}catch(err){showPricingMessage(err.message,true)}});

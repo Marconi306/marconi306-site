@@ -53,6 +53,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   let arrival = null;
   let departure = null;
   let loaded = false;
+  let priceMap = {};
 
   function localIso(date){
     const y=date.getFullYear(), m=String(date.getMonth()+1).padStart(2,'0'), d=String(date.getDate()).padStart(2,'0');
@@ -61,19 +62,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   function fromIso(iso){ const [y,m,d]=iso.split('-').map(Number); return new Date(y,m-1,d); }
   function addDay(iso, n=1){ const d=fromIso(iso); d.setDate(d.getDate()+n); return localIso(d); }
   function formatDate(iso){ return iso ? new Intl.DateTimeFormat('it-IT',{day:'numeric',month:'long',year:'numeric'}).format(fromIso(iso)) : 'Seleziona'; }
-  function nightlyPrice(iso){
-    const [y,m,d]=iso.split('-').map(Number);
-    if(y===2026){
-      if(m===7) return 85;
-      if(m===8) return d>=10 && d<=16 ? 120 : 100;
-      if(m===9) return 85;
-      if(m===10) return 80;
-      if(m===11) return 70;
-      if(m===12) return [24,25,26,30,31].includes(d) ? 80 : 70;
-    }
-    if(y===2027 && m===1) return d===1 ? 80 : 70;
-    return null;
-  }
+  function nightlyPrice(iso){ return Number.isFinite(priceMap[iso]?.price) ? priceMap[iso].price : null; }
   function nightsBetween(a,b){ return Math.round((fromIso(b)-fromIso(a))/86400000); }
   function eachNight(a,b){ const out=[]; for(let x=a;x<b;x=addDay(x)) out.push(x); return out; }
   function stayPricing(a,b,guests=Number(document.getElementById('guests')?.value || 2)){
@@ -332,9 +321,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   }
   restoreBookingSuccess();
 
-  fetch('/api/availability',{headers:{'Accept':'application/json'}})
-    .then(r=>{if(!r.ok) throw new Error('availability');return r.json();})
-    .then(data=>{loadRanges(data.blockedRanges);loaded=true;document.getElementById('calendar-status').textContent='Calendario aggiornato';render();})
+  const priceStart=localIso(new Date(new Date().getFullYear(),new Date().getMonth(),1));
+  const priceEnd=localIso(new Date(new Date().getFullYear()+1,new Date().getMonth()+6,1));
+  Promise.all([
+    fetch('/api/availability',{headers:{'Accept':'application/json'}}).then(r=>{if(!r.ok) throw new Error('availability');return r.json();}),
+    fetch(`/api/prices?start=${priceStart}&end=${priceEnd}`,{headers:{'Accept':'application/json'}}).then(r=>{if(!r.ok) throw new Error('prices');return r.json();})
+  ]).then(([availability,pricing])=>{loadRanges(availability.blockedRanges);priceMap=pricing.prices||{};loaded=true;document.getElementById('calendar-status').textContent='Calendario aggiornato';render();})
     .catch(()=>{loaded=false;document.getElementById('calendar-status').textContent='Disponibilità non caricata';monthsRoot.innerHTML='<p class="calendar-note">Il calendario non è temporaneamente disponibile. Contattaci direttamente su WhatsApp.</p>';updateSummary();});
   render();
 })();

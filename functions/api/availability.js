@@ -88,7 +88,12 @@ export async function onRequestGet(context) {
       `).all();
       direct = results;
     }
-    const blockedRanges = mergeRanges([...booking, ...airbnb, ...direct]);
+    let manual = [];
+    if (context.env.DB) {
+      const { results = [] } = await context.env.DB.prepare(`SELECT start_date AS start, end_date AS end FROM pricing_rules WHERE is_closed = 1`).all();
+      manual = results;
+    }
+    const blockedRanges = mergeRanges([...booking, ...airbnb, ...direct, ...manual]);
     return Response.json(
       { blockedRanges, updatedAt: new Date().toISOString() },
       { headers: { 'Cache-Control': 'no-store' } }

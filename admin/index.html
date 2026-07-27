@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#173d33">
   <title>Dashboard prenotazioni | Marconi306</title>
   <link rel="icon" href="/favicon.png">
-  <link rel="stylesheet" href="/admin/admin.css?v=11.0">
+  <link rel="stylesheet" href="/admin/admin.css?v=11.1">
 </head>
 <body>
   <main class="shell">
@@ -48,6 +48,25 @@
           <article class="today-card"><span>In soggiorno</span><strong id="today-stays">0</strong><small id="today-stays-names">Nessuno</small></article>
           <article class="today-card"><span>Prossimo arrivo</span><strong id="next-arrival-days">—</strong><small id="next-arrival-name">Nessuna prenotazione futura</small></article>
         </div>
+      </section>
+
+
+      <section class="management-card pricing-manager" aria-labelledby="pricing-title">
+        <div class="section-head management-head">
+          <div><p class="eyebrow">TARIFFE E DISPONIBILITÀ</p><h2 id="pricing-title">Calendario</h2></div>
+          <div class="calendar-nav"><button id="pricing-prev" class="secondary compact">←</button><button id="pricing-today" class="secondary compact">Oggi</button><button id="pricing-next" class="secondary compact">→</button></div>
+        </div>
+        <p class="muted">Seleziona il primo e l’ultimo giorno del periodo da modificare. Le date prenotate sono protette.</p>
+        <div id="pricing-calendar" class="admin-calendar" aria-live="polite"></div>
+        <form id="pricing-form" class="pricing-form">
+          <label>Dal<input id="pricing-start" type="date" required></label>
+          <label>Al (compreso)<input id="pricing-end" type="date" required></label>
+          <label>Prezzo per notte (€)<input id="pricing-price" type="number" min="0" step="1" placeholder="Lascia vuoto per mantenere il prezzo"></label>
+          <label>Nota interna<input id="pricing-note" type="text" maxlength="250" placeholder="Es. Ferragosto"></label>
+          <label class="check-row pricing-close"><input id="pricing-closed" type="checkbox"><span>Chiudi il periodo alle prenotazioni</span></label>
+          <div class="pricing-actions"><button type="submit">Salva periodo</button><button id="pricing-reset" type="button" class="secondary">Rimuovi personalizzazioni</button></div>
+        </form>
+        <p id="pricing-message" class="notice" hidden></p>
       </section>
 
       <section class="stats" aria-label="Riepilogo del mese">
@@ -125,6 +144,6 @@
     </form>
   </dialog>
 
-  <script src="/admin/admin.js?v=11.0" defer></script>
+  <script src="/admin/admin.js?v=11.1" defer></script>
 </body>
 </html>

@@ -1,4 +1,5 @@
-import { calculateStay, cleanExpiredHolds, eachNight, hasConflict, hasExternalConflict, randomId, sqliteDateTime, validateGuest } from '../../_lib/booking.js';
+import { cleanExpiredHolds, eachNight, hasConflict, hasExternalConflict, randomId, sqliteDateTime, validateGuest } from '../../_lib/booking.js';
+import { calculateStayFromDb, TERMS_VERSION } from '../../_lib/pricing.js';
 import { paypalRequest } from '../../_lib/paypal.js';
 
 export async function onRequestPost({ request, env }) {
@@ -9,7 +10,7 @@ export async function onRequestPost({ request, env }) {
     const start = String(data.start || '');
     const end = String(data.end || '');
     const guest = validateGuest(data);
-    const stay = calculateStay(start, end, guest.guests);
+    const stay = await calculateStayFromDb(env.DB, start, end, guest.guests);
 
     await cleanExpiredHolds(env.DB);
     if (await hasExternalConflict(env, start, end) || await hasConflict(env.DB, start, end)) {
@@ -22,9 +23,9 @@ export async function onRequestPost({ request, env }) {
     const statements = [
       env.DB.prepare(`
         INSERT INTO bookings
-        (id, status, start_date, end_date, nights, guests, amount_cents, first_name, last_name, email, phone, notes, hold_expires_at)
-        VALUES (?1, 'HOLD', ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)
-      `).bind(bookingId, start, end, stay.nights, guest.guests, stay.totalCents, guest.firstName, guest.lastName, guest.email, guest.phone, guest.notes, holdExpires),
+        (id, status, start_date, end_date, nights, guests, amount_cents, first_name, last_name, email, phone, notes, hold_expires_at, terms_version)
+        VALUES (?1, 'HOLD', ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)
+      `).bind(bookingId, start, end, stay.nights, guest.guests, stay.totalCents, guest.firstName, guest.lastName, guest.email, guest.phone, guest.notes, holdExpires, TERMS_VERSION),
       ...nights.map(day => env.DB.prepare('INSERT INTO booking_nights (stay_date, booking_id) VALUES (?1, ?2)').bind(day, bookingId))
     ];
 

@@ -1,0 +1,29 @@
+MARCONI306 — RELEASE 1.1
+Data: 27 luglio 2026
+
+NOVITÀ
+- Calendario amministrativo a due mesi, nello stesso stile del sito.
+- Modifica del prezzo per singolo giorno o intervallo.
+- Chiusura manuale di giorni e periodi.
+- Protezione delle date già prenotate.
+- Prezzi e chiusure salvati nel database Cloudflare D1.
+- Motore tariffario con priorità: regola specifica > tariffa predefinita.
+- Il calendario pubblico e PayPal leggono gli stessi prezzi dal database.
+- Nuova politica di cancellazione 30/7 giorni.
+- Versione delle condizioni salvata con ogni nuova prenotazione.
+- Condizioni applicabili riportate nell’email di conferma.
+
+POLITICA DI CANCELLAZIONE
+- oltre 30 giorni prima dell’arrivo: rimborso 100%;
+- da 30 giorni a più di 7 giorni: rimborso 50%;
+- nei 7 giorni precedenti: nessun rimborso;
+- mancata presentazione: nessun rimborso.
+
+INSTALLAZIONE
+1. Pubblicare l’intero contenuto del pacchetto.
+2. Applicare a D1 la migrazione migrations/0003_pricing_and_terms.sql.
+3. Verificare le variabili già previste dalla Release 1.0.
+4. Accedere a /admin e impostare prezzi/chiusure dal nuovo calendario.
+
+VERSIONE TERMINI
+M306-2026-07-27-v1.1

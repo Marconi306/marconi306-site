@@ -65,6 +65,7 @@ export async function sendBookingEmails(env, booking, bookingCode, options = {})
       <strong>Ospiti:</strong> ${Number(booking.guests)}<br>
       <strong>Totale pagato:</strong> ${escapeHtml(amount)}</p>
       <p>La tassa di soggiorno di €1 per persona per notte non è inclusa e sarà riscossa in contanti al check-in.</p>
+      <p><strong>Condizioni di cancellazione:</strong> rimborso del 100% oltre 30 giorni dall’arrivo; rimborso del 50% da 30 a più di 7 giorni; nessun rimborso nei 7 giorni precedenti o in caso di mancata presentazione.<br><small>Versione accettata: ${escapeHtml(booking.terms_version || 'M306-2026-07-27-v1.1')}</small></p>
       <p>Per qualsiasi necessità puoi rispondere a questa email oppure contattarci su WhatsApp.</p>
       <p>A presto,<br><strong>Marconi306</strong></p>
     </div>`;

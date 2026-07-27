@@ -33,7 +33,7 @@ export async function onRequestGet({ request, env }) {
   const statement = env.DB.prepare(`
     SELECT id, paypal_order_id, paypal_capture_id, status, start_date, end_date,
       nights, guests, amount_cents, currency, first_name, last_name, email, phone,
-      notes, hold_expires_at, created_at, confirmed_at
+      notes, hold_expires_at, created_at, confirmed_at, terms_version
     FROM bookings
     ${where}
     ORDER BY start_date DESC, created_at DESC
