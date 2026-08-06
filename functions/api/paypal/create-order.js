@@ -1,4 +1,4 @@
-import { calculateStay, cleanExpiredHolds, eachNight, hasConflict, hasExternalConflict, randomId, sqliteDateTime, validateGuest } from '../../_lib/booking.js';
+import { calculateStay, cleanExpiredHolds, eachNight, hasConflict, hasClosedRuleConflict, hasExternalConflict, randomId, sqliteDateTime, validateGuest } from '../../_lib/booking.js';
 import { paypalRequest } from '../../_lib/paypal.js';
 
 export async function onRequestPost({ request, env }) {
@@ -12,7 +12,7 @@ export async function onRequestPost({ request, env }) {
     const stay = calculateStay(start, end, guest.guests);
 
     await cleanExpiredHolds(env.DB);
-    if (await hasExternalConflict(env, start, end) || await hasConflict(env.DB, start, end)) {
+    if (await hasExternalConflict(env, start, end) || await hasConflict(env.DB, start, end) || await hasClosedRuleConflict(env.DB, start, end)) {
       return Response.json({ error: 'Le date sono appena diventate non disponibili. Scegli un altro periodo.' }, { status: 409 });
     }
 

@@ -83,6 +83,18 @@ export async function hasConflict(db, start, end, excludeId = '') {
   return Boolean(row);
 }
 
+
+export async function hasClosedRuleConflict(db, start, end) {
+  const row = await db.prepare(`
+    SELECT id FROM pricing_rules
+    WHERE is_closed = 1
+      AND start_date < ?2
+      AND end_date > ?1
+    LIMIT 1
+  `).bind(start, end).first();
+  return Boolean(row);
+}
+
 export function validateGuest(data) {
   const guest = {
     firstName: String(data.firstName || '').trim().slice(0, 80),

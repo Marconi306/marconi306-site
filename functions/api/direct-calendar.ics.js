@@ -11,12 +11,13 @@ function dateCompact(iso) {
 }
 
 function utcStamp(value) {
-  const date = value ? new Date(value) : new Date();
-  const valid = Number.isNaN(date.getTime()) ? new Date() : date;
-  return valid.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+  const raw = String(value || '').trim();
+  const parsed = raw ? new Date(raw.endsWith('Z') ? raw : `${raw.replace(' ', 'T')}Z`) : new Date();
+  const safe = Number.isNaN(parsed.getTime()) ? new Date() : parsed;
+  return safe.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
 }
 
-function eventLines({ uid, start, end, stamp, summary }) {
+function makeEvent({ uid, start, end, stamp, summary }) {
   return [
     'BEGIN:VEVENT',
     `UID:${icalEscape(uid)}@marconi306.it`,
@@ -24,6 +25,7 @@ function eventLines({ uid, start, end, stamp, summary }) {
     `DTSTART;VALUE=DATE:${dateCompact(start)}`,
     `DTEND;VALUE=DATE:${dateCompact(end)}`,
     `SUMMARY:${icalEscape(summary)}`,
+    'STATUS:CONFIRMED',
     'TRANSP:OPAQUE',
     'END:VEVENT'
   ].join('\r\n');
@@ -31,10 +33,13 @@ function eventLines({ uid, start, end, stamp, summary }) {
 
 export async function onRequestGet({ env }) {
   if (!env.DB) {
-    return new Response('Database non configurato', { status: 503 });
+    return new Response('Database non configurato', {
+      status: 503,
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+    });
   }
 
-  const [bookingQuery, closureQuery] = await Promise.all([
+  const [bookingsQuery, closuresQuery] = await Promise.all([
     env.DB.prepare(`
       SELECT id, start_date, end_date, confirmed_at, created_at
       FROM bookings
@@ -42,41 +47,29 @@ export async function onRequestGet({ env }) {
       ORDER BY start_date
     `).all(),
     env.DB.prepare(`
-      SELECT id, start_date, end_date, updated_at, created_at, note
+      SELECT MIN(id) AS id, start_date, end_date, MIN(created_at) AS created_at
       FROM pricing_rules
       WHERE is_closed = 1
+      GROUP BY start_date, end_date
       ORDER BY start_date
     `).all()
   ]);
 
-  const events = [];
-  const seenClosures = new Set();
+  const bookingEvents = (bookingsQuery.results || []).map((row) => makeEvent({
+    uid: `booking-${row.id}`,
+    start: row.start_date,
+    end: row.end_date,
+    stamp: row.confirmed_at || row.created_at,
+    summary: 'Prenotazione diretta Marconi306'
+  }));
 
-  for (const row of bookingQuery.results || []) {
-    events.push(eventLines({
-      uid: `booking-${row.id}`,
-      start: row.start_date,
-      end: row.end_date,
-      stamp: row.confirmed_at || row.created_at,
-      summary: 'Prenotazione diretta Marconi306'
-    }));
-  }
-
-  // Il gestionale può aver creato righe duplicate dello stesso periodo:
-  // nel feed ne esportiamo comunque una sola.
-  for (const row of closureQuery.results || []) {
-    const key = `${row.start_date}|${row.end_date}`;
-    if (seenClosures.has(key)) continue;
-    seenClosures.add(key);
-
-    events.push(eventLines({
-      uid: `closure-${row.start_date}-${row.end_date}`,
-      start: row.start_date,
-      end: row.end_date,
-      stamp: row.updated_at || row.created_at,
-      summary: row.note || 'Periodo non disponibile Marconi306'
-    }));
-  }
+  const closureEvents = (closuresQuery.results || []).map((row) => makeEvent({
+    uid: `closure-${row.id}-${row.start_date}-${row.end_date}`,
+    start: row.start_date,
+    end: row.end_date,
+    stamp: row.created_at,
+    summary: 'Periodo non disponibile Marconi306'
+  }));
 
   const body = [
     'BEGIN:VCALENDAR',
@@ -84,8 +77,9 @@ export async function onRequestGet({ env }) {
     'PRODID:-//Marconi306//Prenotazioni dirette e chiusure//IT',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'X-WR-CALNAME:Marconi306 - Disponibilità diretta',
-    ...events,
+    'X-WR-CALNAME:Marconi306 - Disponibilita',
+    ...bookingEvents,
+    ...closureEvents,
     'END:VCALENDAR',
     ''
   ].join('\r\n');
@@ -93,7 +87,7 @@ export async function onRequestGet({ env }) {
   return new Response(body, {
     headers: {
       'Content-Type': 'text/calendar; charset=utf-8',
-      'Content-Disposition': 'attachment; filename="marconi306-direct-calendar.ics"',
+      'Content-Disposition': 'inline; filename="marconi306-disponibilita.ics"',
       'Cache-Control': 'no-store, no-cache, must-revalidate',
       'Pragma': 'no-cache'
     }
