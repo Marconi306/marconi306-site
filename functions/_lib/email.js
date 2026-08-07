@@ -112,3 +112,46 @@ export async function sendBookingEmails(env, booking, bookingCode) {
   }
   return { configured: true, sent: results.length - failed.length, failed: failed.length };
 }
+
+export async function sendCancellationEmails(env, booking, reason = 'property_issue', options = {}) {
+  if (!env.RESEND_API_KEY || !env.BOOKING_EMAIL_FROM) {
+    return { configured: false, sent: 0, failed: 0 };
+  }
+
+  const reasons = {
+    overlap: 'un problema di sovrapposizione delle date',
+    guest_request: 'una richiesta di annullamento',
+    property_issue: 'un problema relativo alla disponibilità della struttura'
+  };
+  const reasonText = reasons[reason] || reasons.property_issue;
+  const checkIn = formatItalianDate(booking.start_date);
+  const checkOut = formatItalianDate(booking.end_date);
+  const guestName = `${booking.first_name || ''} ${booking.last_name || ''}`.trim();
+  const suffix = options.idempotencySuffix || 'cancel';
+
+  const guestText = `Prenotazione annullata – Marconi306\n\nGentile ${booking.first_name || ''},\nla prenotazione dal ${checkIn} al ${checkOut} è stata annullata per ${reasonText}.\n\nPer qualsiasi chiarimento puoi rispondere a questa email.\n\nMarconi306`;
+  const guestHtml = `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#1c342a;max-width:640px;margin:auto"><h1 style="font-size:26px">Prenotazione annullata</h1><p>Gentile ${escapeHtml(booking.first_name || '')},</p><p>la prenotazione dal <strong>${escapeHtml(checkIn)}</strong> al <strong>${escapeHtml(checkOut)}</strong> è stata annullata per ${escapeHtml(reasonText)}.</p><p>Per qualsiasi chiarimento puoi rispondere a questa email.</p><p>Marconi306</p></div>`;
+
+  const sends = [sendResendEmail(env, {
+    to: booking.email,
+    subject: `Prenotazione annullata – Marconi306 – ${checkIn}`,
+    html: guestHtml,
+    text: guestText,
+    reply_to: env.BOOKING_NOTIFICATION_EMAIL || undefined
+  }, `${booking.id}-guest-cancellation-${suffix}`)];
+
+  if (env.BOOKING_NOTIFICATION_EMAIL) {
+    sends.push(sendResendEmail(env, {
+      to: env.BOOKING_NOTIFICATION_EMAIL,
+      subject: `Prenotazione annullata – ${guestName || booking.email} – ${checkIn}`,
+      text: `Prenotazione annullata\n\nOspite: ${guestName}\nEmail: ${booking.email}\nCheck-in: ${checkIn}\nCheck-out: ${checkOut}\nMotivo: ${reasonText}`,
+      html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#1c342a"><h1>Prenotazione annullata</h1><p><strong>Ospite:</strong> ${escapeHtml(guestName)}<br><strong>Email:</strong> ${escapeHtml(booking.email || '')}<br><strong>Check-in:</strong> ${escapeHtml(checkIn)}<br><strong>Check-out:</strong> ${escapeHtml(checkOut)}<br><strong>Motivo:</strong> ${escapeHtml(reasonText)}</p></div>`,
+      reply_to: booking.email || undefined
+    }, `${booking.id}-owner-cancellation-${suffix}`));
+  }
+
+  const results = await Promise.allSettled(sends);
+  const failed = results.filter(result => result.status === 'rejected');
+  if (failed.length) console.error('Cancellation email errors', failed.map(item => item.reason));
+  return { configured: true, sent: results.length - failed.length, failed: failed.length };
+}
