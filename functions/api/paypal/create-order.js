@@ -2,9 +2,9 @@ import { calculateStay, cleanExpiredHolds, hasConflict, hasExternalConflict, ran
 import { paypalRequest } from '../../_lib/paypal.js';
 
 export async function onRequestPost({ request, env }) {
-  let sessionId = '';
   try {
     if (!env.DB) throw new Error('Archivio prenotazioni non configurato.');
+
     const data = await request.json();
     const start = String(data.start || '');
     const end = String(data.end || '');
@@ -12,16 +12,16 @@ export async function onRequestPost({ request, env }) {
     const stay = calculateStay(start, end, guest.guests);
 
     await cleanExpiredHolds(env.DB);
+    await env.DB.prepare("DELETE FROM checkout_sessions WHERE expires_at <= datetime('now')").run();
+
+    // Controllo disponibilità prima di aprire PayPal, ma senza bloccare le date.
     if (await hasExternalConflict(env, start, end) || await hasConflict(env.DB, start, end)) {
       return Response.json({ error: 'Le date sono appena diventate non disponibili. Scegli un altro periodo.' }, { status: 409 });
     }
 
-    sessionId = randomId('M306-CHECKOUT');
-    const expiresAt = sqliteDateTime(new Date(Date.now() + 30 * 60 * 1000));
+    const sessionId = randomId('M306S');
+    const expiresAt = sqliteDateTime(new Date(Date.now() + 20 * 60 * 1000));
 
-    // L'ordine PayPal viene creato SENZA bloccare le notti nel database.
-    // La disponibilità verrà ricontrollata e le notti riservate solo dopo
-    // l'approvazione PayPal, immediatamente prima della capture.
     const order = await paypalRequest(env, '/v2/checkout/orders', {
       method: 'POST',
       headers: { 'PayPal-Request-Id': sessionId },
@@ -49,9 +49,6 @@ export async function onRequestPost({ request, env }) {
     return Response.json({ id: order.id });
   } catch (error) {
     console.error('Create order error', error);
-    if (sessionId && env.DB) {
-      try { await env.DB.prepare('DELETE FROM checkout_sessions WHERE id = ?1').bind(sessionId).run(); } catch (_) {}
-    }
     return Response.json({ error: error.message || 'Impossibile avviare il pagamento.' }, { status: 400 });
   }
 }
