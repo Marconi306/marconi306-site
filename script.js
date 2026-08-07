@@ -286,7 +286,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
               });
             }
           } catch (_) {}
-          showBookingError('Pagamento annullato. Le date sono nuovamente disponibili.');
+          showBookingError('Pagamento annullato. Nessuna data è stata bloccata.');
         },
         onError(error){ console.error(error); showBookingError(error.message||'Si è verificato un errore durante il pagamento.'); }
       }).render('#paypal-button-container');

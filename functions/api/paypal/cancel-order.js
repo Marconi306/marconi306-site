@@ -19,6 +19,6 @@ export async function onRequestPost({ request, env }) {
     return Response.json({ success: true, released: true });
   } catch (error) {
     console.error('Cancel order error', error);
-    return Response.json({ error: error.message || 'Impossibile liberare il blocco temporaneo.' }, { status: 400 });
+    return Response.json({ error: error.message || 'Impossibile annullare la sessione di pagamento.' }, { status: 400 });
   }
 }

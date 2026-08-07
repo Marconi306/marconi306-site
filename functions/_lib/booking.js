@@ -79,7 +79,7 @@ export async function hasConflict(db, start, end, excludeId = '') {
   const row = await db.prepare(`
     SELECT id FROM bookings
     WHERE id <> ?1
-      AND (status = 'CONFIRMED' OR (status = 'HOLD' AND hold_expires_at > datetime('now')))
+      AND status = 'CONFIRMED'
       AND start_date < ?3 AND end_date > ?2
     LIMIT 1
   `).bind(excludeId, start, end).first();

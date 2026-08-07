@@ -84,7 +84,6 @@ export async function onRequestGet(context) {
         SELECT start_date AS start, end_date AS end
         FROM bookings
         WHERE status = 'CONFIRMED'
-           OR (status = 'HOLD' AND hold_expires_at > datetime('now'))
       `).all();
       direct = results;
     }
