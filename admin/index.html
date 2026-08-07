@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#173d33">
   <title>Dashboard prenotazioni | Marconi306</title>
   <link rel="icon" href="/favicon.png">
-  <link rel="stylesheet" href="/admin/admin.css?v=11.1.1">
+  <link rel="stylesheet" href="/admin/admin.css?v=10.9">
 </head>
 <body>
   <main class="shell">
@@ -40,7 +40,7 @@
       <section class="today-panel" aria-labelledby="today-title">
         <div class="section-head">
           <div><p class="eyebrow">OPERATIVITÀ</p><h2 id="today-title">Oggi</h2></div>
-          <button id="refresh" class="secondary compact">Aggiorna</button>
+          <div class="inline-actions"><button id="new-booking" class="compact">+ Nuova prenotazione</button><button id="refresh" class="secondary compact">Aggiorna</button></div>
         </div>
         <div class="today-grid">
           <article class="today-card"><span>Check-in</span><strong id="today-checkins">0</strong><small id="today-checkins-names">Nessuno</small></article>
@@ -123,6 +123,28 @@
     </section>
   </main>
 
+  <dialog id="manual-dialog" class="manual-dialog">
+    <form id="manual-form">
+      <div class="dialog-head"><div><p class="eyebrow">PRENOTAZIONE MANUALE</p><h2 id="manual-title">Nuova prenotazione</h2></div><button type="button" id="close-manual-dialog" class="icon-button" aria-label="Chiudi">×</button></div>
+      <input id="manual-id" type="hidden">
+      <div class="manual-grid">
+        <label>Nome<input id="manual-first-name" required maxlength="80"></label>
+        <label>Cognome<input id="manual-last-name" required maxlength="80"></label>
+        <label>Check-in<input id="manual-start" type="date" required></label>
+        <label>Check-out<input id="manual-end" type="date" required></label>
+        <label>Ospiti<select id="manual-guests"><option value="1">1 ospite</option><option value="2" selected>2 ospiti</option></select></label>
+        <label>Importo totale (€)<input id="manual-amount" type="number" min="0" step="0.01" value="0" required></label>
+        <label>Origine<select id="manual-source"><option value="DIRECT">Diretta</option><option value="BOOKING">Booking</option><option value="AIRBNB">Airbnb</option><option value="OTHER">Altro</option><option value="BLOCK">Blocco / uso personale</option></select></label>
+        <label>Pagamento<select id="manual-payment"><option value="UNPAID">Da pagare</option><option value="PAID">Pagato</option></select></label>
+        <label>Email (facoltativa)<input id="manual-email" type="email" maxlength="160"></label>
+        <label>Telefono (facoltativo)<input id="manual-phone" maxlength="40"></label>
+        <label class="manual-notes">Note<textarea id="manual-notes" rows="4" maxlength="1000"></textarea></label>
+      </div>
+      <p class="muted">Al salvataggio la prenotazione viene confermata e le date diventano immediatamente non disponibili sul sito.</p>
+      <div class="dialog-actions"><button type="button" id="manual-back" class="secondary">Annulla</button><button type="submit">Salva prenotazione</button></div>
+    </form>
+  </dialog>
+
   <dialog id="details-dialog">
     <div class="dialog-head">
       <div><p class="eyebrow">DETTAGLIO PRENOTAZIONE</p><h2 id="dialog-title">Prenotazione</h2></div>
@@ -156,6 +178,6 @@
     </form>
   </dialog>
 
-  <script src="/admin/admin.js?v=11.1.1" defer></script>
+  <script src="/admin/admin.js?v=10.9" defer></script>
 </body>
 </html>

@@ -15,6 +15,8 @@ function dateTime(value) { return value ? new Intl.DateTimeFormat('it-IT', { dat
 function code(booking) { return booking.id.split('-').slice(0, 2).join('-').toUpperCase(); }
 function escapeHtml(value='') { return String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
 function statusLabel(status) { return ({CONFIRMED:'Confermata',HOLD:'In attesa',CANCELLED:'Annullata'})[status] || status; }
+function sourceLabel(source){return ({ONLINE:'Online',DIRECT:'Diretta',BOOKING:'Booking',AIRBNB:'Airbnb',OTHER:'Altro',BLOCK:'Blocco'})[source]||source||'Online';}
+function paymentLabel(status){return status==='UNPAID'?'Da pagare':'Pagato';}
 function guestName(b) { return `${b.first_name || ''} ${b.last_name || ''}`.trim(); }
 function plural(value, singular, pluralWord) { return `${value} ${value === 1 ? singular : pluralWord}`; }
 function csvCell(value) { const text=String(value ?? ''); return `"${text.replaceAll('"','""')}"`; }
@@ -131,7 +133,7 @@ function renderBookings() {
     const periodText=b.status==='CONFIRMED' && b.start_date<=today && b.end_date>today?'In soggiorno':b.start_date===today?'Arrivo oggi':b.end_date===today?'Partenza oggi':'';
     article.innerHTML=`
       <div>
-        <div class="guest-line"><span class="status ${b.status}">${statusLabel(b.status)}</span>${periodText?`<span class="period-pill">${periodText}</span>`:''}</div>
+        <div class="guest-line"><span class="status ${b.status}">${statusLabel(b.status)}</span>${b.source&&b.source!=='ONLINE'?`<span class="source-pill">${escapeHtml(sourceLabel(b.source))}</span>`:''}${periodText?`<span class="period-pill">${periodText}</span>`:''}</div>
         <h3>${escapeHtml(guestName(b))}</h3><p class="code">${escapeHtml(code(b))}</p>
       </div>
       <div><strong>${date(b.start_date)} → ${date(b.end_date)}</strong><p>${plural(b.nights,'notte','notti')} · ${plural(b.guests,'ospite','ospiti')}</p></div>
@@ -152,11 +154,13 @@ function openDetails(id){
     ${detail('Telefono',`<a href="tel:${escapeHtml(cleanPhone)}">${escapeHtml(b.phone)}</a>`,true)}
     ${detail('Notti / ospiti',`${b.nights} / ${b.guests}`)}${detail('Totale',euro(b.amount_cents))}
     ${detail('Creata',dateTime(b.created_at))}${detail('Confermata',dateTime(b.confirmed_at))}
+    ${detail('Origine',sourceLabel(b.source))}${detail('Pagamento',paymentLabel(b.payment_status))}
     ${detail('Ordine PayPal',b.paypal_order_id)}${detail('Capture PayPal',b.paypal_capture_id)}
   </div>${b.notes?`<h3>Note</h3><div class="notes">${escapeHtml(b.notes)}</div>`:''}`;
   const actions=$('#dialog-actions'); actions.innerHTML='';
   if(cleanPhone) actions.append(makeLink('Scrivi su WhatsApp',`https://wa.me/${cleanPhone.replace('+','')}?text=${encodeURIComponent(`Ciao ${b.first_name}, ti contatto in merito alla prenotazione ${code(b)} presso Marconi306.`)}`,'whatsapp'));
-  if(b.status==='CONFIRMED') actions.append(makeButton('Reinvia email','secondary',()=>resendEmails(b.id)));
+  if(b.status==='CONFIRMED' && b.email && b.source==='ONLINE') actions.append(makeButton('Reinvia email','secondary',()=>resendEmails(b.id)));
+  if(b.status==='CONFIRMED' && String(b.id).startsWith('M306-MAN')) actions.append(makeButton('Modifica','secondary',()=>openManualDialog(b)));
   if(b.status!=='CANCELLED') actions.append(makeButton('Annulla e libera date','danger',()=>cancelBooking(b)));
   dialog.showModal();
 }
@@ -174,7 +178,7 @@ function cancelBooking(b){
   cancellationBooking=b;
   $('#cancel-booking-summary').textContent=`${code(b)} · ${guestName(b)} · ${date(b.start_date)} → ${date(b.end_date)}`;
   $('#cancel-reason').value='overlap';
-  $('#cancel-send-email').checked=true;
+  $('#cancel-send-email').checked=Boolean(b.email);
   updateCancellationPreview();
   dialog.close();
   cancelDialog.showModal();
@@ -206,12 +210,32 @@ async function resendEmails(id){
 }
 function exportCsv(){
   if(!state.visibleBookings.length){notify('Non ci sono prenotazioni da esportare.');return;}
-  const rows=[['Codice','Stato','Nome','Cognome','Email','Telefono','Check-in','Check-out','Notti','Ospiti','Totale EUR','Note','ID ordine PayPal','ID acquisizione PayPal']];
-  for(const b of state.visibleBookings) rows.push([code(b),statusLabel(b.status),b.first_name,b.last_name,b.email,b.phone,b.start_date,b.end_date,b.nights,b.guests,(Number(b.amount_cents||0)/100).toFixed(2),b.notes||'',b.paypal_order_id||'',b.paypal_capture_id||'']);
+  const rows=[['Codice','Stato','Nome','Cognome','Email','Telefono','Check-in','Check-out','Notti','Ospiti','Totale EUR','Note','ID ordine PayPal','ID acquisizione PayPal','Origine','Pagamento']];
+  for(const b of state.visibleBookings) rows.push([code(b),statusLabel(b.status),b.first_name,b.last_name,b.email,b.phone,b.start_date,b.end_date,b.nights,b.guests,(Number(b.amount_cents||0)/100).toFixed(2),b.notes||'',b.paypal_order_id||'',b.paypal_capture_id||'',sourceLabel(b.source),paymentLabel(b.payment_status)]);
   const csv='\uFEFF'+rows.map(row=>row.map(csvCell).join(';')).join('\r\n');
   const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
   const a=document.createElement('a');a.href=url;a.download=`marconi306-prenotazioni-${isoToday()}.csv`;document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url);
 }
+
+
+const manualDialog=$('#manual-dialog');
+function openManualDialog(b=null){
+  if(dialog.open)dialog.close();
+  $('#manual-form').reset(); $('#manual-id').value=b?.id||''; $('#manual-title').textContent=b?'Modifica prenotazione':'Nuova prenotazione';
+  $('#manual-guests').value=String(b?.guests||2); $('#manual-amount').value=b?(Number(b.amount_cents||0)/100).toFixed(2):'0';
+  $('#manual-source').value=b?.source||'DIRECT'; $('#manual-payment').value=b?.payment_status||'UNPAID';
+  $('#manual-first-name').value=b?.first_name||''; $('#manual-last-name').value=b?.last_name||''; $('#manual-start').value=b?.start_date||''; $('#manual-end').value=b?.end_date||'';
+  $('#manual-email').value=b?.email||''; $('#manual-phone').value=b?.phone||''; $('#manual-notes').value=b?.notes||''; manualDialog.showModal();
+}
+$('#new-booking').addEventListener('click',()=>openManualDialog());
+$('#close-manual-dialog').addEventListener('click',()=>manualDialog.close()); $('#manual-back').addEventListener('click',()=>manualDialog.close());
+$('#manual-source').addEventListener('change',()=>{if($('#manual-source').value==='BLOCK'){if(!$('#manual-first-name').value)$('#manual-first-name').value='Blocco';if(!$('#manual-last-name').value)$('#manual-last-name').value='calendario';$('#manual-amount').value='0';}});
+$('#manual-form').addEventListener('submit',async event=>{
+  event.preventDefault(); const button=event.submitter;button.disabled=true;
+  const id=$('#manual-id').value; const payload={id,firstName:$('#manual-first-name').value,lastName:$('#manual-last-name').value,startDate:$('#manual-start').value,endDate:$('#manual-end').value,guests:Number($('#manual-guests').value),amount:Number($('#manual-amount').value),source:$('#manual-source').value,paymentStatus:$('#manual-payment').value,email:$('#manual-email').value,phone:$('#manual-phone').value,notes:$('#manual-notes').value};
+  try{const result=await api('/api/admin/bookings',{method:id?'PATCH':'POST',body:JSON.stringify(payload)});manualDialog.close();notify(result.message);await loadBookings();await loadPricing();}
+  catch(err){alert(err.message);}finally{button.disabled=false;}
+});
 
 $('#close-dialog').addEventListener('click',()=>dialog.close());
 $('#logout').addEventListener('click',logout);

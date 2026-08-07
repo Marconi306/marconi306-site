@@ -42,3 +42,6 @@
 .pricing-form{margin-top:0}
 @media(max-width:900px){.admin-calendar{grid-template-columns:1fr}.admin-calendar-card{padding:18px}}
 @media(max-width:600px){.admin-calendar-card{padding:12px}.admin-calendar-toolbar{grid-template-columns:46px 1fr 46px}.admin-calendar-nav{width:46px;height:46px}.admin-days,.admin-weekdays{gap:2px}.admin-day{min-height:46px}.admin-day-number{font-size:.8rem}.admin-day-price{font-size:.56rem}.admin-month h3{font-size:1.55rem}.admin-calendar-legend{gap:9px 14px}}
+
+/* v10.9 — prenotazioni manuali */
+.inline-actions{display:flex;gap:8px;flex-wrap:wrap}.manual-dialog{width:min(820px,calc(100% - 24px))}.manual-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}.manual-grid label{display:grid;gap:7px;font-weight:700}.manual-grid input,.manual-grid select,.manual-grid textarea{width:100%}.manual-notes{grid-column:1/-1}.source-pill,.payment-pill{display:inline-flex;border-radius:999px;padding:4px 8px;font-size:.68rem;font-weight:850;margin-left:6px;background:var(--soft);color:var(--ink-2)}.payment-pill.UNPAID{background:#fff0c9;color:#7d5708}.payment-pill.PAID{background:#dff3e5;color:#23633a}@media(max-width:650px){.manual-grid{grid-template-columns:1fr}.manual-notes{grid-column:auto}.inline-actions{width:100%}.inline-actions button{flex:1}}
