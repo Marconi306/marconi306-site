@@ -15,16 +15,13 @@ export function eachNight(start, end) {
 }
 
 export function nightlyPrice(iso) {
-  const [year, month, day] = iso.split('-').map(Number);
-  if (year === 2026) {
-    if (month === 7) return 85;
-    if (month === 8) return day >= 10 && day <= 16 ? 120 : 100;
-    if (month === 9) return 85;
-    if (month === 10) return 80;
-    if (month === 11) return 70;
-    if (month === 12) return [24, 25, 26, 30, 31].includes(day) ? 80 : 70;
-  }
-  if (year === 2027 && month === 1) return day === 1 ? 80 : 70;
+  const [, month] = iso.split('-').map(Number);
+  // Listino diretto Marconi306: Nov-Mag 70 €, Giu-Lug 80 €, Ago 95 €, Set 80 €, Ott 75 €.
+  if ([11, 12, 1, 2, 3, 4, 5].includes(month)) return 70;
+  if ([6, 7].includes(month)) return 80;
+  if (month === 8) return 95;
+  if (month === 9) return 80;
+  if (month === 10) return 75;
   return null;
 }
 
@@ -63,6 +60,12 @@ export async function cleanExpiredHolds(db) {
       AND (hold_expires_at IS NULL OR hold_expires_at <= datetime('now'))
   `).all();
   const ids = (expired.results || []).map(row => row.id);
+  // Elimina anche eventuali lock residui appartenenti a tentativi già annullati.
+  await db.prepare(`
+    DELETE FROM booking_nights
+    WHERE booking_id IN (SELECT id FROM bookings WHERE status = 'CANCELLED')
+  `).run();
+
   if (!ids.length) return 0;
 
   await db.batch(ids.flatMap(id => [
@@ -80,18 +83,6 @@ export async function hasConflict(db, start, end, excludeId = '') {
       AND start_date < ?3 AND end_date > ?2
     LIMIT 1
   `).bind(excludeId, start, end).first();
-  return Boolean(row);
-}
-
-
-export async function hasClosedRuleConflict(db, start, end) {
-  const row = await db.prepare(`
-    SELECT id FROM pricing_rules
-    WHERE is_closed = 1
-      AND start_date < ?2
-      AND end_date > ?1
-    LIMIT 1
-  `).bind(start, end).first();
   return Boolean(row);
 }
 

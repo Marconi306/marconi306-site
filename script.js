@@ -62,16 +62,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   function addDay(iso, n=1){ const d=fromIso(iso); d.setDate(d.getDate()+n); return localIso(d); }
   function formatDate(iso){ return iso ? new Intl.DateTimeFormat('it-IT',{day:'numeric',month:'long',year:'numeric'}).format(fromIso(iso)) : 'Seleziona'; }
   function nightlyPrice(iso){
-    const [y,m,d]=iso.split('-').map(Number);
-    if(y===2026){
-      if(m===7) return 85;
-      if(m===8) return d>=10 && d<=16 ? 120 : 100;
-      if(m===9) return 85;
-      if(m===10) return 80;
-      if(m===11) return 70;
-      if(m===12) return [24,25,26,30,31].includes(d) ? 80 : 70;
-    }
-    if(y===2027 && m===1) return d===1 ? 80 : 70;
+    const [,m]=iso.split('-').map(Number);
+    if([11,12,1,2,3,4,5].includes(m)) return 70;
+    if([6,7].includes(m)) return 80;
+    if(m===8) return 95;
+    if(m===9) return 80;
+    if(m===10) return 75;
     return null;
   }
   function nightsBetween(a,b){ return Math.round((fromIso(b)-fromIso(a))/86400000); }
