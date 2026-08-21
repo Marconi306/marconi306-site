@@ -493,3 +493,14 @@ body{top:0!important}
 .booking-breakdown strong{white-space:nowrap}
 #booking-discount-row strong{color:#31553a}
 #booking-recap small{display:block;margin-top:10px;color:#66736d;line-height:1.45}
+
+/* v10.9.1 — Cookie consent / Google Analytics */
+.cookie-banner{position:fixed;z-index:20000;left:18px;right:18px;bottom:18px;display:flex;justify-content:center;pointer-events:none}
+.cookie-banner__inner{pointer-events:auto;width:min(980px,100%);display:flex;align-items:center;justify-content:space-between;gap:24px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 22px;box-shadow:0 22px 70px rgba(20,24,22,.22)}
+.cookie-banner__copy{max-width:700px}.cookie-banner__copy strong{display:block;font-size:1.05rem;margin-bottom:7px;color:var(--ink)}
+.cookie-banner__copy p{margin:0 0 7px;color:var(--muted);font-size:.9rem;line-height:1.5}.cookie-banner__copy a{color:var(--sage-dark);font-weight:700;text-underline-offset:3px}
+.cookie-banner__actions{display:flex;gap:10px;flex:0 0 auto}.cookie-btn{min-width:108px;border-radius:999px;padding:11px 17px;font:inherit;font-weight:800;cursor:pointer}
+.cookie-btn--secondary{background:#fff;color:var(--ink);border:1px solid var(--ink)}.cookie-btn--primary{background:var(--sage);color:#fff;border:1px solid var(--sage)}
+.cookie-btn:focus-visible,.cookie-settings-link:focus-visible{outline:3px solid rgba(118,139,118,.35);outline-offset:2px}
+.cookie-settings-link{appearance:none;border:0;background:transparent;padding:0;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+@media(max-width:700px){.cookie-banner{left:10px;right:10px;bottom:10px}.cookie-banner__inner{display:block;padding:18px;border-radius:15px}.cookie-banner__actions{margin-top:15px}.cookie-btn{flex:1;min-width:0}}
