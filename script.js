@@ -1,6 +1,6 @@
 
 const $=(s,r=document)=>r.querySelector(s);
-const gallery=["assets/img/camera-01.jpg", "assets/img/camera-02.jpg", "assets/img/camera-03.jpg", "assets/img/camera-04.jpg", "assets/img/camera-05.jpg", "assets/img/camera-06.jpg", "assets/img/camera-07.jpg", "assets/img/camera-08.jpg", "assets/img/camera-09.jpg", "assets/img/camera-10.jpg", "assets/img/camera-11.jpg", "assets/img/camera-12.jpg", "assets/img/camera-13.jpg", "assets/img/camera-14.jpg", "assets/img/camera-15.jpg", "assets/img/camera-16.jpg", "assets/img/camera-17.jpg", "assets/img/camera-18.jpg", "assets/img/camera-19.jpg"];
+const gallery=["assets/img/gallery-camera-frontale.jpg", "assets/img/camera-02.jpg", "assets/img/gallery-camera-ingresso.jpg", "assets/img/gallery-tv-scrivania.jpg", "assets/img/gallery-scrivania.jpg", "assets/img/camera-04.jpg", "assets/img/camera-06.jpg", "assets/img/camera-08.jpg", "assets/img/camera-07.jpg", "assets/img/gallery-nicchia-bagno.jpg", "assets/img/camera-09.jpg", "assets/img/camera-10.jpg", "assets/img/camera-11.jpg", "assets/img/camera-16.jpg", "assets/img/camera-12.jpg", "assets/img/camera-18.jpg", "assets/img/gallery-angolo-caffe.jpg", "assets/img/camera-14.jpg", "assets/img/camera-15.jpg", "assets/img/gallery-cuscineria.jpg", "assets/img/camera-19.jpg"];
 let lb=0;
 function openLightbox(i){lb=i;$('#lb-img').src=gallery[lb];$('.lightbox').style.display='flex';}
 function closeLightbox(){$('.lightbox').style.display='none';}
