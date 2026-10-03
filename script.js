@@ -50,6 +50,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   const todayIso = localIso(new Date());
   let cursor = new Date(); cursor.setDate(1); cursor.setHours(0,0,0,0);
   let blocked = new Set();
+  let priceMap = {};
   let arrival = null;
   let departure = null;
   let loaded = false;
@@ -62,13 +63,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   function addDay(iso, n=1){ const d=fromIso(iso); d.setDate(d.getDate()+n); return localIso(d); }
   function formatDate(iso){ return iso ? new Intl.DateTimeFormat('it-IT',{day:'numeric',month:'long',year:'numeric'}).format(fromIso(iso)) : 'Seleziona'; }
   function nightlyPrice(iso){
-    const [,m]=iso.split('-').map(Number);
-    if([11,12,1,2,3,4,5].includes(m)) return 70;
-    if([6,7].includes(m)) return 80;
-    if(m===8) return 95;
-    if(m===9) return 80;
-    if(m===10) return 75;
-    return null;
+    const entry = priceMap[iso];
+    return entry && !entry.closed && Number.isFinite(Number(entry.price)) ? Number(entry.price) : null;
   }
   function nightsBetween(a,b){ return Math.round((fromIso(b)-fromIso(a))/86400000); }
   function eachNight(a,b){ const out=[]; for(let x=a;x<b;x=addDay(x)) out.push(x); return out; }
@@ -94,7 +90,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   }
   function canChoose(iso){
     if(iso<todayIso) return false;
-    if(!arrival || departure) return !blocked.has(iso);
+    if(!arrival || departure) return !blocked.has(iso) && nightlyPrice(iso) !== null;
     return validDeparture(iso);
   }
   function loadRanges(ranges){
@@ -115,12 +111,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
       const price=nightlyPrice(iso);
       btn.innerHTML=`<span class="calendar-day-number">${day}</span>${price ? `<span class="calendar-day-price">€${price}</span>` : ''}`;
       if(iso<todayIso) btn.classList.add('past');
-      if(blocked.has(iso)) btn.classList.add('busy');
+      if(blocked.has(iso) || priceMap[iso]?.closed) btn.classList.add('busy');
       if(arrival===iso) btn.classList.add('selected','checkin');
       if(departure===iso) btn.classList.add('selected','checkout');
       if(arrival && departure && iso>arrival && iso<departure) btn.classList.add('range');
       btn.disabled=!loaded || !canChoose(iso);
-      btn.setAttribute('aria-label',`${day} ${monthNames[m]} ${y}${blocked.has(iso)?', non disponibile':', disponibile'}${price ? `, ${price} euro a notte` : ''}`);
+      btn.setAttribute('aria-label',`${day} ${monthNames[m]} ${y}${(blocked.has(iso)||priceMap[iso]?.closed)?', non disponibile':', disponibile'}${price ? `, ${price} euro a notte` : ''}`);
       btn.addEventListener('click',()=>selectDate(iso));
       grid.appendChild(btn);
     }
@@ -328,10 +324,20 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e
   }
   restoreBookingSuccess();
 
-  fetch('/api/availability',{headers:{'Accept':'application/json'}})
-    .then(r=>{if(!r.ok) throw new Error('availability');return r.json();})
-    .then(data=>{loadRanges(data.blockedRanges);loaded=true;document.getElementById('calendar-status').textContent='Calendario aggiornato';render();})
-    .catch(()=>{loaded=false;document.getElementById('calendar-status').textContent='Disponibilità non caricata';monthsRoot.innerHTML='<p class="calendar-note">Il calendario non è temporaneamente disponibile. Contattaci direttamente su WhatsApp.</p>';updateSummary();});
+  const pricingEnd = addDay(todayIso, 550);
+  Promise.all([
+    fetch('/api/availability',{headers:{'Accept':'application/json'}}).then(r=>{if(!r.ok) throw new Error('availability');return r.json();}),
+    fetch(`/api/prices?start=${encodeURIComponent(todayIso)}&end=${encodeURIComponent(pricingEnd)}`,{headers:{'Accept':'application/json'},cache:'no-store'}).then(r=>{if(!r.ok) throw new Error('prices');return r.json();})
+  ])
+    .then(([availabilityData, pricingData])=>{
+      loadRanges(availabilityData.blockedRanges);
+      priceMap = pricingData.prices || {};
+      Object.entries(priceMap).forEach(([day,entry])=>{ if(entry?.closed) blocked.add(day); });
+      loaded=true;
+      document.getElementById('calendar-status').textContent='Calendario aggiornato';
+      render();
+    })
+    .catch(()=>{loaded=false;document.getElementById('calendar-status').textContent='Disponibilità o prezzi non caricati';monthsRoot.innerHTML='<p class="calendar-note">Il calendario non è temporaneamente disponibile. Contattaci direttamente su WhatsApp.</p>';updateSummary();});
   render();
 })();
 
