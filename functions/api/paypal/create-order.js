@@ -1,5 +1,6 @@
 import { calculateStay, cleanExpiredHolds, hasConflict, hasExternalConflict, randomId, sqliteDateTime, validateGuest } from '../../_lib/booking.js';
 import { paypalRequest } from '../../_lib/paypal.js';
+import { calculateStayFromDb } from '../../_lib/pricing.js';
 
 export async function onRequestPost({ request, env }) {
   let bookingId = '';
@@ -9,7 +10,10 @@ export async function onRequestPost({ request, env }) {
     const start = String(data.start || '');
     const end = String(data.end || '');
     const guest = validateGuest(data);
-    const stay = calculateStay(start, end, guest.guests);
+    // Valida le date/ospiti con le regole esistenti, poi calcola l'importo
+    // usando ESATTAMENTE le tariffe del gestionale salvate in D1.
+    calculateStay(start, end, guest.guests);
+    const stay = await calculateStayFromDb(env.DB, start, end, guest.guests);
 
     // I record HOLD servono solo a collegare il tentativo di pagamento al cliente.
     // NON bloccano il calendario e NON occupano booking_nights.
